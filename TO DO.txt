@@ -1,5 +1,5 @@
-1) Ensure one tool is selected at a time. 
-2) Enable drawing tool selection.
+1) DONE Ensure one tool is selected at a time. 
+2) DONE Enable drawing tool selection.
 3) Link tool size number display and slider bar with events. 
 4) Enable drawing events and display drawn lines. Events are sent via the tool and that makes the marks on the picture. This then sends the redraw command to the viewers. 
 4.1) All viewers of picture data (canvas window and layer bar) must listen for picture redraw events. Considder making an abstract object called PictureViewer with this event listener. 
