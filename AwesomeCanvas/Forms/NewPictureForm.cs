@@ -59,5 +59,10 @@ namespace AwesomeCanvas
                 this.DialogResult = DialogResult.OK;
             }
         }
+
+        private void groupBox_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

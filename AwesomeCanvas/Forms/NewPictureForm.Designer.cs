@@ -125,6 +125,7 @@
             this.groupBox.TabIndex = 9;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Properties";
+            this.groupBox.Enter += new System.EventHandler(this.groupBox_Enter);
             // 
             // NewPictureForm
             // 

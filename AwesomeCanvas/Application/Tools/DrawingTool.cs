@@ -43,12 +43,17 @@ namespace AwesomeCanvas
         {
             m_toolDown = true; 
         }
-
+        public override void MouseUp(CanvasWindow sender, MouseEventArgs e)
+        {
+            m_toolDown = false;
+        }
         public override void MouseMove(CanvasWindow sender, MouseEventArgs e)
         {
             if (m_toolDown == true)
             {
                 Draw(sender.GetPicture().CurrentLayer, e.Location);
+                //TODO: decide routine for when to push a re-draw
+                sender.canvasBox.Invalidate();
             }
         }
 

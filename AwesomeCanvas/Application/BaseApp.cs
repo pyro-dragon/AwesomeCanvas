@@ -55,6 +55,8 @@ namespace AwesomeCanvas
                 m_activeTool = m_penTool;
             else if (toolName.Text.Equals("Pointer"))
                 m_activeTool = m_pointerTool;
+            
+            Console.WriteLine("Changed tool to" + toolName);
         }
 
         private void NewPicFinalisation(CanvasWindow window)
@@ -96,36 +98,43 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         // A mouse event has been recived from a canvas window
         //-------------------------------------------------------------------------
+        CanvasWindow GetCanvasWindow(object pObject)
+        {
+            if (pObject is System.Windows.Forms.PictureBox && (pObject as System.Windows.Forms.PictureBox).Parent is CanvasWindow)
+            {
+                return (pObject as System.Windows.Forms.PictureBox).Parent as CanvasWindow;
+            }
+            throw new Exception("could not find canvas window");
+        }
         public void ReciveCanvasMouseClick(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseClick((CanvasWindow)sender, e);
+            m_activeTool.MouseClick(GetCanvasWindow(sender), e);
         }
 
         public void ReciveCanvasMouseUp(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseUp((CanvasWindow)sender, e);
+            m_activeTool.MouseUp(GetCanvasWindow(sender), e);
         }
 
         public void ReciveCanvasMouseDown(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseDown((CanvasWindow)sender, e);
+            m_activeTool.MouseDown(GetCanvasWindow(sender), e);
         }
 
         public void ReciveCanvasMouseMove(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseMove((CanvasWindow)sender, e);
+            m_activeTool.MouseMove(GetCanvasWindow(sender), e);
         }
 
         public void ReciveCanvasMouseEnter(object sender, EventArgs e)
         {
-            m_activeTool.MouseEnter((CanvasWindow)sender, e);
+            m_activeTool.MouseEnter(GetCanvasWindow(sender), e);
         }
 
         public void ReciveCanvasMouseExit(object sender, EventArgs e)
         {
-            m_activeTool.MouseExit((CanvasWindow)sender, e);
+            m_activeTool.MouseExit(GetCanvasWindow(sender), e);
         }
-
 
 
         public Tool GetActiveTool()
