@@ -15,5 +15,6 @@ namespace AwesomeCanvas
         bool LeftButtonDown { get;set; }
         bool RightButtonDown { get; set; }
         Point Position { get; set; }
+        Point LastPosition { get; set; }
     }
 }
