@@ -41,6 +41,7 @@
             this.canvasBox.Size = new System.Drawing.Size(284, 262);
             this.canvasBox.TabIndex = 0;
             this.canvasBox.TabStop = false;
+            this.canvasBox.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
             // 
             // CanvasWindow
             // 
