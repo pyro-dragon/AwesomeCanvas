@@ -43,7 +43,7 @@ namespace AwesomeCanvas
             for (int i = 0; i < length; i++)
             {
                 // Draw a pixel
-                DrawStep(currentLayer, new Point((int)drawPoint.X, (int)drawPoint.Y));
+                DrawStep(layer, new Point((int)drawPoint.X, (int)drawPoint.Y));
                 drawPoint.X += step.X;
                 drawPoint.Y += step.Y;
             }

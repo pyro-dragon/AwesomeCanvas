@@ -74,7 +74,7 @@ namespace AwesomeCanvas
                     for (int i = 0; i < len; i++ ) //un nested the loop
                     {
                         int x = i % m_toolArea.Width;
-                        int y = i > 0 ? m_toolArea.Width / i : 0; //division by zero protection
+                        int y = i/m_toolArea.Width; //division by zero protection
                         // Check if the pixel is inside the circle
                         if ((((m_halfSize - x) * (m_halfSize - x)) + ((m_halfSize - y) * (m_halfSize - y)) <= m_halfSquared) && layer.GetArea().Contains(x + m_toolArea.X, y + m_toolArea.Y))
                         {
