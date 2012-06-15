@@ -29,12 +29,13 @@ namespace AwesomeCanvas
             if (end == null)
             {
                 // We are drawing a single dot
-
+                //RenderToLayer(start, layer);
             }
             else 
             {
  
             }
+            RenderToLayer(start, layer);
         }
 
         //---------------------------------------------------------------------
@@ -69,19 +70,19 @@ namespace AwesomeCanvas
                 if (!areaToPaint.IsEmpty)
                 {
                     // Go through the draw area and set the pixels as they should be
-                    for (int y = 0; y < m_toolArea.Height; y++)
+                    int len = m_toolArea.Height * m_toolArea.Width;
+                    for (int i = 0; i < len; i++ ) //un nested the loop
                     {
-                        for (int x = 0; x < m_toolArea.Width; x++)
+                        int x = i % m_toolArea.Width;
+                        int y = i > 0 ? m_toolArea.Width / i : 0; //division by zero protection
+                        // Check if the pixel is inside the circle
+                        if ((((m_halfSize - x) * (m_halfSize - x)) + ((m_halfSize - y) * (m_halfSize - y)) <= m_halfSquared) && layer.GetArea().Contains(x + m_toolArea.X, y + m_toolArea.Y))
                         {
-                            // Check if the pixel is inside the circle
-                            if ((((m_halfSize - x) * (m_halfSize - x)) + ((m_halfSize - y) * (m_halfSize - y)) <= m_halfSquared) && layer.GetArea().Contains(x + m_toolArea.X, y + m_toolArea.Y))
-                            {
-                                // Set the pixel RGB channels individually
-                                ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride] = m_colour.B;
-                                ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 1] = m_colour.G;
-                                ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 2] = m_colour.R;
-                                ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 3] = m_colour.A;
-                            }
+                            // Set the pixel RGB channels individually
+                            ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride] = m_colour.B;
+                            ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 1] = m_colour.G;
+                            ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 2] = m_colour.R;
+                            ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 3] = m_colour.A;
                         }
                     }
                 }
