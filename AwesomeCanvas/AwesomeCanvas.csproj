@@ -67,11 +67,13 @@
     <Compile Include="Application\Layer.cs" />
     <Compile Include="Application\PaintBrushTool.cs" />
     <Compile Include="Application\Tools\BrushTool.cs" />
+    <Compile Include="Application\Tools\FreehandTool.cs" />
     <Compile Include="Application\Tools\PenTool.cs" />
     <Compile Include="Application\Picture.cs" />
     <Compile Include="Application\Tools\PointerTool.cs" />
     <Compile Include="Application\Tools\Tool.cs" />
     <Compile Include="Application\Tools\DrawingTool.cs" />
+    <Compile Include="Application\Vector2D.cs" />
     <Compile Include="Forms\CanvasWindow.cs">
       <SubType>Form</SubType>
     </Compile>
