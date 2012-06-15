@@ -10,7 +10,7 @@ namespace AwesomeCanvas
     //---------------------------------------------------------------------
     // A tool for performing brush strokes with
     //---------------------------------------------------------------------
-    public class BrushTool : DrawingTool
+    public class BrushTool : FreehandTool
     {
         public BrushTool()
         { }
@@ -24,24 +24,24 @@ namespace AwesomeCanvas
         //}
 
         // The draw function for the 
-        public override void Draw(Layer layer, Point start, Point end = new Point())
-        {
-            if (end == null)
-            {
+        //public override void Draw(Layer layer, Point start, Point end = new Point())
+        //{
+            //if (end == null)
+            //{
                 // We are drawing a single dot
                 //RenderToLayer(start, layer);
-            }
-            else 
-            {
+            //}
+            //else 
+            //{
  
-            }
-            RenderToLayer(start, layer);
-        }
+            //}
+            //RenderToLayer(start, layer);
+        //}
 
         //---------------------------------------------------------------------
         // Render the alterations to the layer
         //---------------------------------------------------------------------
-        private void RenderToLayer(Point position, Layer layer)
+        public override void DrawStep(Layer layer, Point position)
         {
             // Set the tool size rect to the locate on of the point to be painted
             Point centre = new Point((position.X - m_halfSize),

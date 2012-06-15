@@ -18,6 +18,8 @@ namespace AwesomeCanvas
         protected float m_halfSquared;
         protected Color m_colour;
         protected bool m_toolDown;
+        protected Point m_postion;
+        protected Point m_lastPosition;
 
         //-------------------------------------------------------------------------
         // Constructor
@@ -49,9 +51,13 @@ namespace AwesomeCanvas
         }
         public override void MouseMove(CanvasWindow sender, MouseEventArgs e)
         {
+            // Update mouse status
+            m_lastPosition = m_postion;
+            m_postion = e.Location;
+            
             if (m_toolDown == true)
             {
-                Draw(sender.GetPicture().CurrentLayer, e.Location);
+                Draw(sender.GetPicture().CurrentLayer, m_lastPosition, m_postion);
                 //TODO: decide routine for when to push a re-draw
                 sender.canvasBox.Invalidate();
             }

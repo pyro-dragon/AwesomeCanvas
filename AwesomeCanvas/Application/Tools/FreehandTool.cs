@@ -9,7 +9,7 @@ namespace AwesomeCanvas
     //-------------------------------------------------------------------------
     // A class that represents free hand drawing tools like a pen or brush
     //-------------------------------------------------------------------------
-    class FreehandTool : DrawingTool 
+    public class FreehandTool : DrawingTool 
     {
         // Constructor
         public FreehandTool()
