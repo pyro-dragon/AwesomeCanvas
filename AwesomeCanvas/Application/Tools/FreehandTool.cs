@@ -27,7 +27,26 @@ namespace AwesomeCanvas
         // Calculate the line and step through
         public void DrawLine(Layer layer, Point start, Point end = new Point())
         {
+            // Create a line vector
             Vector2D vector = new Vector2D(start.X - end.X, start.Y - end.Y);
+
+            // Create the point to draw at
+            PointF drawPoint = new Point(end.X, end.Y);
+
+            // Get the amount to step each time
+            PointF step = vector.GetNormalisedVector();
+
+            // Find the length of the line
+            double length = vector.GetMagnitude();
+
+            // For each step along the line...
+            for (int i = 0; i < length; i++)
+            {
+                // Draw a pixel
+                DrawStep(currentLayer, new Point((int)drawPoint.X, (int)drawPoint.Y));
+                drawPoint.X += step.X;
+                drawPoint.Y += step.Y;
+            }
         }
 
         // Draw on the actual canvas
