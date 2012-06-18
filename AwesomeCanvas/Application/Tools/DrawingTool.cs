@@ -33,33 +33,45 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         // Mouse click event
         //-------------------------------------------------------------------------
-        public override void MouseClick(CanvasWindow sender, MouseEventArgs e)
+        public override void MouseClick(CanvasWindow sender, MouseEventArgs current, MouseEventArgs previouse)
         {
-            Draw(sender.GetPicture().CurrentLayer, e.Location);
+            //Draw(sender.GetPicture().CurrentLayer, current.Location);
         }
 
         //---------------------------------------------------------------------
         // A mouse button has been pressed down
         //---------------------------------------------------------------------
-        public override void MouseDown(CanvasWindow sender, MouseEventArgs e)
+        public override void MouseDown(CanvasWindow sender, MouseEventArgs current, MouseEventArgs previouse)
         {
             m_toolDown = true; 
         }
-        public override void MouseUp(CanvasWindow sender, MouseEventArgs e)
+        public override void MouseUp(CanvasWindow sender, MouseEventArgs current, MouseEventArgs previouse)
         {
             m_toolDown = false;
+
+            IssueDrawCommand(sender.GetPicture().CurrentLayer, previouse.Location, current.Location);
+
+            // Temporary solution. Need to issue redraw command
+            sender.canvasBox.Invalidate();
         }
-        public override void MouseMove(CanvasWindow sender, MouseEventArgs e)
+        public override void MouseMove(CanvasWindow sender, MouseEventArgs current, MouseEventArgs previouse)
         {
-            // Update mouse status
-            m_lastPosition = m_postion;
-            m_postion = e.Location;
-            
+            IssueDrawCommand(sender.GetPicture().CurrentLayer, previouse.Location, current.Location);
+
+            // Temporary solution. Need to issue redraw command
+            sender.canvasBox.Invalidate();
+        }
+
+        //---------------------------------------------------------------------
+        // Check the status of the mouse and issue the draw command
+        //---------------------------------------------------------------------
+        private void IssueDrawCommand(Layer layer, Point start, Point end = new Point())
+        {
             if (m_toolDown == true)
             {
-                Draw(sender.GetPicture().CurrentLayer, m_lastPosition, m_postion);
+                Draw(layer, start, end);
                 //TODO: decide routine for when to push a re-draw
-                sender.canvasBox.Invalidate();
+                //sender.canvasBox.Invalidate();
             }
         }
 
