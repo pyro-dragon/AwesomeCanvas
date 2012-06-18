@@ -12,7 +12,7 @@ namespace AwesomeCanvas
     public class FreehandTool : DrawingTool 
     {
         // Constructor
-        public FreehandTool()
+        public FreehandTool(BaseApp baseApp) : base(baseApp)
         { 
             
         }

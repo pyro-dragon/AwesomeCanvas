@@ -7,5 +7,8 @@ namespace AwesomeCanvas
 {
     class PenTool : DrawingTool
     {
+        public PenTool(BaseApp baseApp)
+            : base(baseApp)
+        { }
     }
 }

@@ -9,10 +9,18 @@ namespace AwesomeCanvas
     // The base object for tools
     public class Tool
     {
-        public Tool()   
-        { 
+        protected BaseApp m_baseApp;
+
+        //public Tool()   
+        //{ 
             
+        //}
+
+        public Tool(BaseApp baseApp)
+        {
+            m_baseApp = baseApp;
         }
+
 
         public virtual void MouseEvent(object sender, MouseEventArgs e)
         { }

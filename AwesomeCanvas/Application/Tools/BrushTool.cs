@@ -12,7 +12,8 @@ namespace AwesomeCanvas
     //---------------------------------------------------------------------
     public class BrushTool : FreehandTool
     {
-        public BrushTool()
+        public BrushTool(BaseApp baseApp)
+            : base(baseApp)
         { }
 
         //public override void MouseEvent(CanvasWindow sender, MouseEventArgs e)

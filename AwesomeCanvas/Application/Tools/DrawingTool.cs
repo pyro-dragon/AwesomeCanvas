@@ -24,7 +24,7 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         // Constructor
         //-------------------------------------------------------------------------
-        public DrawingTool()
+        public DrawingTool(BaseApp baseApp) : base(baseApp)
         {
             SetSize(1);
             m_colour = Color.Black;
@@ -60,6 +60,7 @@ namespace AwesomeCanvas
 
             // Temporary solution. Need to issue redraw command
             sender.canvasBox.Invalidate();
+            
         }
 
         //---------------------------------------------------------------------
@@ -72,6 +73,8 @@ namespace AwesomeCanvas
                 Draw(layer, start, end);
                 //TODO: decide routine for when to push a re-draw
                 //sender.canvasBox.Invalidate();
+                m_baseApp.IssueRedraw();
+
             }
         }
 

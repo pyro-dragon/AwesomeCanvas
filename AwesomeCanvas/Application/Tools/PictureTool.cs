@@ -7,5 +7,8 @@ namespace AwesomeCanvas
 {
     public class PictureTool : Tool
     {
+        public PictureTool(BaseApp baseApp)
+            : base(baseApp)
+        { }
     }
 }
