@@ -9,8 +9,8 @@ using System.Windows.Forms;
 
 namespace AwesomeCanvas
 {
-    public delegate void ToolChangeEv(ToolStripButton name);
-    public delegate void NewPictureCreatedEv(CanvasWindow window);
+    public delegate void GUIToolChange(ToolStripButton name);
+    public delegate void GUINewPictureCreated(CanvasWindow window);
 
     //-------------------------------------------------------------------------
     // The main application form. 
@@ -21,8 +21,8 @@ namespace AwesomeCanvas
         private BaseApp m_baseApp;          // A pointer to the base application
         private ToolStripButton m_activeToolButton;  // The currently active tool button
         
-        public event ToolChangeEv ChangeTool;
-        public event NewPictureCreatedEv NewPicCreated;
+        public event GUIToolChange OnGUIToolChanged;
+        public event GUINewPictureCreated OnGUINewPicture;
 
         // Constructor
         public MainForm()
@@ -74,7 +74,7 @@ namespace AwesomeCanvas
                 toolPanelTop.Visible = true;
 
                 // Tell everything about the new picture
-                NewPicCreated(newMDIChild);
+                OnGUINewPicture(newMDIChild);
             }
         }
         
@@ -105,7 +105,7 @@ namespace AwesomeCanvas
             m_activeToolButton = (ToolStripButton)sender;
 
             // Send tool change event
-            ChangeTool((ToolStripButton)sender);
+            OnGUIToolChanged((ToolStripButton)sender);
         }
     }
 }

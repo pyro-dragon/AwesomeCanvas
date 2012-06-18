@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-
+using AwesomeCanvas.Application.Math;
 namespace AwesomeCanvas
 {
     //-------------------------------------------------------------------------
     // A class that represents free hand drawing tools like a pen or brush
     //-------------------------------------------------------------------------
-    public class FreehandTool : DrawingTool 
+    public class FreehandTool : Tool 
     {
         // Constructor
         public FreehandTool()
@@ -17,35 +17,34 @@ namespace AwesomeCanvas
             
         }
 
-        //---------------------------------------------------------------------
-        // The draw command
-        public override void Draw(Layer layer, Point start, Point end = new Point())
-        {
-            DrawLine(layer, start, end);
+        public override void Move(int pX, int pY, Picture pPicture, Layer pLayer) {
+            base.Move(pX, pY, pPicture, pLayer);
+            m_postion = new Point(pX, pY);
+            if (isDown) 
+                DrawLine(pLayer, m_lastPosition, m_postion);
+            m_lastPosition = m_postion;
         }
 
         // Calculate the line and step through
         public void DrawLine(Layer layer, Point start, Point end = new Point())
         {
             // Create a line vector
-            Vector2D vector = new Vector2D(start.X - end.X, start.Y - end.Y);
+            PointF fStart = PointFExt.FromPoint(start);
+            PointF fEnd = PointFExt.FromPoint(end);
+            PointF delta = fEnd.Subtract(fStart);
 
             // Create the point to draw at
             PointF drawPoint = new Point(end.X, end.Y);
 
-            // Get the amount to step each time
-            PointF step = vector.GetNormalisedVector();
-
             // Find the length of the line
-            double length = vector.GetMagnitude();
+            float length = delta.Length();
 
             // For each step along the line...
             for (int i = 0; i < length; i++)
             {
                 // Draw a pixel
-                DrawStep(layer, new Point((int)drawPoint.X, (int)drawPoint.Y));
-                drawPoint.X += step.X;
-                drawPoint.Y += step.Y;
+                DrawStep(layer, PointFExt.Lerp(fStart, fEnd, (float)i/length).ToPointRounded());
+
             }
         }
 

@@ -51,6 +51,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>.\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -64,16 +67,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\BaseApp.cs" />
+    <Compile Include="Application\Controller\Controller.cs" />
+    <Compile Include="Application\EzJson.cs" />
     <Compile Include="Application\Layer.cs" />
+    <Compile Include="Application\Math\PointFExt.cs" />
     <Compile Include="Application\Tools\PaintBrushTool.cs" />
     <Compile Include="Application\Tools\BrushTool.cs" />
     <Compile Include="Application\Tools\FreehandTool.cs" />
-    <Compile Include="Application\Tools\PenTool.cs" />
     <Compile Include="Application\Picture.cs" />
     <Compile Include="Application\Tools\PointerTool.cs" />
     <Compile Include="Application\Tools\Tool.cs" />
-    <Compile Include="Application\Tools\DrawingTool.cs" />
-    <Compile Include="Application\Vector2D.cs" />
     <Compile Include="Forms\CanvasWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,8 +96,6 @@
     <Compile Include="Forms\NewPictureForm.Designer.cs">
       <DependentUpon>NewPictureForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Application\Tools\PictureTool.cs" />
-    <Compile Include="Application\MouseStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\ToolStripNumericUpDown.cs">
       <SubType>Component</SubType>
@@ -153,6 +154,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

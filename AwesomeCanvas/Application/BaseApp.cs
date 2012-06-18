@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using AwesomeCanvas.Application.Controller;
+using AwesomeCanvas.Application;
 namespace AwesomeCanvas
 {
     // New Picture event delegate
@@ -20,17 +23,12 @@ namespace AwesomeCanvas
     {
         // Custom events
         //public event NewPictureDel NewPictureEv;        // Event for a new picture being created
-        public event RedrawPictureDel RedrawPictureEv;  // Update a picture
-        public event ChangeWindowDel ChangeWindowEv;    // The window with focus is being changed 
+        //public event RedrawPictureDel RedrawPictureEv;  // Update a picture
+        //public event ChangeWindowDel ChangeWindowEv;    // The window with focus is being changed 
 
         // Member variables
         ArrayList m_pictureList;     // List of currently open pictures
-        Tool m_activeTool;   // The current active tool
-        MouseStatus MouseStatus { get; set; }
-        MouseEventArgs PreviouseMouseState { get; set; }
-        PointerTool m_pointerTool;
-        PenTool m_penTool;
-        BrushTool m_brushTool;
+        Controller m_localController;
 
         //-------------------------------------------------------------------------
         // Constructor
@@ -39,47 +37,25 @@ namespace AwesomeCanvas
         {
             // Initalise
             m_pictureList = new ArrayList();
-            m_activeTool = new Tool();
-            mainForm.ChangeTool += new ToolChangeEv(this.ChangeTool);
-            mainForm.NewPicCreated += new NewPictureCreatedEv(this.NewPicFinalisation);
-            m_pointerTool = new PointerTool();
-            m_penTool = new PenTool();
-            m_brushTool = new BrushTool();
-
+            mainForm.OnGUIToolChanged += new GUIToolChange(this.GUIToolChange);
+            mainForm.OnGUINewPicture += new GUINewPictureCreated(this.NewPicFinalisation);
+            m_localController = new Controller("localUserInput");
         }
-
-        private void ChangeTool(ToolStripButton toolName)
+        private void GUIToolChange(ToolStripButton name)
         {
-            if (toolName.Text.Equals("Brush"))
-                m_activeTool = m_brushTool;
-            else if (toolName.Text.Equals("Pen"))
-                m_activeTool = m_penTool;
-            else if (toolName.Text.Equals("Pointer"))
-                m_activeTool = m_pointerTool;
-            
-            Console.WriteLine("Changed tool to" + toolName);
+            EzJson j = new EzJson();
+            j.BeginFunction("change_tool");
+            j.AddData("tool", name.Text);
+            m_localController.ParseJSON(j.Finish());
         }
 
         private void NewPicFinalisation(CanvasWindow window)
         { 
             // Add tool events
-            window.canvasBox.MouseClick += new MouseEventHandler(ReciveCanvasMouseClick);
             window.canvasBox.MouseDown += new MouseEventHandler(ReciveCanvasMouseDown);
             window.canvasBox.MouseUp += new MouseEventHandler(ReciveCanvasMouseUp);
             window.canvasBox.MouseMove += new MouseEventHandler(ReciveCanvasMouseMove);
-            window.canvasBox.MouseEnter += new EventHandler(ReciveCanvasMouseEnter);
-            window.canvasBox.MouseLeave += new EventHandler(ReciveCanvasMouseExit);
         }
-
-        //-------------------------------------------------------------------------
-        // Create a new a picture
-        //-------------------------------------------------------------------------
-        //public void CreateNewPicture()
-        //{
-        //    // Create a new picture
-        //    // Fire an event to inform that a new picture has been created. 
-        //    NewPictureEv();
-        //}
 
         //-------------------------------------------------------------------------
         // Add a new picture to the list
@@ -90,8 +66,8 @@ namespace AwesomeCanvas
 
             // Activate drawing controls
             if (m_pictureList.Count == 1)
-            { 
-                
+            {
+                m_localController.SetPicture(m_pictureList[0] as Picture);
             }
                 
         }
@@ -107,49 +83,35 @@ namespace AwesomeCanvas
             }
             throw new Exception("could not find canvas window");
         }
-        public void ReciveCanvasMouseClick(object sender, MouseEventArgs e)
-        {
-            m_activeTool.MouseClick(GetCanvasWindow(sender), e, PreviouseMouseState);
-            PreviouseMouseState = e;
-        }
 
         public void ReciveCanvasMouseUp(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseUp(GetCanvasWindow(sender), e, PreviouseMouseState);
-            PreviouseMouseState = e;
+            EzJson j = new EzJson();
+            j.BeginFunction("tool_up");
+            j.AddData("x", e.X.ToString());
+            j.AddData("y", e.Y.ToString());
+            m_localController.ParseJSON(j.Finish());
+            (sender as System.Windows.Forms.PictureBox).Invalidate();
         }
 
         public void ReciveCanvasMouseDown(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseDown(GetCanvasWindow(sender), e, PreviouseMouseState);
-            PreviouseMouseState = e;
+            EzJson j = new EzJson();
+            j.BeginFunction("tool_down");
+            j.AddData("x", e.X.ToString());
+            j.AddData("y", e.Y.ToString());
+            m_localController.ParseJSON(j.Finish());
+            (sender as System.Windows.Forms.PictureBox).Invalidate();
         }
 
         public void ReciveCanvasMouseMove(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseMove(GetCanvasWindow(sender), e, PreviouseMouseState);
-            PreviouseMouseState = e;
-        }
-
-        public void ReciveCanvasMouseEnter(object sender, EventArgs e)
-        {
-            m_activeTool.MouseEnter(GetCanvasWindow(sender), e);
-        }
-
-        public void ReciveCanvasMouseExit(object sender, EventArgs e)
-        {
-            m_activeTool.MouseExit(GetCanvasWindow(sender), e);
-        }
-
-
-        public Tool GetActiveTool()
-        {
-            return m_activeTool;
-        }
-
-        public void UpdateMouseState()
-        {
-            //PreviouseMouseState;
+            EzJson j = new EzJson();
+            j.BeginFunction("tool_move");
+            j.AddData("x", e.X.ToString());
+            j.AddData("y", e.Y.ToString());
+            m_localController.ParseJSON(j.Finish());
+            (sender as System.Windows.Forms.PictureBox).Invalidate();
         }
     }
 }

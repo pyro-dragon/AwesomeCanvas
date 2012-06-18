@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
+//using System.Collections;
+//using System.Linq
+//using System.Windows.Forms;
 using System.Windows.Forms;
-
+using AwesomeCanvas.Application;
 namespace AwesomeCanvas
 {
     static class Program
@@ -13,9 +14,9 @@ namespace AwesomeCanvas
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+           System.Windows.Forms.Application.EnableVisualStyles();
+           System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+           System.Windows.Forms.Application.Run(new MainForm());
         }
     }
 }

@@ -12,31 +12,9 @@ namespace AwesomeCanvas
     //---------------------------------------------------------------------
     public class BrushTool : FreehandTool
     {
+        Color m_colour = Color.Black;
         public BrushTool()
         { }
-
-        //public override void MouseEvent(CanvasWindow sender, MouseEventArgs e)
-        //{ 
-            // Check if click is inside the paint area
-        //    sender.GetPicture();
-
-            // Draw a circle
-        //}
-
-        // The draw function for the 
-        //public override void Draw(Layer layer, Point start, Point end = new Point())
-        //{
-            //if (end == null)
-            //{
-                // We are drawing a single dot
-                //RenderToLayer(start, layer);
-            //}
-            //else 
-            //{
- 
-            //}
-            //RenderToLayer(start, layer);
-        //}
 
         //---------------------------------------------------------------------
         // Render the alterations to the layer
@@ -71,10 +49,10 @@ namespace AwesomeCanvas
                 {
                     // Go through the draw area and set the pixels as they should be
                     int len = m_toolArea.Height * m_toolArea.Width;
-                    for (int i = 0; i < len; i++ ) //un nested the loop
+                    for (int i = 0; i < len; i++ )
                     {
                         int x = i % m_toolArea.Width;
-                        int y = i/m_toolArea.Width; //division by zero protection
+                        int y = i/m_toolArea.Width; 
                         // Check if the pixel is inside the circle
                         if ((((m_halfSize - x) * (m_halfSize - x)) + ((m_halfSize - y) * (m_halfSize - y)) <= m_halfSquared) && layer.GetArea().Contains(x + m_toolArea.X, y + m_toolArea.Y))
                         {
