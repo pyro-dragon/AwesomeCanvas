@@ -27,6 +27,7 @@ namespace AwesomeCanvas
         ArrayList m_pictureList;     // List of currently open pictures
         Tool m_activeTool;   // The current active tool
         MouseStatus MouseStatus { get; set; }
+        MouseEventArgs PreviouseMouseState { get; set; }
         PointerTool m_pointerTool;
         PenTool m_penTool;
         BrushTool m_brushTool;
@@ -108,22 +109,26 @@ namespace AwesomeCanvas
         }
         public void ReciveCanvasMouseClick(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseClick(GetCanvasWindow(sender), e);
+            m_activeTool.MouseClick(GetCanvasWindow(sender), e, PreviouseMouseState);
+            PreviouseMouseState = e;
         }
 
         public void ReciveCanvasMouseUp(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseUp(GetCanvasWindow(sender), e);
+            m_activeTool.MouseUp(GetCanvasWindow(sender), e, PreviouseMouseState);
+            PreviouseMouseState = e;
         }
 
         public void ReciveCanvasMouseDown(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseDown(GetCanvasWindow(sender), e);
+            m_activeTool.MouseDown(GetCanvasWindow(sender), e, PreviouseMouseState);
+            PreviouseMouseState = e;
         }
 
         public void ReciveCanvasMouseMove(object sender, MouseEventArgs e)
         {
-            m_activeTool.MouseMove(GetCanvasWindow(sender), e);
+            m_activeTool.MouseMove(GetCanvasWindow(sender), e, PreviouseMouseState);
+            PreviouseMouseState = e;
         }
 
         public void ReciveCanvasMouseEnter(object sender, EventArgs e)
@@ -140,6 +145,11 @@ namespace AwesomeCanvas
         public Tool GetActiveTool()
         {
             return m_activeTool;
+        }
+
+        public void UpdateMouseState()
+        {
+            //PreviouseMouseState;
         }
     }
 }
