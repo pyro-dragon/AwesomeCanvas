@@ -38,8 +38,9 @@ namespace AwesomeCanvas
 
             // Associeate a handler for the New Picture event
             //m_baseApp.NewPictureEv += new NewPictureDel(NewPic);
-
-            m_activeToolButton = this.pointerButton;
+            this.toolStripTrackBarItem1.trackBar.ValueChanged += OnSizeChanged;
+            this.toolStripNumericUpDownItem1.numericUpDown.ValueChanged += OnSizeChanged;
+            this.m_activeToolButton = this.pointerButton;
         }
 
         //---------------------------------------------------------------------
@@ -71,6 +72,7 @@ namespace AwesomeCanvas
                 m_baseApp.AddPicture(newMDIChild.GetPicture());
 
                 // Prepare the tool bar
+                this.toolStripTrackBarItem1.trackBar.Value = Tool.DEFAULT_TOOLSIZE;
                 toolPanelTop.Visible = true;
 
                 // Tell everything about the new picture
@@ -95,7 +97,21 @@ namespace AwesomeCanvas
             // Launch the New Picture funtion
             CreateNewPicture();
         }
-
+        //---------------------------------------------------------------------
+        // The function for when tool size changes
+        //---------------------------------------------------------------------
+        private void OnSizeChanged(object sender, EventArgs e) {
+            TrackBar bar = this.toolStripTrackBarItem1.trackBar;
+            NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
+            if (sender == bar && bar.Value != (int)number.Value) {
+                number.Value = bar.Value;
+                m_baseApp.ReciveSizeChanged((int)number.Value);
+            }
+            if (sender == number && bar.Value != number.Value) {
+                bar.Value = Math.Max(0, Math.Min((int)number.Value, bar.Maximum));
+                m_baseApp.ReciveSizeChanged((int)number.Value);
+            }
+        }
         //---------------------------------------------------------------------
         // Bush tool button was clicked
         //---------------------------------------------------------------------
@@ -106,6 +122,15 @@ namespace AwesomeCanvas
 
             // Send tool change event
             OnGUIToolChanged((ToolStripButton)sender);
+        }
+
+        private void toolStripNumericUpDownItem1_Click(object sender, EventArgs e) {
+
+        }
+
+
+        private void MainForm_Load(object sender, EventArgs e) {
+
         }
     }
 }

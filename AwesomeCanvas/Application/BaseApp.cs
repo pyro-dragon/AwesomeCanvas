@@ -113,5 +113,11 @@ namespace AwesomeCanvas
             m_localController.ParseJSON(j.Finish());
             (sender as System.Windows.Forms.PictureBox).Invalidate();
         }
+        public void ReciveSizeChanged( int pNewSize ) {
+            EzJson j = new EzJson();
+            j.BeginFunction("tool_size");
+            j.AddData("size", pNewSize.ToString());
+            m_localController.ParseJSON(j.Finish());
+        }
     }
 }

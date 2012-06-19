@@ -9,13 +9,14 @@ namespace AwesomeCanvas
     // The base object for tools
     public class Tool
     {
+        public const int DEFAULT_TOOLSIZE = 14;
         public Tool(){
-            size = 1;
+            size = DEFAULT_TOOLSIZE;
         }
         public bool isDown { get; private set; } //true when mouse is down
-        public bool active { get; private set; } //true when tool is in the hand of the controller
-        public virtual void Activate() { active = true;   }
-        public virtual void Deactivate() { active = false; }
+        public bool isActive { get; private set; } //true when tool is in the hand of the controller
+        public virtual void Activate() { isActive = true;   }
+        public virtual void Deactivate() { isActive = false; }
         public virtual void Down(int pX, int pY, Picture pPicture, Layer pLayer) { isDown = true; m_lastPosition = m_postion = new Point(pX, pY); }
         public virtual void Move(int pX, int pY, Picture pPicture, Layer pLayer) { }
         public virtual void Up(int pX, int pY, Picture pPicture, Layer pLayer) { isDown = false; }
