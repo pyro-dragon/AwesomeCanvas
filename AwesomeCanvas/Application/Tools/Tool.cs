@@ -10,12 +10,10 @@ namespace AwesomeCanvas
     public class Tool
     {
         public const int DEFAULT_TOOLSIZE = 14;
-        public Tool(){
-            size = DEFAULT_TOOLSIZE;
-        //}
 
         public Tool(BaseApp baseApp)
         {
+            size = DEFAULT_TOOLSIZE;
             m_baseApp = baseApp;
         }
         public bool isDown { get; private set; } //true when mouse is down
@@ -30,6 +28,7 @@ namespace AwesomeCanvas
         protected Rectangle m_toolArea;
         protected int m_halfSquared, m_halfSize;
         protected Point m_postion, m_lastPosition;
+        protected BaseApp m_baseApp;
 
         public int size {
             set {

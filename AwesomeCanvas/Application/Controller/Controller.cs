@@ -14,8 +14,8 @@ namespace AwesomeCanvas.Application.Controller
         Dictionary<string, Tool> m_tools = new Dictionary<string, Tool>();
         Tool m_activeTool;
         public Controller( string pUsername ) {
-            m_tools.Add("brush", new BrushTool());
-            m_tools.Add("pointer", new PointerTool());
+            m_tools.Add("brush", new BrushTool(null));
+            m_tools.Add("pointer", new PointerTool(null));
             m_username = pUsername;
         }
         
