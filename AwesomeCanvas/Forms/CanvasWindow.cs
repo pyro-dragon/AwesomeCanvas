@@ -54,6 +54,12 @@ namespace AwesomeCanvas
             m_picture.DrawPicture(e.Graphics);
         }
 
+        public void Redraw() 
+        {
+            if (this.Focused)
+                canvasBox.Invalidate();
+        }
+
         //---------------------------------------------------------------------
         // A mouse button has been pressed down
         //---------------------------------------------------------------------

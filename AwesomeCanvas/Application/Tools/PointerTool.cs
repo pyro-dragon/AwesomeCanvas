@@ -7,5 +7,8 @@ namespace AwesomeCanvas
 {
     class PointerTool : Tool
     {
+        public PointerTool(BaseApp baseApp) : base(baseApp)
+        {
+        }
     }
 }

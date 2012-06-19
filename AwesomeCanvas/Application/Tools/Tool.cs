@@ -12,6 +12,11 @@ namespace AwesomeCanvas
         public const int DEFAULT_TOOLSIZE = 14;
         public Tool(){
             size = DEFAULT_TOOLSIZE;
+        //}
+
+        public Tool(BaseApp baseApp)
+        {
+            m_baseApp = baseApp;
         }
         public bool isDown { get; private set; } //true when mouse is down
         public bool isActive { get; private set; } //true when tool is in the hand of the controller

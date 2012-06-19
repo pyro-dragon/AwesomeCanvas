@@ -12,8 +12,8 @@ namespace AwesomeCanvas
     //---------------------------------------------------------------------
     public class BrushTool : FreehandTool
     {
-        Color m_colour = Color.Black;
-        public BrushTool()
+        public BrushTool(BaseApp baseApp)
+            : base(baseApp)
         { }
 
         //---------------------------------------------------------------------

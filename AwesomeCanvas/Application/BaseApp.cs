@@ -9,23 +9,14 @@ using AwesomeCanvas.Application.Controller;
 using AwesomeCanvas.Application;
 namespace AwesomeCanvas
 {
-    // New Picture event delegate
-    //public delegate void NewPictureDel();
-    public delegate void RedrawPictureDel(Picture picture);
-    public delegate void ChangeWindowDel(CanvasWindow canvasWindow);
-    public delegate void ChangeTool(object sender);
-    public delegate void MouseEvent(CanvasWindow window, MouseEventArgs args);
+    public delegate void RedrawHandler();
 
     //-------------------------------------------------------------------------
     // The core application from which everything takes its orders
     //-------------------------------------------------------------------------
     public class BaseApp
     {
-        // Custom events
-        //public event NewPictureDel NewPictureEv;        // Event for a new picture being created
-        //public event RedrawPictureDel RedrawPictureEv;  // Update a picture
-        //public event ChangeWindowDel ChangeWindowEv;    // The window with focus is being changed 
-
+        public event RedrawHandler Redraw;
         // Member variables
         ArrayList m_pictureList;     // List of currently open pictures
         Controller m_localController;
@@ -49,12 +40,16 @@ namespace AwesomeCanvas
             m_localController.ParseJSON(j.Finish());
         }
 
+        //---------------------------------------------------------------------
+        // Add event handlers to the new picture window
+        //---------------------------------------------------------------------
         private void NewPicFinalisation(CanvasWindow window)
         { 
             // Add tool events
             window.canvasBox.MouseDown += new MouseEventHandler(ReciveCanvasMouseDown);
             window.canvasBox.MouseUp += new MouseEventHandler(ReciveCanvasMouseUp);
             window.canvasBox.MouseMove += new MouseEventHandler(ReciveCanvasMouseMove);
+            Redraw += new RedrawHandler(window.Redraw);
         }
 
         //-------------------------------------------------------------------------
@@ -118,6 +113,11 @@ namespace AwesomeCanvas
             j.BeginFunction("tool_size");
             j.AddData("size", pNewSize.ToString());
             m_localController.ParseJSON(j.Finish());
+        }
+
+        public void IssueRedraw() {
+            if (Redraw != null)
+                Redraw();
         }
     }
 }
