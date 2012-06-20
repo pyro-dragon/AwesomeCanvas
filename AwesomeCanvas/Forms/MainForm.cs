@@ -32,10 +32,7 @@ namespace AwesomeCanvas
 
             // Initialise the application core
             // TODO: Make this a Singlton
-            
-
-            // Associeate a handler for the New Picture event
-            //m_baseApp.NewPictureEv += new NewPictureDel(NewPic);
+   
             this.toolStripTrackBarItem1.trackBar.ValueChanged += OnGUISizeChanged;
             this.toolStripNumericUpDownItem1.numericUpDown.ValueChanged += OnGUISizeChanged;
             this.m_activeToolButton = this.pointerButton;
@@ -83,6 +80,7 @@ namespace AwesomeCanvas
         /// Swap Active Canvas Session
         /// </summary>
         private void OnCanvasWindowGotFocus(object sender, EventArgs e) {
+            Console.WriteLine("Canvas Got Focus!");
             CanvasWindow cw = sender as CanvasWindow;
             SetCurrentCanvasSession(cw.m_session);
         }
@@ -121,6 +119,7 @@ namespace AwesomeCanvas
             //re-add the events
             bar.ValueChanged += OnGUISizeChanged;
             number.ValueChanged += OnGUISizeChanged;
+            m_currentCanvasSession.canvasWindow.Focus();
         }
 
         //---------------------------------------------------------------------
@@ -132,10 +131,12 @@ namespace AwesomeCanvas
             if (sender == bar && bar.Value != (int)number.Value) {
                 number.Value = bar.Value;
                 m_currentCanvasSession.GuiInput_ToolSizeChanged((int)number.Value);
+                m_currentCanvasSession.canvasWindow.Focus();
             }
             if (sender == number && bar.Value != number.Value) {
                 bar.Value = Math.Max(0, Math.Min((int)number.Value, bar.Maximum));
                 m_currentCanvasSession.GuiInput_ToolSizeChanged((int)number.Value);
+                m_currentCanvasSession.canvasWindow.Focus();
             }
         }
         

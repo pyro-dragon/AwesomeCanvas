@@ -57,13 +57,13 @@
             this.brushButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
+            this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
             this.toolPanelTop = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelBottom = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelLeft = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelRight = new System.Windows.Forms.ToolStripPanel();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
-            this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
             this.menuStrip1.SuspendLayout();
             this.pointerTools.SuspendLayout();
             this.brushTools.SuspendLayout();
@@ -277,7 +277,7 @@
             this.toolStripTrackBarItem1});
             this.brushTools.Location = new System.Drawing.Point(41, 0);
             this.brushTools.Name = "brushTools";
-            this.brushTools.Size = new System.Drawing.Size(396, 26);
+            this.brushTools.Size = new System.Drawing.Size(365, 26);
             this.brushTools.TabIndex = 1;
             // 
             // pencilButton
@@ -312,6 +312,18 @@
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(60, 23);
             this.toolStripLabel1.Text = "Tool Size: ";
+            // 
+            // toolStripNumericUpDownItem1
+            // 
+            this.toolStripNumericUpDownItem1.Name = "toolStripNumericUpDownItem1";
+            this.toolStripNumericUpDownItem1.Size = new System.Drawing.Size(41, 23);
+            this.toolStripNumericUpDownItem1.Text = "0";
+            // 
+            // toolStripTrackBarItem1
+            // 
+            this.toolStripTrackBarItem1.Name = "toolStripTrackBarItem1";
+            this.toolStripTrackBarItem1.Size = new System.Drawing.Size(200, 23);
+            this.toolStripTrackBarItem1.Text = "toolStripTrackBarItem1";
             // 
             // toolPanelTop
             // 
@@ -362,18 +374,6 @@
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Visible = false;
             this.toolStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip_ItemClicked);
-            // 
-            // toolStripNumericUpDownItem1
-            // 
-            this.toolStripNumericUpDownItem1.Name = "toolStripNumericUpDownItem1";
-            this.toolStripNumericUpDownItem1.Size = new System.Drawing.Size(41, 23);
-            this.toolStripNumericUpDownItem1.Text = "0";
-            // 
-            // toolStripTrackBarItem1
-            // 
-            this.toolStripTrackBarItem1.Name = "toolStripTrackBarItem1";
-            this.toolStripTrackBarItem1.Size = new System.Drawing.Size(200, 23);
-            this.toolStripTrackBarItem1.Text = "toolStripTrackBarItem1";
             // 
             // MainForm
             // 

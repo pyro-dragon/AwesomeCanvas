@@ -75,7 +75,7 @@ namespace AwesomeCanvas.Application.Controller
                 Console.WriteLine("Changed tool to " + toolName);
             }
             else {
-                Console.WriteLine("no tool named " + toolName);
+                throw new Exception("no tool named toolName");
             }
         }
         void ToolDown(Dictionary<string, string> pOptions) {

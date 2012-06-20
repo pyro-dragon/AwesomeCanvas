@@ -18,7 +18,7 @@ namespace AwesomeCanvas
         Controller m_localController;
         CanvasWindow m_canvasWindow;
         MainForm m_mainForm;
-
+        public CanvasWindow canvasWindow { get { return m_canvasWindow; } }
         public Controller localController { get { return m_localController; } }
         //-------------------------------------------------------------------------
         // Constructor

@@ -55,8 +55,7 @@ namespace AwesomeCanvas
 
         public void Redraw( Application.Controller.Controller pController ) 
         {
-            if (this.Focused)
-                canvasBox.Invalidate();
+            canvasBox.Invalidate();
         }
     }
 }
