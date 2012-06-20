@@ -9,9 +9,10 @@ using AwesomeCanvas.Application.Controller;
 using AwesomeCanvas.Application;
 namespace AwesomeCanvas
 {
-    //-------------------------------------------------------------------------
-    // The core application from which everything takes its orders
-    //-------------------------------------------------------------------------
+    /// <summary>
+    ///  this class collects input from the gui
+    ///  it also handles the controllers associated with the canvas
+    /// </summary>
     public class CanvasSession
     {
         Controller m_localController;
@@ -35,25 +36,6 @@ namespace AwesomeCanvas
             m_localController.OnCanvasUpdated = m_canvasWindow.Redraw;
 
         }
-        private void GUIToolChange(ToolStripButton name)
-        {
-            EzJson j = new EzJson();
-            j.BeginFunction("change_tool");
-            j.AddData("tool", name.Text);
-            m_localController.ParseJSON(j.Finish());
-        }
-
-        //-------------------------------------------------------------------------
-        // A mouse event has been recived from a canvas window
-        //-------------------------------------------------------------------------
-        CanvasWindow GetCanvasWindow(object pObject)
-        {
-            if (pObject is System.Windows.Forms.PictureBox && (pObject as System.Windows.Forms.PictureBox).Parent is CanvasWindow)
-            {
-                return (pObject as System.Windows.Forms.PictureBox).Parent as CanvasWindow;
-            }
-            throw new Exception("could not find canvas window");
-        }
 
         public void GuiInput_MouseUp(object sender, MouseEventArgs e)
         {
@@ -62,7 +44,6 @@ namespace AwesomeCanvas
             j.AddData("x", e.X.ToString());
             j.AddData("y", e.Y.ToString());
             m_localController.ParseJSON(j.Finish());
-            (sender as System.Windows.Forms.PictureBox).Invalidate();
         }
 
         public void GuiInput_MouseDown(object sender, MouseEventArgs e)
@@ -72,7 +53,6 @@ namespace AwesomeCanvas
             j.AddData("x", e.X.ToString());
             j.AddData("y", e.Y.ToString());
             m_localController.ParseJSON(j.Finish());
-            (sender as System.Windows.Forms.PictureBox).Invalidate();
         }
 
         public void GuiInput_MouseMove(object sender, MouseEventArgs e)
@@ -82,7 +62,6 @@ namespace AwesomeCanvas
             j.AddData("x", e.X.ToString());
             j.AddData("y", e.Y.ToString());
             m_localController.ParseJSON(j.Finish());
-            (sender as System.Windows.Forms.PictureBox).Invalidate();
         }
         public void GuiInput_ToolSizeChanged( int pNewSize ) {
             EzJson j = new EzJson();
@@ -94,6 +73,12 @@ namespace AwesomeCanvas
             EzJson j = new EzJson();
             j.BeginFunction("change_tool");
             j.AddData("tool", pToolName);
+            m_localController.ParseJSON(j.Finish());
+        }
+        private void GuiInput_ToolChange(ToolStripButton name) {
+            EzJson j = new EzJson();
+            j.BeginFunction("change_tool");
+            j.AddData("tool", name.Text);
             m_localController.ParseJSON(j.Finish());
         }
     }
