@@ -247,11 +247,10 @@
             this.pointerTools.Dock = System.Windows.Forms.DockStyle.None;
             this.pointerTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pointerButton});
-            this.pointerTools.Location = new System.Drawing.Point(3, 0);
+            this.pointerTools.Location = new System.Drawing.Point(6, 0);
             this.pointerTools.Name = "pointerTools";
             this.pointerTools.Size = new System.Drawing.Size(35, 25);
             this.pointerTools.TabIndex = 0;
-            this.pointerTools.Visible = false;
             // 
             // pointerButton
             // 
@@ -276,7 +275,7 @@
             this.toolStripLabel1,
             this.toolStripNumericUpDownItem1,
             this.toolStripTrackBarItem1});
-            this.brushTools.Location = new System.Drawing.Point(3, 0);
+            this.brushTools.Location = new System.Drawing.Point(41, 0);
             this.brushTools.Name = "brushTools";
             this.brushTools.Size = new System.Drawing.Size(365, 26);
             this.brushTools.TabIndex = 1;
@@ -373,6 +372,8 @@
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(111, 25);
             this.toolStrip.TabIndex = 1;
+            this.toolStrip.Visible = false;
+            this.toolStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip_ItemClicked);
             // 
             // MainForm
             // 
@@ -389,7 +390,6 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Awesome Canvas 3";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pointerTools.ResumeLayout(false);
