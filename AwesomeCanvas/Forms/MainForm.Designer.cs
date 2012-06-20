@@ -57,13 +57,13 @@
             this.brushButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
-            this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
             this.toolPanelTop = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelBottom = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelLeft = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelRight = new System.Windows.Forms.ToolStripPanel();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
+            this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
             this.menuStrip1.SuspendLayout();
             this.pointerTools.SuspendLayout();
             this.brushTools.SuspendLayout();
@@ -247,11 +247,10 @@
             this.pointerTools.Dock = System.Windows.Forms.DockStyle.None;
             this.pointerTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pointerButton});
-            this.pointerTools.Location = new System.Drawing.Point(3, 0);
+            this.pointerTools.Location = new System.Drawing.Point(6, 0);
             this.pointerTools.Name = "pointerTools";
             this.pointerTools.Size = new System.Drawing.Size(35, 25);
             this.pointerTools.TabIndex = 0;
-            this.pointerTools.Visible = false;
             // 
             // pointerButton
             // 
@@ -276,9 +275,9 @@
             this.toolStripLabel1,
             this.toolStripNumericUpDownItem1,
             this.toolStripTrackBarItem1});
-            this.brushTools.Location = new System.Drawing.Point(3, 0);
+            this.brushTools.Location = new System.Drawing.Point(41, 0);
             this.brushTools.Name = "brushTools";
-            this.brushTools.Size = new System.Drawing.Size(365, 26);
+            this.brushTools.Size = new System.Drawing.Size(396, 26);
             this.brushTools.TabIndex = 1;
             // 
             // pencilButton
@@ -313,18 +312,6 @@
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(60, 23);
             this.toolStripLabel1.Text = "Tool Size: ";
-            // 
-            // toolStripNumericUpDownItem1
-            // 
-            this.toolStripNumericUpDownItem1.Name = "toolStripNumericUpDownItem1";
-            this.toolStripNumericUpDownItem1.Size = new System.Drawing.Size(41, 23);
-            this.toolStripNumericUpDownItem1.Text = "0";
-            // 
-            // toolStripTrackBarItem1
-            // 
-            this.toolStripTrackBarItem1.Name = "toolStripTrackBarItem1";
-            this.toolStripTrackBarItem1.Size = new System.Drawing.Size(200, 23);
-            this.toolStripTrackBarItem1.Text = "toolStripTrackBarItem1";
             // 
             // toolPanelTop
             // 
@@ -373,6 +360,20 @@
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(111, 25);
             this.toolStrip.TabIndex = 1;
+            this.toolStrip.Visible = false;
+            this.toolStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip_ItemClicked);
+            // 
+            // toolStripNumericUpDownItem1
+            // 
+            this.toolStripNumericUpDownItem1.Name = "toolStripNumericUpDownItem1";
+            this.toolStripNumericUpDownItem1.Size = new System.Drawing.Size(41, 23);
+            this.toolStripNumericUpDownItem1.Text = "0";
+            // 
+            // toolStripTrackBarItem1
+            // 
+            this.toolStripTrackBarItem1.Name = "toolStripTrackBarItem1";
+            this.toolStripTrackBarItem1.Size = new System.Drawing.Size(200, 23);
+            this.toolStripTrackBarItem1.Text = "toolStripTrackBarItem1";
             // 
             // MainForm
             // 
@@ -389,7 +390,6 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Awesome Canvas 3";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pointerTools.ResumeLayout(false);

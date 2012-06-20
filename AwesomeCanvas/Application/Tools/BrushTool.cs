@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
+using AwesomeCanvas.Application.Controller;
 namespace AwesomeCanvas
 {
     //---------------------------------------------------------------------
@@ -13,9 +13,12 @@ namespace AwesomeCanvas
     public class BrushTool : FreehandTool
     {
         protected Color m_colour = Color.Aqua;
-        public BrushTool(BaseApp baseApp)
-            : base(baseApp)
-        { }
+        public BrushTool(Controller pController)
+            : base(pController)
+        {
+            size = 18;
+            m_colour = Color.Maroon;
+        }
 
         //---------------------------------------------------------------------
         // Render the alterations to the layer

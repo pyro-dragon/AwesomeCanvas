@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using AwesomeCanvas.Application.Controller;
 namespace AwesomeCanvas
 {
     // The base object for tools
@@ -11,10 +12,10 @@ namespace AwesomeCanvas
     {
         public const int DEFAULT_TOOLSIZE = 14;
 
-        public Tool(BaseApp baseApp)
+        public Tool(Controller pController)
         {
             size = DEFAULT_TOOLSIZE;
-            m_baseApp = baseApp;
+            m_controller = pController;
         }
         public bool isDown { get; private set; } //true when mouse is down
         public bool isActive { get; private set; } //true when tool is in the hand of the controller
@@ -28,7 +29,7 @@ namespace AwesomeCanvas
         protected Rectangle m_toolArea;
         protected int m_halfSquared, m_halfSize;
         protected Point m_postion, m_lastPosition;
-        protected BaseApp m_baseApp;
+        protected Controller m_controller;
 
         public int size {
             set {
@@ -38,6 +39,7 @@ namespace AwesomeCanvas
                 m_toolArea.Width = m_size;
                 m_halfSquared = m_halfSize * m_halfSize;
             }
+            get { return m_size; }
         }
         //-------------------------------------------------------------------------
         // Get methods

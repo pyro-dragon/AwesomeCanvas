@@ -66,11 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\BaseApp.cs" />
+    <Compile Include="Application\CanvasSession.cs" />
     <Compile Include="Application\Controller\Controller.cs" />
     <Compile Include="Application\EzJson.cs" />
     <Compile Include="Application\Layer.cs" />
     <Compile Include="Application\Math\PointFExt.cs" />
+    <Compile Include="Application\Tools\PenTool.cs" />
     <Compile Include="Application\Tools\PaintBrushTool.cs" />
     <Compile Include="Application\Tools\BrushTool.cs" />
     <Compile Include="Application\Tools\FreehandTool.cs" />
