@@ -44,8 +44,7 @@ namespace AwesomeCanvas
         {
             foreach (Layer layer in layers)
             {
-                if (layer.Visible)
-                {
+                if (layer.Visible) {
                     layer.Draw(graphics);
                 }
             }
