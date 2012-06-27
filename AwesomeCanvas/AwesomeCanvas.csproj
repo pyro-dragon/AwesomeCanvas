@@ -84,6 +84,18 @@
     <Compile Include="Forms\CanvasWindow.Designer.cs">
       <DependentUpon>CanvasWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\LayerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\LayerControl.Designer.cs">
+      <DependentUpon>LayerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LayerControlForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\LayerControlForm.Designer.cs">
+      <DependentUpon>LayerControlForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +118,12 @@
     </Compile>
     <EmbeddedResource Include="Forms\CanvasWindow.resx">
       <DependentUpon>CanvasWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LayerControl.resx">
+      <DependentUpon>LayerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LayerControlForm.resx">
+      <DependentUpon>LayerControlForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
