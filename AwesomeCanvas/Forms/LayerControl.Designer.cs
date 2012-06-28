@@ -1,4 +1,4 @@
-﻿namespace AwesomeCanvas.Forms
+﻿namespace AwesomeCanvas
 {
     partial class LayerControl
     {
@@ -75,6 +75,7 @@
             this.layerNameBox.Name = "layerNameBox";
             this.layerNameBox.Size = new System.Drawing.Size(132, 19);
             this.layerNameBox.TabIndex = 0;
+            this.layerNameBox.Text = "Name";
             this.layerNameBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.layerNameBox_KeyUp);
             this.layerNameBox.Leave += new System.EventHandler(this.layerNameBox_Leave);
             this.layerNameBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.layerNameBox_MouseDoubleClick);

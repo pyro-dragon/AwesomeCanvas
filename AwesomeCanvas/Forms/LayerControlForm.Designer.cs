@@ -1,4 +1,4 @@
-﻿namespace AwesomeCanvas.Forms
+﻿namespace AwesomeCanvas
 {
     partial class LayerControlForm
     {
@@ -31,8 +31,8 @@
             this.sidePannelSplitContainer = new System.Windows.Forms.SplitContainer();
             this.previewImageBox = new System.Windows.Forms.PictureBox();
             this.layerControlSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.newLayerButton = new System.Windows.Forms.Button();
             this.deleteLayerButton = new System.Windows.Forms.Button();
+            this.newLayerButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.sidePannelSplitContainer)).BeginInit();
             this.sidePannelSplitContainer.Panel1.SuspendLayout();
             this.sidePannelSplitContainer.Panel2.SuspendLayout();
@@ -57,7 +57,7 @@
             // sidePannelSplitContainer.Panel2
             // 
             this.sidePannelSplitContainer.Panel2.Controls.Add(this.layerControlSplitContainer);
-            this.sidePannelSplitContainer.Size = new System.Drawing.Size(307, 351);
+            this.sidePannelSplitContainer.Size = new System.Drawing.Size(215, 351);
             this.sidePannelSplitContainer.SplitterDistance = 102;
             this.sidePannelSplitContainer.TabIndex = 0;
             // 
@@ -66,7 +66,7 @@
             this.previewImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.previewImageBox.Location = new System.Drawing.Point(0, 0);
             this.previewImageBox.Name = "previewImageBox";
-            this.previewImageBox.Size = new System.Drawing.Size(307, 102);
+            this.previewImageBox.Size = new System.Drawing.Size(215, 102);
             this.previewImageBox.TabIndex = 0;
             this.previewImageBox.TabStop = false;
             // 
@@ -81,9 +81,19 @@
             // 
             this.layerControlSplitContainer.Panel2.Controls.Add(this.deleteLayerButton);
             this.layerControlSplitContainer.Panel2.Controls.Add(this.newLayerButton);
-            this.layerControlSplitContainer.Size = new System.Drawing.Size(307, 245);
+            this.layerControlSplitContainer.Size = new System.Drawing.Size(215, 245);
             this.layerControlSplitContainer.SplitterDistance = 203;
             this.layerControlSplitContainer.TabIndex = 0;
+            // 
+            // deleteLayerButton
+            // 
+            this.deleteLayerButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.deleteLayerButton.Location = new System.Drawing.Point(140, 0);
+            this.deleteLayerButton.Name = "deleteLayerButton";
+            this.deleteLayerButton.Size = new System.Drawing.Size(75, 38);
+            this.deleteLayerButton.TabIndex = 1;
+            this.deleteLayerButton.Text = "Delete Layer";
+            this.deleteLayerButton.UseVisualStyleBackColor = true;
             // 
             // newLayerButton
             // 
@@ -94,16 +104,7 @@
             this.newLayerButton.TabIndex = 0;
             this.newLayerButton.Text = "New Layer";
             this.newLayerButton.UseVisualStyleBackColor = true;
-            // 
-            // deleteLayerButton
-            // 
-            this.deleteLayerButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.deleteLayerButton.Location = new System.Drawing.Point(232, 0);
-            this.deleteLayerButton.Name = "deleteLayerButton";
-            this.deleteLayerButton.Size = new System.Drawing.Size(75, 38);
-            this.deleteLayerButton.TabIndex = 1;
-            this.deleteLayerButton.Text = "Delete Layer";
-            this.deleteLayerButton.UseVisualStyleBackColor = true;
+            this.newLayerButton.Click += new System.EventHandler(this.newLayerButton_Click);
             // 
             // LayerControlForm
             // 
@@ -111,7 +112,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.sidePannelSplitContainer);
             this.Name = "LayerControlForm";
-            this.Size = new System.Drawing.Size(307, 351);
+            this.Size = new System.Drawing.Size(215, 351);
             this.sidePannelSplitContainer.Panel1.ResumeLayout(false);
             this.sidePannelSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sidePannelSplitContainer)).EndInit();

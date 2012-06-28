@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace AwesomeCanvas.Forms
+namespace AwesomeCanvas
 {
     public partial class LayerControl : UserControl
     {
