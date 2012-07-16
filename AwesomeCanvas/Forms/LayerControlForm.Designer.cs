@@ -33,12 +33,14 @@
             this.layerControlSplitContainer = new System.Windows.Forms.SplitContainer();
             this.deleteLayerButton = new System.Windows.Forms.Button();
             this.newLayerButton = new System.Windows.Forms.Button();
+            this.LayerDisplayPanel = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.sidePannelSplitContainer)).BeginInit();
             this.sidePannelSplitContainer.Panel1.SuspendLayout();
             this.sidePannelSplitContainer.Panel2.SuspendLayout();
             this.sidePannelSplitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layerControlSplitContainer)).BeginInit();
+            this.layerControlSplitContainer.Panel1.SuspendLayout();
             this.layerControlSplitContainer.Panel2.SuspendLayout();
             this.layerControlSplitContainer.SuspendLayout();
             this.SuspendLayout();
@@ -63,6 +65,7 @@
             // 
             // previewImageBox
             // 
+            this.previewImageBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.previewImageBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.previewImageBox.Location = new System.Drawing.Point(0, 0);
             this.previewImageBox.Name = "previewImageBox";
@@ -77,12 +80,17 @@
             this.layerControlSplitContainer.Name = "layerControlSplitContainer";
             this.layerControlSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
+            // layerControlSplitContainer.Panel1
+            // 
+            this.layerControlSplitContainer.Panel1.AutoScroll = true;
+            this.layerControlSplitContainer.Panel1.Controls.Add(this.LayerDisplayPanel);
+            // 
             // layerControlSplitContainer.Panel2
             // 
             this.layerControlSplitContainer.Panel2.Controls.Add(this.deleteLayerButton);
             this.layerControlSplitContainer.Panel2.Controls.Add(this.newLayerButton);
             this.layerControlSplitContainer.Size = new System.Drawing.Size(215, 245);
-            this.layerControlSplitContainer.SplitterDistance = 203;
+            this.layerControlSplitContainer.SplitterDistance = 215;
             this.layerControlSplitContainer.TabIndex = 0;
             // 
             // deleteLayerButton
@@ -90,7 +98,7 @@
             this.deleteLayerButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.deleteLayerButton.Location = new System.Drawing.Point(140, 0);
             this.deleteLayerButton.Name = "deleteLayerButton";
-            this.deleteLayerButton.Size = new System.Drawing.Size(75, 38);
+            this.deleteLayerButton.Size = new System.Drawing.Size(75, 26);
             this.deleteLayerButton.TabIndex = 1;
             this.deleteLayerButton.Text = "Delete Layer";
             this.deleteLayerButton.UseVisualStyleBackColor = true;
@@ -100,11 +108,20 @@
             this.newLayerButton.Dock = System.Windows.Forms.DockStyle.Left;
             this.newLayerButton.Location = new System.Drawing.Point(0, 0);
             this.newLayerButton.Name = "newLayerButton";
-            this.newLayerButton.Size = new System.Drawing.Size(75, 38);
+            this.newLayerButton.Size = new System.Drawing.Size(75, 26);
             this.newLayerButton.TabIndex = 0;
             this.newLayerButton.Text = "New Layer";
             this.newLayerButton.UseVisualStyleBackColor = true;
             this.newLayerButton.Click += new System.EventHandler(this.newLayerButton_Click);
+            // 
+            // LayerDisplayPanel
+            // 
+            this.LayerDisplayPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LayerDisplayPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LayerDisplayPanel.Location = new System.Drawing.Point(0, 0);
+            this.LayerDisplayPanel.Name = "LayerDisplayPanel";
+            this.LayerDisplayPanel.Size = new System.Drawing.Size(215, 215);
+            this.LayerDisplayPanel.TabIndex = 0;
             // 
             // LayerControlForm
             // 
@@ -118,6 +135,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.sidePannelSplitContainer)).EndInit();
             this.sidePannelSplitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.previewImageBox)).EndInit();
+            this.layerControlSplitContainer.Panel1.ResumeLayout(false);
             this.layerControlSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.layerControlSplitContainer)).EndInit();
             this.layerControlSplitContainer.ResumeLayout(false);
@@ -132,5 +150,6 @@
         private System.Windows.Forms.SplitContainer layerControlSplitContainer;
         private System.Windows.Forms.Button deleteLayerButton;
         private System.Windows.Forms.Button newLayerButton;
+        private System.Windows.Forms.FlowLayoutPanel LayerDisplayPanel;
     }
 }

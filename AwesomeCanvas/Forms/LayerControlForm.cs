@@ -20,8 +20,9 @@ namespace AwesomeCanvas
         private void newLayerButton_Click(object sender, EventArgs e)
         {
             LayerControl lc = new LayerControl();
-            lc.Dock = DockStyle.Top;
-            layerControlSplitContainer.Panel2.Controls.Add(lc);
+            //lc.Dock = DockStyle.Top;
+            //lc.Show();
+            this.LayerDisplayPanel.Controls.Add(lc);
         }
     }
 }

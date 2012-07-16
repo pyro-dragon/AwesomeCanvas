@@ -50,24 +50,27 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.pointerTools = new System.Windows.Forms.ToolStrip();
-            this.pointerButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolPanelTop = new System.Windows.Forms.ToolStripPanel();
             this.brushTools = new System.Windows.Forms.ToolStrip();
             this.pencilButton = new System.Windows.Forms.ToolStripButton();
             this.brushButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
-            this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
-            this.toolPanelTop = new System.Windows.Forms.ToolStripPanel();
+            this.pointerTools = new System.Windows.Forms.ToolStrip();
+            this.pointerButton = new System.Windows.Forms.ToolStripButton();
             this.toolPanelBottom = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelLeft = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelRight = new System.Windows.Forms.ToolStripPanel();
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
+            this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
+            this.layerControlForm1 = new AwesomeCanvas.LayerControlForm();
             this.menuStrip1.SuspendLayout();
-            this.pointerTools.SuspendLayout();
-            this.brushTools.SuspendLayout();
             this.toolPanelTop.SuspendLayout();
+            this.brushTools.SuspendLayout();
+            this.pointerTools.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -128,8 +131,8 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
-                        | System.Windows.Forms.Keys.S)));
+            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.S)));
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             // 
@@ -242,28 +245,28 @@
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // pointerTools
+            // toolStrip
             // 
-            this.pointerTools.Dock = System.Windows.Forms.DockStyle.None;
-            this.pointerTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pointerButton});
-            this.pointerTools.Location = new System.Drawing.Point(6, 0);
-            this.pointerTools.Name = "pointerTools";
-            this.pointerTools.Size = new System.Drawing.Size(35, 25);
-            this.pointerTools.TabIndex = 0;
+            this.toolStrip.AllowDrop = true;
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip.Location = new System.Drawing.Point(3, 25);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(111, 25);
+            this.toolStrip.TabIndex = 1;
+            this.toolStrip.Visible = false;
+            this.toolStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip_ItemClicked);
             // 
-            // pointerButton
+            // toolPanelTop
             // 
-            this.pointerButton.Checked = true;
-            this.pointerButton.CheckOnClick = true;
-            this.pointerButton.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.pointerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.pointerButton.Image = ((System.Drawing.Image)(resources.GetObject("pointerButton.Image")));
-            this.pointerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.pointerButton.Name = "pointerButton";
-            this.pointerButton.Size = new System.Drawing.Size(23, 22);
-            this.pointerButton.Text = "Pointer";
-            this.pointerButton.Click += new System.EventHandler(this.toolStripButton_Click);
+            this.toolPanelTop.Controls.Add(this.pointerTools);
+            this.toolPanelTop.Controls.Add(this.brushTools);
+            this.toolPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.toolPanelTop.Location = new System.Drawing.Point(0, 0);
+            this.toolPanelTop.Name = "toolPanelTop";
+            this.toolPanelTop.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.toolPanelTop.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.toolPanelTop.Size = new System.Drawing.Size(850, 26);
+            this.toolPanelTop.Visible = false;
             // 
             // brushTools
             // 
@@ -275,7 +278,7 @@
             this.toolStripLabel1,
             this.toolStripNumericUpDownItem1,
             this.toolStripTrackBarItem1});
-            this.brushTools.Location = new System.Drawing.Point(41, 0);
+            this.brushTools.Location = new System.Drawing.Point(38, 0);
             this.brushTools.Name = "brushTools";
             this.brushTools.Size = new System.Drawing.Size(365, 26);
             this.brushTools.TabIndex = 1;
@@ -313,29 +316,28 @@
             this.toolStripLabel1.Size = new System.Drawing.Size(60, 23);
             this.toolStripLabel1.Text = "Tool Size: ";
             // 
-            // toolStripNumericUpDownItem1
+            // pointerTools
             // 
-            this.toolStripNumericUpDownItem1.Name = "toolStripNumericUpDownItem1";
-            this.toolStripNumericUpDownItem1.Size = new System.Drawing.Size(41, 23);
-            this.toolStripNumericUpDownItem1.Text = "0";
+            this.pointerTools.Dock = System.Windows.Forms.DockStyle.None;
+            this.pointerTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pointerButton});
+            this.pointerTools.Location = new System.Drawing.Point(3, 0);
+            this.pointerTools.Name = "pointerTools";
+            this.pointerTools.Size = new System.Drawing.Size(35, 25);
+            this.pointerTools.TabIndex = 0;
             // 
-            // toolStripTrackBarItem1
+            // pointerButton
             // 
-            this.toolStripTrackBarItem1.Name = "toolStripTrackBarItem1";
-            this.toolStripTrackBarItem1.Size = new System.Drawing.Size(200, 23);
-            this.toolStripTrackBarItem1.Text = "toolStripTrackBarItem1";
-            // 
-            // toolPanelTop
-            // 
-            this.toolPanelTop.Controls.Add(this.pointerTools);
-            this.toolPanelTop.Controls.Add(this.brushTools);
-            this.toolPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.toolPanelTop.Location = new System.Drawing.Point(0, 24);
-            this.toolPanelTop.Name = "toolPanelTop";
-            this.toolPanelTop.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.toolPanelTop.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.toolPanelTop.Size = new System.Drawing.Size(850, 26);
-            this.toolPanelTop.Visible = false;
+            this.pointerButton.Checked = true;
+            this.pointerButton.CheckOnClick = true;
+            this.pointerButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.pointerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.pointerButton.Image = ((System.Drawing.Image)(resources.GetObject("pointerButton.Image")));
+            this.pointerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.pointerButton.Name = "pointerButton";
+            this.pointerButton.Size = new System.Drawing.Size(23, 22);
+            this.pointerButton.Text = "Pointer";
+            this.pointerButton.Click += new System.EventHandler(this.toolStripButton_Click);
             // 
             // toolPanelBottom
             // 
@@ -364,22 +366,41 @@
             this.toolPanelRight.RowMargin = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.toolPanelRight.Size = new System.Drawing.Size(0, 516);
             // 
-            // toolStrip
+            // panel1
             // 
-            this.toolStrip.AllowDrop = true;
-            this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip.Location = new System.Drawing.Point(3, 25);
-            this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(111, 25);
-            this.toolStrip.TabIndex = 1;
-            this.toolStrip.Visible = false;
-            this.toolStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip_ItemClicked);
+            this.panel1.Controls.Add(this.layerControlForm1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel1.Location = new System.Drawing.Point(644, 24);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(206, 516);
+            this.panel1.TabIndex = 4;
+            // 
+            // toolStripNumericUpDownItem1
+            // 
+            this.toolStripNumericUpDownItem1.Name = "toolStripNumericUpDownItem1";
+            this.toolStripNumericUpDownItem1.Size = new System.Drawing.Size(41, 23);
+            this.toolStripNumericUpDownItem1.Text = "0";
+            // 
+            // toolStripTrackBarItem1
+            // 
+            this.toolStripTrackBarItem1.Name = "toolStripTrackBarItem1";
+            this.toolStripTrackBarItem1.Size = new System.Drawing.Size(200, 23);
+            this.toolStripTrackBarItem1.Text = "toolStripTrackBarItem1";
+            // 
+            // layerControlForm1
+            // 
+            this.layerControlForm1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layerControlForm1.Location = new System.Drawing.Point(0, 0);
+            this.layerControlForm1.Name = "layerControlForm1";
+            this.layerControlForm1.Size = new System.Drawing.Size(206, 516);
+            this.layerControlForm1.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(850, 562);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolPanelTop);
             this.Controls.Add(this.toolPanelBottom);
             this.Controls.Add(this.toolPanelLeft);
@@ -392,12 +413,13 @@
             this.Text = "Awesome Canvas 3";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.pointerTools.ResumeLayout(false);
-            this.pointerTools.PerformLayout();
-            this.brushTools.ResumeLayout(false);
-            this.brushTools.PerformLayout();
             this.toolPanelTop.ResumeLayout(false);
             this.toolPanelTop.PerformLayout();
+            this.brushTools.ResumeLayout(false);
+            this.brushTools.PerformLayout();
+            this.pointerTools.ResumeLayout(false);
+            this.pointerTools.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -426,20 +448,22 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripPanel toolPanelTop;
         private System.Windows.Forms.ToolStrip pointerTools;
-        private System.Windows.Forms.ToolStrip brushTools;
         private System.Windows.Forms.ToolStripButton pointerButton;
+        private System.Windows.Forms.ToolStrip brushTools;
         private System.Windows.Forms.ToolStripButton pencilButton;
         private System.Windows.Forms.ToolStripButton brushButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private ToolStripNumericUpDownItem toolStripNumericUpDownItem1;
         private ToolStripTrackBarItem toolStripTrackBarItem1;
-        private System.Windows.Forms.ToolStripPanel toolPanelTop;
         private System.Windows.Forms.ToolStripPanel toolPanelBottom;
         private System.Windows.Forms.ToolStripPanel toolPanelLeft;
         private System.Windows.Forms.ToolStripPanel toolPanelRight;
-        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.Panel panel1;
+        private LayerControlForm layerControlForm1;
     }
 }
 

@@ -14,6 +14,7 @@ namespace AwesomeCanvas.Application.Controller
         //public event ControllerEventHandler OnToolChanged;
         //public event ControllerEventHandler OnColorChanged;
         public ControllerEventHandler OnCanvasUpdated;
+        //public
 
         Picture m_picture;
         int m_currentLayer;
@@ -33,39 +34,70 @@ namespace AwesomeCanvas.Application.Controller
    
         }
         
-       
+       // Decypher the JSON command and execute the corrasponding function
         public void ParseJSON(string pJson) {
             //Console.WriteLine(pJson);
             Dictionary<string, string>[] input = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>[]>( pJson );
             foreach (Dictionary<string, string> data in input) 
             {
-                switch (data["function"]) {
+                switch (data["function"]) 
+                {
                     case "change_tool":
-                    ChangeTool(data);
-                    break;
+                        ChangeTool(data); 
+                        break;
+
                     case "tool_down":
-                    ToolDown(data);
-                    break;
+                        ToolDown(data);
+                        break;
+
                     case "tool_move":
-                    ToolMove(data);
-                    break;
+                        ToolMove(data);
+                        break;
+
                     case "tool_up":
-                    ToolUp(data);
-                    break;
+                        ToolUp(data);
+                        break;
+
                     case "tool_size":
-                    ToolSize(data);
-                    break;
-                    default: break;
+                        ToolSize(data);
+                        break;
+
+                    case "change_layer": 
+
+                        break;
+
+                    case "new_layer": 
+
+                        break;
+
+                    case "delete_layer": 
+
+                        break;
+
+                    default: 
+                        break;
                 }
             }
         }
-        public Layer currentLayer { get { if (m_picture != null && m_picture.layers.Count > m_currentLayer && m_picture.layers.Count > 0) { return m_picture.layers[m_currentLayer]; } return null; } }
-        void ChangeTool( Dictionary<string,string> pOptions ){
+        public Layer currentLayer { 
+            get 
+            { 
+                if (m_picture != null && m_picture.layers.Count > m_currentLayer && m_picture.layers.Count > 0) 
+                { 
+                    return m_picture.layers[m_currentLayer]; 
+                } 
+
+                return null; 
+            } 
+        }
+        void ChangeTool( Dictionary<string,string> pOptions )
+        {
             string toolName;
             Tool oldTool = currentTool;
             Tool newTool = null;
             toolName = pOptions["tool"];
-            if (m_tools.TryGetValue(toolName, out newTool)) {
+            if (m_tools.TryGetValue(toolName, out newTool)) 
+            {
                 if (oldTool != null && oldTool.isActive)
                     oldTool.Deactivate();
                 currentTool = newTool;
@@ -74,26 +106,30 @@ namespace AwesomeCanvas.Application.Controller
                     OnToolSizeChanged(this);
                 Console.WriteLine("Changed tool to " + toolName);
             }
-            else {
+            else 
                 throw new Exception("no tool named toolName");
-            }
         }
-        void ToolDown(Dictionary<string, string> pOptions) {
+        void ToolDown(Dictionary<string, string> pOptions) 
+        {
             if (currentLayer != null )
                 currentTool.Down(Convert.ToInt32(pOptions["x"]), Convert.ToInt32(pOptions["y"]), m_picture, currentLayer);
         }
-        void ToolMove(Dictionary<string, string> pOptions) {
-            if (currentTool != null && currentLayer != null) {
+        void ToolMove(Dictionary<string, string> pOptions) 
+        {
+            if (currentTool != null && currentLayer != null) 
+            {
                 currentTool.Move(Convert.ToInt32(pOptions["x"]), Convert.ToInt32(pOptions["y"]), m_picture, currentLayer);
                 if (OnCanvasUpdated != null)
                     OnCanvasUpdated(this);
             }
         }
-        void ToolUp(Dictionary<string, string> pOptions) {
+        void ToolUp(Dictionary<string, string> pOptions) 
+        {
             if (currentLayer != null)
                 currentTool.Up(Convert.ToInt32(pOptions["x"]), Convert.ToInt32(pOptions["y"]), m_picture, currentLayer);
         }
-        void ToolSize(Dictionary<string, string> pOptions) {
+        void ToolSize(Dictionary<string, string> pOptions) 
+        {
             currentTool.size = Convert.ToInt32(pOptions["size"]);
             if(OnToolSizeChanged != null)
                 OnToolSizeChanged(this);
