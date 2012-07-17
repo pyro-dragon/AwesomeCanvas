@@ -62,17 +62,17 @@ namespace AwesomeCanvas.Application.Controller
                         ToolSize(data);
                         break;
 
-                    case "change_layer": 
+                    //case "change_layer": 
 
-                        break;
+                    //    break;
 
-                    case "new_layer": 
+                    //case "new_layer": 
 
-                        break;
+                    //    break;
 
-                    case "delete_layer": 
+                    //case "delete_layer": 
 
-                        break;
+                    //    break;
 
                     default: 
                         break;

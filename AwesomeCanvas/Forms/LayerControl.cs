@@ -9,13 +9,27 @@ using System.Windows.Forms;
 
 namespace AwesomeCanvas
 {
+    public delegate void LayerNameChaged(Layer layer, String name);
+    public delegate void LayerControlSelected(LayerControl layerControl);
+
     // A UI component used to represent a layer in a drawing
     public partial class LayerControl : UserControl
     {
+        // Variables
+        Layer m_layer;
+
+        // Events
+        public event LayerNameChaged layerNameChanged;
+        public event LayerControlSelected layerControlSelected;
+
         // Constructor
-        public LayerControl()
+        public LayerControl(Layer layer)
         {
             InitializeComponent();
+
+            //LayerNameChaged namechange = new LayerNameChaged(); 
+
+            m_layer = layer;
         }
 
         // Event triggered when focus on the layer name box is lost
@@ -69,25 +83,24 @@ namespace AwesomeCanvas
             layerNameBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             // TODO: Trigger layer renameing event
+            layerNameChanged(m_layer, layerNameBox.Text);
         }
 
         // Event for when the layer control is clicked - selecting it
         private void LayerControl_Click(object sender, EventArgs e)
         {
-            // TODO: Triger event that tells the manager that another layer has been selected
-
-            // Indicate this layer is active
-            
+            // Triger event that tells the manager that another layer has been selected
+            layerControlSelected(this);
         }
 
         // Actions carried out when the layer is selected
-        private void LayerActivated()
+        public void LayerActivated()
         {
             this.BackColor = SystemColors.Highlight;
         }
 
         // Actions carried out when the layer is deselected
-        private void LayerDeactivated()
+        public void LayerDeactivated()
         {
             this.BackColor = SystemColors.Control;
         }
