@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
-namespace AwesomeCanvas.Application
+namespace AwesomeCanvas
 {
     public class EzJson
     {

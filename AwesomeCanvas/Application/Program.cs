@@ -3,7 +3,6 @@
 //using System.Linq
 //using System.Windows.Forms;
 using System.Windows.Forms;
-using AwesomeCanvas.Application;
 namespace AwesomeCanvas
 {
     static class Program

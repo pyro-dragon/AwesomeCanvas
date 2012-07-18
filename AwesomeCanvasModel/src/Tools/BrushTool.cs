@@ -4,20 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using AwesomeCanvas.Application.Controller;
 namespace AwesomeCanvas
 {
     //---------------------------------------------------------------------
     // A tool for performing brush strokes with
     //---------------------------------------------------------------------
-    public class PenTool : FreehandTool
+    public class BrushTool : FreehandTool
     {
         protected Color m_colour = Color.Aqua;
-        public PenTool(Controller pController)
+        public BrushTool(Controller pController)
             : base(pController)
         {
-            m_colour = Color.Brown;
-            size = 4;
+            size = 18;
+            m_colour = Color.Maroon;
         }
 
         //---------------------------------------------------------------------
@@ -58,7 +57,7 @@ namespace AwesomeCanvas
                         int x = i % m_toolArea.Width;
                         int y = i/m_toolArea.Width; 
                         // Check if the pixel is inside the circle
-                        if (layer.GetArea().Contains(x + m_toolArea.X, y + m_toolArea.Y))
+                        if ((((m_halfSize - x) * (m_halfSize - x)) + ((m_halfSize - y) * (m_halfSize - y)) <= m_halfSquared) && layer.GetArea().Contains(x + m_toolArea.X, y + m_toolArea.Y))
                         {
                             // Set the pixel RGB channels individually
                             ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride] = m_colour.B;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 
-namespace AwesomeCanvas.Application.Controller
+namespace AwesomeCanvas
 {
     public delegate void ControllerEventHandler( Controller pTarget );
     public class Controller

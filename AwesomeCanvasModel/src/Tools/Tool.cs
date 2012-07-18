@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using AwesomeCanvas.Application.Controller;
 namespace AwesomeCanvas
 {
     // The base object for tools

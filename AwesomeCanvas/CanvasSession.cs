@@ -4,9 +4,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
-using AwesomeCanvas.Application.Controller;
-using AwesomeCanvas.Application;
+using AwesomeCanvas;
 namespace AwesomeCanvas
 {
     /// <summary>

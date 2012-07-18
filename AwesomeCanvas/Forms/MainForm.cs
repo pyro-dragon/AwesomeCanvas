@@ -103,7 +103,7 @@ namespace AwesomeCanvas
         /// When the gui needs to change due to updates in the model
         /// </summary>
         /// <param name="pController"></param>
-        private void SetToolsizeGUI(Application.Controller.Controller pController) {
+        private void SetToolsizeGUI(AwesomeCanvas.Controller pController) {
             TrackBar bar = this.toolStripTrackBarItem1.trackBar;
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             //first disable gui events
