@@ -31,7 +31,7 @@ namespace AwesomeCanvas
             m_canvasWindow.canvasBox.MouseMove += new MouseEventHandler(GuiInput_MouseMove);
             m_canvasWindow.m_session = this;
             
-            m_localController.OnCanvasUpdated = m_canvasWindow.Redraw;
+            m_localController.OnCanvasNeedsRedraw = m_canvasWindow.Redraw;
 
         }
 
@@ -39,8 +39,11 @@ namespace AwesomeCanvas
         {
             EzJson j = new EzJson();
             j.BeginFunction("tool_up");
+            j.AddData("tool", m_mainForm.GetToolName());
+            j.AddData("size", m_mainForm.GetToolSize().ToString());
             j.AddData("x", e.X.ToString());
             j.AddData("y", e.Y.ToString());
+            j.AddData("layer", "0");
             m_localController.ParseJSON(j.Finish());
         }
 
@@ -48,8 +51,11 @@ namespace AwesomeCanvas
         {
             EzJson j = new EzJson();
             j.BeginFunction("tool_down");
+            j.AddData("tool", m_mainForm.GetToolName());
+            j.AddData("size", m_mainForm.GetToolSize().ToString());
             j.AddData("x", e.X.ToString());
             j.AddData("y", e.Y.ToString());
+            j.AddData("layer", "0");
             m_localController.ParseJSON(j.Finish());
         }
 
@@ -57,27 +63,15 @@ namespace AwesomeCanvas
         {
             EzJson j = new EzJson();
             j.BeginFunction("tool_move");
+            j.AddData("tool", m_mainForm.GetToolName());
+            j.AddData("size", m_mainForm.GetToolSize().ToString());
             j.AddData("x", e.X.ToString());
             j.AddData("y", e.Y.ToString());
+            j.AddData("layer", "0");
             m_localController.ParseJSON(j.Finish());
         }
-        public void GuiInput_ToolSizeChanged( int pNewSize ) {
-            EzJson j = new EzJson();
-            j.BeginFunction("tool_size");
-            j.AddData("size", pNewSize.ToString());
-            m_localController.ParseJSON(j.Finish());
-        }
-        public void GuiInput_ToolSizeChanged(string pToolName) {
-            EzJson j = new EzJson();
-            j.BeginFunction("change_tool");
-            j.AddData("tool", pToolName);
-            m_localController.ParseJSON(j.Finish());
-        }
-        private void GuiInput_ToolChange(ToolStripButton name) {
-            EzJson j = new EzJson();
-            j.BeginFunction("change_tool");
-            j.AddData("tool", name.Text);
-            m_localController.ParseJSON(j.Finish());
-        }
+
+  
+
     }
 }

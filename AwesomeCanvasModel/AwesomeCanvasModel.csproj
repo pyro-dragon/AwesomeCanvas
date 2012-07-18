@@ -50,6 +50,7 @@
     <Compile Include="src\Controller\Controller.cs" />
     <Compile Include="src\EzJson.cs" />
     <Compile Include="src\Layer.cs" />
+    <Compile Include="src\Math\MathExt.cs" />
     <Compile Include="src\Math\PointFExt.cs" />
     <Compile Include="src\Picture.cs" />
     <Compile Include="src\Tools\BrushTool.cs" />

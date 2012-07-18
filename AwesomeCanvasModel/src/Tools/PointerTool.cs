@@ -9,7 +9,6 @@ namespace AwesomeCanvas
     {
         public PointerTool(Controller pController) : base(pController)
         {
-            size = 0;
         }
     }
 }

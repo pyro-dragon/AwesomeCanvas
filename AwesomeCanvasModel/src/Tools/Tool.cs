@@ -13,38 +13,19 @@ namespace AwesomeCanvas
 
         public Tool(Controller pController)
         {
-            size = DEFAULT_TOOLSIZE;
             m_controller = pController;
         }
         public bool isDown { get; private set; } //true when mouse is down
-        public bool isActive { get; private set; } //true when tool is in the hand of the controller
-        public virtual void Activate() { isActive = true;   }
-        public virtual void Deactivate() { isActive = false; }
-        public virtual void Down(int pX, int pY, Picture pPicture, Layer pLayer) { isDown = true; m_lastPosition = m_postion = new Point(pX, pY); }
-        public virtual void Move(int pX, int pY, Picture pPicture, Layer pLayer) { }
-        public virtual void Up(int pX, int pY, Picture pPicture, Layer pLayer) { isDown = false; }
-
-        private int m_size;
-        protected Rectangle m_toolArea;
-        protected int m_halfSquared, m_halfSize;
-        protected Point m_postion, m_lastPosition;
-        protected Controller m_controller;
-
-        public int size {
-            set {
-                m_size = value;
-                m_halfSize = m_size / 2;
-                m_toolArea.Height = m_size;
-                m_toolArea.Width = m_size;
-                m_halfSquared = m_halfSize * m_halfSize;
-            }
-            get { return m_size; }
+        public virtual void Down(int pX, int pY, int pSize, Picture pPicture, Layer pLayer) { 
+            isDown = true; 
+            m_lastPosition = new Point(pX, pY);
+            m_lastSize = pSize;
         }
-        //-------------------------------------------------------------------------
-        // Get methods
-        //-------------------------------------------------------------------------
-        public int GetSize() { return m_size; }
-        public int GetHalfSize() { return m_size; }
-        public Rectangle GetToolArea() { return m_toolArea; }
+        public virtual void Move(int pX, int pY, int pSize, Picture pPicture, Layer pLayer) {}
+        public virtual void Up(int pX, int pY, int pSize, Picture pPicture, Layer pLayer) { isDown = false; }
+
+        protected int m_lastSize;
+        protected Point m_lastPosition;
+        protected Controller m_controller;      
     }
 }
