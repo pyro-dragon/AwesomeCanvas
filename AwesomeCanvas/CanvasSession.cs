@@ -4,6 +4,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
 using AwesomeCanvas;
 namespace AwesomeCanvas
 {
@@ -40,22 +41,35 @@ namespace AwesomeCanvas
             EzJson j = new EzJson();
             j.BeginFunction("tool_up");
             j.AddData("tool", m_mainForm.GetToolName());
-            j.AddData("size", m_mainForm.GetToolSize().ToString());
-            j.AddData("x", e.X.ToString());
-            j.AddData("y", e.Y.ToString());
+            j.AddData("x", e.X);
+            j.AddData("y", e.Y);
+            j.AddData("pressure", 0);
             j.AddData("layer", "0");
             m_localController.ParseJSON(j.Finish());
         }
 
         public void GuiInput_MouseDown(object sender, MouseEventArgs e)
         {
+            string toolName = m_mainForm.GetToolName();
             EzJson j = new EzJson();
             j.BeginFunction("tool_down");
-            j.AddData("tool", m_mainForm.GetToolName());
-            j.AddData("size", m_mainForm.GetToolSize().ToString());
-            j.AddData("x", e.X.ToString());
-            j.AddData("y", e.Y.ToString());
+            j.AddData("tool", toolName);
+            j.AddData("pressure", (128).ToString());
+            j.AddData("x", e.X);
+            j.AddData("y", e.Y);
             j.AddData("layer", "0");
+
+            switch (toolName) {
+                case "brush":
+                    j.AddData("options", m_mainForm.GetBrushOptions());
+                break;
+                case "pen":
+                    j.AddData("options", m_mainForm.GetPenOptions());
+                break;
+                default:
+                    j.AddData("options", null);
+                break;
+            }
             m_localController.ParseJSON(j.Finish());
         }
 
@@ -64,7 +78,7 @@ namespace AwesomeCanvas
             EzJson j = new EzJson();
             j.BeginFunction("tool_move");
             j.AddData("tool", m_mainForm.GetToolName());
-            j.AddData("size", m_mainForm.GetToolSize().ToString());
+            j.AddData("pressure", (128).ToString());
             j.AddData("x", e.X.ToString());
             j.AddData("y", e.Y.ToString());
             j.AddData("layer", "0");

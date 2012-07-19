@@ -11,21 +11,40 @@ namespace AwesomeCanvas
     //---------------------------------------------------------------------
     public class BrushTool : FreehandTool
     {
-        protected Color m_colour = Color.Aqua;
+        //options for BrushTool
+        public class Options : ToolOptions 
+        {
+            public bool pressureSensitive;
+            public Color color;
+            public int size;
+        }
+
         public BrushTool(Controller pController)
             : base(pController)
         {
-            m_colour = Color.Maroon;
+        }
+        
+        //cover up base.options with a casted version
+        protected new Options options {
+            get { return base.options as Options; }
+        }
+        
+        //SetOptions is called on every Tool.Down
+        //I haven't figured a better way for converting anon json objects.
+        protected override void SetOptions(Newtonsoft.Json.Linq.JContainer o) {
+            base.options = o.ToObject<Options>();
         }
 
         //---------------------------------------------------------------------
         // Render the alterations to the layer
         //---------------------------------------------------------------------
-        public override void DrawStep(Layer layer, Point position, int size)
+        protected override void DrawStep(Layer layer, Point position, int pPressure)
         {
+            int size = options.size;
             int halfSize = size / 2;
             Rectangle toolArea = new Rectangle(0, 0, size, size);
             int halfSizeSquared = halfSize * halfSize;
+            Color color = options.color;
 
             // Set the tool size rect to the locate on of the point to be painted
             Point centre = new Point((position.X - halfSize),
@@ -63,10 +82,10 @@ namespace AwesomeCanvas
                         if ((((halfSize - x) * (halfSize - x)) + ((halfSize - y) * (halfSize - y)) <= halfSizeSquared) && layer.GetArea().Contains(x + toolArea.X, y + toolArea.Y))
                         {
                             // Set the pixel RGB channels individually
-                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride] = m_colour.B;
-                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 1] = m_colour.G;
-                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 2] = m_colour.R;
-                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 3] = m_colour.A;
+                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride] = color.B;
+                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 1] = color.G;
+                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 2] = color.R;
+                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 3] = color.A;
                         }
                     }
                 }

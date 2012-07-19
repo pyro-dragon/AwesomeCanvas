@@ -28,27 +28,27 @@ namespace AwesomeCanvas
             if (m_picture == null)
                 return;
             //Console.WriteLine(pJson);
-            Dictionary<string, string>[] input = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>[]>( pJson );
+            Dictionary<string, object>[] input = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>[]>(pJson);
 
-            foreach (Dictionary<string, string> data in input) 
+            foreach (Dictionary<string, object> data in input) 
             {
                 int layerIndex = Convert.ToInt32(data["layer"]);
                 Layer layer = layers[layerIndex];
-                int size = Convert.ToInt32(data["size"]);
+                int pressure = Convert.ToInt32(data["pressure"]);
                 int x = Convert.ToInt32(data["x"]);
                 int y = Convert.ToInt32(data["y"]);
-                Tool tool = m_tools[data["tool"]];
+                Tool tool = m_tools[data["tool"] as string];
 
-                switch (data["function"]) 
+                switch (data["function"] as string) 
                 {
                     case "tool_down":
-                        tool.Down(x, y, size, m_picture, layers[layerIndex]);
+                        tool.Down(x, y, pressure, m_picture, layers[layerIndex], data["options"]);
                         break;
                     case "tool_move":
-                        tool.Move(x, y, size, m_picture, layers[layerIndex]);
+                        tool.Move(x, y, pressure, m_picture, layers[layerIndex]);
                         break;
                     case "tool_up":
-                        tool.Up(x, y, size, m_picture, layers[layerIndex]);
+                        tool.Up(x, y, pressure, m_picture, layers[layerIndex]);
                         break;
 
                     //case "change_layer": 

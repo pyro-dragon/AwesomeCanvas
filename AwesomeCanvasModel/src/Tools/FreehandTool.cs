@@ -18,17 +18,17 @@ namespace AwesomeCanvas
             
         }
 
-        public override void Move(int pX, int pY, int pSize, Picture pPicture, Layer pLayer) {
-            base.Move(pX, pY, pSize, pPicture, pLayer);
+        public override void Move(int pX, int pY, int pPressure, Picture pPicture, Layer pLayer) {
+            base.Move(pX, pY, pPressure, pPicture, pLayer);
             Point position = new Point(pX, pY);
             if (isDown)
-                DrawLine(pLayer, m_lastPosition, position, m_lastSize, pSize);
+                DrawLine(pLayer, m_lastPosition, position, m_lastPressure, pPressure);
             m_lastPosition = position;
-            m_lastSize = pSize;
+            m_lastPressure = pPressure;
         }
 
         // Calculate the line and step through
-        public void DrawLine(Layer layer, Point start, Point end, int pStartSize, int pEndSize)
+        public void DrawLine(Layer layer, Point start, Point end, int pStartPressure, int pEndPressure)
         {
             // Create a line vector
             PointF fStart = PointFExt.FromPoint(start);
@@ -47,16 +47,18 @@ namespace AwesomeCanvas
                 // Draw a pixel
                 float quota =  (float)i / length;
                 PointF position = PointFExt.Lerp(fStart, fEnd,quota);
-                int size = MathExt.RoundToInt(MathExt.Lerp(pStartSize, pEndSize, quota));
-                DrawStep(layer, position.ToPointRounded(), size);
+                int pressure = MathExt.RoundToInt(MathExt.Lerp(pStartPressure, pEndPressure, quota));
+                DrawStep(layer, position.ToPointRounded(), pressure);
 
             }
         }
 
         // Draw on the actual canvas
-        public virtual void DrawStep(Layer layer, System.Drawing.Point point, int pSize)
+        protected virtual void DrawStep(Layer layer, System.Drawing.Point point, int pPressure)
         { 
             
         }
+
+        protected virtual void GetSize() { }
     }
 }

@@ -7,18 +7,18 @@ namespace AwesomeCanvas
 {
     public class EzJson
     {
-        List<Dictionary<string,string>> l = new List<Dictionary<string,string>>();
+        List<Dictionary<string, object>> l = new List<Dictionary<string, object>>();
         public void BeginFunction(string pName)
         {
-            l.Add(new Dictionary<string,string>());
+            l.Add(new Dictionary<string, object>());
             current.Add("function", pName.ToLower());
         }
-        public void AddData(string pKey, string pData) {
-            current.Add(pKey.ToLower(), pData.ToLower());
+        public void AddData(string pKey, object pData) {
+            current.Add(pKey.ToLower(), pData);
         }
-        public Dictionary<string, string> current { get { return l.Last(); } }
+        public Dictionary<string, object> current { get { return l.Last(); } }
         public string Finish() {
-            Dictionary<string, string>[] arr = l.ToArray();
+            Dictionary<string, object>[] arr = l.ToArray();
             l.Clear();
             return JsonConvert.SerializeObject(arr);
         }

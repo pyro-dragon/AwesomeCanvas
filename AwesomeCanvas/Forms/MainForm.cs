@@ -117,7 +117,6 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         // Bush tool button was clicked
         //---------------------------------------------------------------------
-        string selectedTool = "";
         private void toolStripButton_Click(object sender, EventArgs e)
         {
             m_activeToolButton.Checked = false;
@@ -128,12 +127,29 @@ namespace AwesomeCanvas
 
         }
 
-        internal int GetToolSize() {
+        private int GetToolSize() {
             return (int)this.toolStripNumericUpDownItem1.numericUpDown.Value;
         }
 
         internal string GetToolName() {
-            return m_activeToolButton.Text;
+            return m_activeToolButton.Text.ToLower();
+        }
+
+
+        /// later we will collect information from diffrent option form here (color wheel, brush options etc)
+        internal BrushTool.Options GetBrushOptions() {
+            return new BrushTool.Options {
+                color = Color.Linen,
+                size = GetToolSize(),
+                pressureSensitive = false
+            };
+        }
+        /// later we will collect information from diffrent option form here (color wheel, pen options etc)
+        internal PenTool.Options GetPenOptions() {
+            return new PenTool.Options {
+                color = Color.OrangeRed,
+                size = GetToolSize()
+            };
         }
     }
 }
