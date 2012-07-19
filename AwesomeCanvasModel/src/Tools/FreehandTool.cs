@@ -18,11 +18,11 @@ namespace AwesomeCanvas
             
         }
 
-        public override void Move(int pX, int pY, int pPressure, Picture pPicture, Layer pLayer) {
-            base.Move(pX, pY, pPressure, pPicture, pLayer);
+        public override void Move(int pX, int pY, int pPressure) {
+            base.Move(pX, pY, pPressure);
             Point position = new Point(pX, pY);
             if (isDown)
-                DrawLine(pLayer, m_lastPosition, position, m_lastPressure, pPressure);
+                DrawLine(m_layer, m_lastPosition, position, m_lastPressure, pPressure);
             m_lastPosition = position;
             m_lastPressure = pPressure;
         }

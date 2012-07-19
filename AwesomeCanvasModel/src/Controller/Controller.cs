@@ -11,10 +11,12 @@ namespace AwesomeCanvas
     {
 
         public ControllerEventHandler OnCanvasNeedsRedraw;
-        //public
+        
         Picture m_picture;
         string m_username;
         Dictionary<string, Tool> m_tools = new Dictionary<string, Tool>();
+        Tool m_currentTool = null;
+
         public Controller( string pUsername, Picture pPicture) {
             m_tools.Add("brush", new BrushTool(this));
             m_tools.Add("pen", new PenTool(this));
@@ -32,23 +34,29 @@ namespace AwesomeCanvas
 
             foreach (Dictionary<string, object> data in input) 
             {
-                int layerIndex = Convert.ToInt32(data["layer"]);
-                Layer layer = layers[layerIndex];
+                //so far all commands contains these three parameters
                 int pressure = Convert.ToInt32(data["pressure"]);
                 int x = Convert.ToInt32(data["x"]);
                 int y = Convert.ToInt32(data["y"]);
-                Tool tool = m_tools[data["tool"] as string];
 
                 switch (data["function"] as string) 
                 {
-                    case "tool_down":
-                        tool.Down(x, y, pressure, m_picture, layers[layerIndex], data["options"]);
+                    case "tool_down": //tool down comes with all the tool options
+                        Tool tool = m_tools[data["tool"] as string]; //swap tool on tool down
+                        int layerIndex = Convert.ToInt32(data["layer"]);
+                        Layer layer = layers[layerIndex];
+                        m_currentTool = tool;
+                        m_currentTool.Down(x, y, pressure, m_picture, layer, data["options"]);
                         break;
                     case "tool_move":
-                        tool.Move(x, y, pressure, m_picture, layers[layerIndex]);
+                        if(m_currentTool != null) //tool move can happend without tool beeing down
+                            m_currentTool.Move(x, y, pressure);
                         break;
                     case "tool_up":
-                        tool.Up(x, y, pressure, m_picture, layers[layerIndex]);
+                        if (m_currentTool != null)//tool up might happend without tool beeing down
+                            m_currentTool.Up(x, y, pressure);
+                        //release tool
+                        m_currentTool = null;
                         break;
 
                     //case "change_layer": 

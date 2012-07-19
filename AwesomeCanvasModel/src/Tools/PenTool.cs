@@ -11,7 +11,7 @@ namespace AwesomeCanvas
     //---------------------------------------------------------------------
     public class PenTool : FreehandTool
     {
-        public class Options : ToolOptions
+        public class Options : Tool.Options
         {
             public Color color;
             public int size;

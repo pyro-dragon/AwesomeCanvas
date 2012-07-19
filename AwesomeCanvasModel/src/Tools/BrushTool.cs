@@ -12,7 +12,7 @@ namespace AwesomeCanvas
     public class BrushTool : FreehandTool
     {
         //options for BrushTool
-        public class Options : ToolOptions 
+        public class Options : Tool.Options 
         {
             public bool pressureSensitive;
             public Color color;
