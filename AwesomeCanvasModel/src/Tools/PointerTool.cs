@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using AwesomeCanvas.Application.Controller;
+using AwesomeCanvas;
 namespace AwesomeCanvas
 {
     class PointerTool : Tool
     {
-        public PointerTool(Controller pController) : base(pController)
+        public PointerTool(ToolRunner pController) : base(pController)
         {
-            size = 0;
         }
     }
 }

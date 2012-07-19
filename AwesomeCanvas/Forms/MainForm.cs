@@ -35,7 +35,9 @@ namespace AwesomeCanvas
    
             this.toolStripTrackBarItem1.trackBar.ValueChanged += OnGUISizeChanged;
             this.toolStripNumericUpDownItem1.numericUpDown.ValueChanged += OnGUISizeChanged;
-            this.m_activeToolButton = this.pointerButton;
+            this.m_activeToolButton = this.pointerButton; 
+            NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
+            number.Value = 17;
         }
         //---------------------------------------------------------------------
         // The function for when the New menu item is clicked
@@ -80,16 +82,15 @@ namespace AwesomeCanvas
         /// Swap Active Canvas Session
         /// </summary>
         private void OnCanvasWindowGotFocus(object sender, EventArgs e) {
-            Console.WriteLine("Canvas Got Focus!");
+  //          Console.WriteLine("Canvas Got Focus!");
             CanvasWindow cw = sender as CanvasWindow;
             SetCurrentCanvasSession(cw.m_session);
         }
 
         private void SetCurrentCanvasSession(CanvasSession pCanvasSession) {
             m_currentCanvasSession = pCanvasSession;
-            m_currentCanvasSession.localController.OnToolSizeChanged = SetToolsizeGUI;
             //update the toolbar
-            SetToolsizeGUI(m_currentCanvasSession.localController);
+
         }
         //---------------------------------------------------------------------
         ///  Deactivate the current tool and activate the new tool
@@ -97,29 +98,6 @@ namespace AwesomeCanvas
         private void SwitchToolButton(ToolStripButton sender)
         {
             m_activeToolButton.Checked = false;
-        }
-
-        /// <summary>
-        /// When the gui needs to change due to updates in the model
-        /// </summary>
-        /// <param name="pController"></param>
-        private void SetToolsizeGUI(Application.Controller.Controller pController) {
-            TrackBar bar = this.toolStripTrackBarItem1.trackBar;
-            NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
-            //first disable gui events
-            bar.ValueChanged -= OnGUISizeChanged;
-            number.ValueChanged -= OnGUISizeChanged;
-            //change the values
-            if (bar.Value != pController.currentTool.size) {
-                bar.Value = pController.currentTool.size;
-            }
-            if ((int)number.Value != pController.currentTool.size) {
-                number.Value = (int)pController.currentTool.size;
-            }
-            //re-add the events
-            bar.ValueChanged += OnGUISizeChanged;
-            number.ValueChanged += OnGUISizeChanged;
-            m_currentCanvasSession.canvasWindow.Focus();
         }
 
         //---------------------------------------------------------------------
@@ -130,13 +108,9 @@ namespace AwesomeCanvas
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             if (sender == bar && bar.Value != (int)number.Value) {
                 number.Value = bar.Value;
-                m_currentCanvasSession.GuiInput_ToolSizeChanged((int)number.Value);
-                m_currentCanvasSession.canvasWindow.Focus();
             }
             if (sender == number && bar.Value != number.Value) {
                 bar.Value = Math.Max(0, Math.Min((int)number.Value, bar.Maximum));
-                m_currentCanvasSession.GuiInput_ToolSizeChanged((int)number.Value);
-                m_currentCanvasSession.canvasWindow.Focus();
             }
         }
         
@@ -147,14 +121,32 @@ namespace AwesomeCanvas
         {
             m_activeToolButton.Checked = false;
             m_activeToolButton = (ToolStripButton)sender;
-
-            // Send tool change event
-            if (m_currentCanvasSession != null)
-                m_currentCanvasSession.GuiInput_ToolSizeChanged(((ToolStripButton)sender).Text);
         }
 
         private void toolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
 
+        }
+        internal string GetToolName() {
+            return m_activeToolButton.Text.ToLower();
+        }
+
+        private int GetToolSize() {
+            return (int)this.toolStripNumericUpDownItem1.numericUpDown.Value;
+        }
+        /// later we will collect information from diffrent option forms (color wheel, brush options etc)
+        internal BrushTool.Options GetBrushOptions() {
+            return new BrushTool.Options {
+                color = Color.Linen,
+                size = GetToolSize(),
+                pressureSensitive = false
+            };
+        }
+        /// later we will collect information from diffrent option forms (color wheel, pen options etc)
+        internal PenTool.Options GetPenOptions() {
+            return new PenTool.Options {
+                color = Color.OrangeRed,
+                size = GetToolSize()
+            };
         }
     }
 }

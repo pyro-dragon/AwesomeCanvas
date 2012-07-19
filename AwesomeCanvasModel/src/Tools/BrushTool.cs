@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using AwesomeCanvas.Application.Controller;
 namespace AwesomeCanvas
 {
     //---------------------------------------------------------------------
@@ -12,27 +11,49 @@ namespace AwesomeCanvas
     //---------------------------------------------------------------------
     public class BrushTool : FreehandTool
     {
-        protected Color m_colour = Color.Aqua;
-        public BrushTool(Controller pController)
+        //options for BrushTool
+        public class Options : Tool.Options 
+        {
+            public bool pressureSensitive;
+            public Color color;
+            public int size;
+        }
+
+        public BrushTool(ToolRunner pController)
             : base(pController)
         {
-            size = 18;
-            m_colour = Color.Maroon;
+        }
+        
+        //cover up base.options with a casted version
+        protected new BrushTool.Options options {
+            get { return base.options as BrushTool.Options; }
+        }
+        
+        //SetOptions is called on every Tool.Down
+        //I haven't figured a better way for converting anon json objects.
+        protected override void SetOptions(Newtonsoft.Json.Linq.JContainer o) {
+            base.options = o.ToObject<Options>();
         }
 
         //---------------------------------------------------------------------
         // Render the alterations to the layer
         //---------------------------------------------------------------------
-        public override void DrawStep(Layer layer, Point position)
+        protected override void DrawStep(Layer layer, Point position, int pPressure)
         {
+            int size = options.size;
+            int halfSize = size / 2;
+            Rectangle toolArea = new Rectangle(0, 0, size, size);
+            int halfSizeSquared = halfSize * halfSize;
+            Color color = options.color;
+
             // Set the tool size rect to the locate on of the point to be painted
-            Point centre = new Point((position.X - m_halfSize),
-                                     (position.Y - m_halfSize));
-            m_toolArea.Location = centre;
+            Point centre = new Point((position.X - halfSize),
+                                     (position.Y - halfSize));
+            toolArea.Location = centre;
 
             // Get the area to be painted
             Rectangle areaToPaint = new Rectangle();
-            areaToPaint = Rectangle.Intersect(layer.GetArea(), m_toolArea);
+            areaToPaint = Rectangle.Intersect(layer.GetArea(), toolArea);
 
             // Get bitmap data to draw to
             Bitmap bmp = layer.GetBitmap();
@@ -52,19 +73,19 @@ namespace AwesomeCanvas
                 if (!areaToPaint.IsEmpty)
                 {
                     // Go through the draw area and set the pixels as they should be
-                    int len = m_toolArea.Height * m_toolArea.Width;
+                    int len = toolArea.Height * toolArea.Width;
                     for (int i = 0; i < len; i++ )
                     {
-                        int x = i % m_toolArea.Width;
-                        int y = i/m_toolArea.Width; 
+                        int x = i % toolArea.Width;
+                        int y = i/toolArea.Width; 
                         // Check if the pixel is inside the circle
-                        if ((((m_halfSize - x) * (m_halfSize - x)) + ((m_halfSize - y) * (m_halfSize - y)) <= m_halfSquared) && layer.GetArea().Contains(x + m_toolArea.X, y + m_toolArea.Y))
+                        if ((((halfSize - x) * (halfSize - x)) + ((halfSize - y) * (halfSize - y)) <= halfSizeSquared) && layer.GetArea().Contains(x + toolArea.X, y + toolArea.Y))
                         {
                             // Set the pixel RGB channels individually
-                            ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride] = m_colour.B;
-                            ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 1] = m_colour.G;
-                            ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 2] = m_colour.R;
-                            ptr[((x + m_toolArea.X) * 4) + (y + m_toolArea.Y) * stride + 3] = m_colour.A;
+                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride] = color.B;
+                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 1] = color.G;
+                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 2] = color.R;
+                            ptr[((x + toolArea.X) * 4) + (y + toolArea.Y) * stride + 3] = color.A;
                         }
                     }
                 }

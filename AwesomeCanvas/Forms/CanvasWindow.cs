@@ -53,7 +53,7 @@ namespace AwesomeCanvas
             m_picture.DrawPicture(e.Graphics);
         }
 
-        public void Redraw( Application.Controller.Controller pController ) 
+        public void Redraw( ToolRunner pController ) 
         {
             canvasBox.Invalidate();
         }
