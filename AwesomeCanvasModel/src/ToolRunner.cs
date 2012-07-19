@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
 namespace AwesomeCanvas
 {
     public delegate void ToolRunnerEventHandler( ToolRunner pTarget );
@@ -11,7 +10,7 @@ namespace AwesomeCanvas
     {
 
         public ToolRunnerEventHandler OnCanvasNeedsRedraw;
-        
+        History history = new History();
         Picture m_picture;
         string m_username;
         Dictionary<string, Tool> m_tools = new Dictionary<string, Tool>();
@@ -31,33 +30,72 @@ namespace AwesomeCanvas
                 return;
             //Console.WriteLine(pJson);
             Dictionary<string, object>[] input = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>[]>(pJson);
-
-            foreach (Dictionary<string, object> data in input) 
+            ExecuteCommands(input);
+            OnCanvasNeedsRedraw(this);
+        }
+        void ToolDown(Dictionary<string, object> inputMessage) {
+            int pressure = Convert.ToInt32(inputMessage["pressure"]);
+            int x = Convert.ToInt32(inputMessage["x"]);
+            int y = Convert.ToInt32(inputMessage["y"]);
+            Tool tool = m_tools[inputMessage["tool"] as string]; //swap tool on tool down
+            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
+            Layer layer = layers[layerIndex];
+            m_currentTool = tool;
+            m_currentTool.Down(x, y, pressure, m_picture, layer, inputMessage["options"]);
+        }
+        void ToolMove(Dictionary<string, object> inputMessage) {
+            int pressure = Convert.ToInt32(inputMessage["pressure"]);
+            int x = Convert.ToInt32(inputMessage["x"]);
+            int y = Convert.ToInt32(inputMessage["y"]);
+            if (m_currentTool != null) //tool move can happend without tool beeing down
             {
-                //so far all commands contains these three parameters
-                int pressure = Convert.ToInt32(data["pressure"]);
-                int x = Convert.ToInt32(data["x"]);
-                int y = Convert.ToInt32(data["y"]);
+                m_currentTool.Move(x, y, pressure);
+                history.StoreUndoData(inputMessage);
+            }
+        }
+        void ToolUp(Dictionary<string, object> inputMessage) {
+            int pressure = Convert.ToInt32(inputMessage["pressure"]);
+            int x = Convert.ToInt32(inputMessage["x"]);
+            int y = Convert.ToInt32(inputMessage["y"]);
+            if (m_currentTool != null) //tool move can happend without tool beeing down
+            {
+                m_currentTool.Up(x, y, pressure);
+                m_currentTool = null;
+            }
+        }
+        void ExecuteCommands(IEnumerable<Dictionary<string, object>> input) 
+        {
+            foreach (Dictionary<string, object>inputMessage in input) 
+            {
 
-                switch (data["function"] as string) 
+                switch (inputMessage["function"] as string) 
                 {
                     case "tool_down": //tool down comes with all the tool options
-                        Tool tool = m_tools[data["tool"] as string]; //swap tool on tool down
-                        int layerIndex = Convert.ToInt32(data["layer"]);
-                        Layer layer = layers[layerIndex];
-                        m_currentTool = tool;
-                        m_currentTool.Down(x, y, pressure, m_picture, layer, data["options"]);
-                        break;
+                    ToolDown(inputMessage);
+                    history.BeginNewUndoLevel();
+                    history.StoreUndoData(inputMessage);
+                    break;
                     case "tool_move":
-                        if(m_currentTool != null) //tool move can happend without tool beeing down
-                            m_currentTool.Move(x, y, pressure);
-                        break;
+                    ToolMove(inputMessage);
+                    history.StoreUndoData(inputMessage);
+                    break;
                     case "tool_up":
-                        if (m_currentTool != null)//tool up might happend without tool beeing down
-                            m_currentTool.Up(x, y, pressure);
-                        //release tool
-                        m_currentTool = null;
-                        break;
+                    ToolUp(inputMessage);
+                    history.StoreUndoData(inputMessage);
+                    break;
+                    case "clear":
+                    m_picture.Clear();
+                    history.StoreUndoData(inputMessage);
+                    break;
+                    case "undo":
+                    m_picture.Clear();
+                    history.PopUndoLevel();
+                    Dictionary<string,object>[] h = history.ToArray();//important to copy to array since the history will be modified!
+                    history.Clear();
+                    ExecuteCommands(h);
+                    
+                    break;
+                    
 
                     //case "change_layer": 
 
@@ -71,10 +109,10 @@ namespace AwesomeCanvas
 
                     //    break;
 
-                    default: 
-                        break;
+                    default:
+                    break;
                 }
-                OnCanvasNeedsRedraw(this);
+
             }
         }
         public List<Layer> layers { 

@@ -38,6 +38,7 @@ namespace AwesomeCanvas
             this.m_activeToolButton = this.pointerButton; 
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             number.Value = 17;
+   
         }
         //---------------------------------------------------------------------
         // The function for when the New menu item is clicked
@@ -89,8 +90,7 @@ namespace AwesomeCanvas
 
         private void SetCurrentCanvasSession(CanvasSession pCanvasSession) {
             m_currentCanvasSession = pCanvasSession;
-            //update the toolbar
-
+            m_currentCanvasSession.OnFocus();
         }
         //---------------------------------------------------------------------
         ///  Deactivate the current tool and activate the new tool

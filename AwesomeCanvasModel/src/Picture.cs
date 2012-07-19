@@ -31,10 +31,7 @@ namespace AwesomeCanvas
 
             // Set layer1's colour to white
             // TODO: Let the user pick the starting colour
-            using (Graphics graphics = Graphics.FromImage(layers[0].GetBitmap()))
-            {
-                graphics.Clear(Color.White);
-            }
+            Clear();
         }
 
         //---------------------------------------------------------------------
@@ -46,6 +43,16 @@ namespace AwesomeCanvas
             {
                 if (layer.Visible) {
                     layer.Draw(graphics);
+                }
+            }
+        }
+
+        public void Clear() {
+            // Set layer1's colour to white
+            // TODO: Let the user pick the starting colour
+            for (int i = 0; i < layers.Count; i++ ){
+                using (Graphics graphics = Graphics.FromImage(layers[i].GetBitmap())) {
+                    graphics.Clear(Color.White);
                 }
             }
         }
