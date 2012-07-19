@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using AwesomeCanvas.Application.Math;
-using AwesomeCanvas.Application.Controller;
+
 namespace AwesomeCanvas
 {
     //-------------------------------------------------------------------------
@@ -13,22 +12,23 @@ namespace AwesomeCanvas
     public class FreehandTool : Tool 
     {
         // Constructor
-        public FreehandTool(Controller pController)
+        public FreehandTool(ToolRunner pController)
             : base(pController)
         { 
             
         }
 
-        public override void Move(int pX, int pY, Picture pPicture, Layer pLayer) {
-            base.Move(pX, pY, pPicture, pLayer);
-            m_postion = new Point(pX, pY);
-            if (isDown) 
-                DrawLine(pLayer, m_lastPosition, m_postion);
-            m_lastPosition = m_postion;
+        public override void Move(int pX, int pY, int pPressure) {
+            base.Move(pX, pY, pPressure);
+            Point position = new Point(pX, pY);
+            if (isDown)
+                DrawLine(m_layer, m_lastPosition, position, m_lastPressure, pPressure);
+            m_lastPosition = position;
+            m_lastPressure = pPressure;
         }
 
         // Calculate the line and step through
-        public void DrawLine(Layer layer, Point start, Point end = new Point())
+        public void DrawLine(Layer layer, Point start, Point end, int pStartPressure, int pEndPressure)
         {
             // Create a line vector
             PointF fStart = PointFExt.FromPoint(start);
@@ -45,15 +45,20 @@ namespace AwesomeCanvas
             for (int i = 0; i < length; i++)
             {
                 // Draw a pixel
-                DrawStep(layer, PointFExt.Lerp(fStart, fEnd, (float)i/length).ToPointRounded());
+                float quota =  (float)i / length;
+                PointF position = PointFExt.Lerp(fStart, fEnd,quota);
+                int pressure = MathExt.RoundToInt(MathExt.Lerp(pStartPressure, pEndPressure, quota));
+                DrawStep(layer, position.ToPointRounded(), pressure);
 
             }
         }
 
         // Draw on the actual canvas
-        public virtual void DrawStep(Layer layer, System.Drawing.Point point)
+        protected virtual void DrawStep(Layer layer, System.Drawing.Point point, int pPressure)
         { 
             
         }
+
+        protected virtual void GetSize() { }
     }
 }
