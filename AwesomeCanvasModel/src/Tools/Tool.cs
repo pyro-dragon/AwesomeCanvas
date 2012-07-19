@@ -7,12 +7,10 @@ using System.Drawing;
 using Newtonsoft.Json;
 namespace AwesomeCanvas
 {
-   
-
     public class Tool
     {
         public class Options { } //base class for all tool options
-        public Tool(Controller pController)
+        public Tool(ToolRunner pController)
         {
             m_controller = pController;
         }
@@ -30,13 +28,18 @@ namespace AwesomeCanvas
             m_picture = pPicture;
         }
         public virtual void Move(int pX, int pY, int pPressure) {}
-        public virtual void Up(int pX, int pY, int pPressure) { isDown = false; }
+        public virtual void Up(int pX, int pY, int pPressure) { 
+            isDown = false;
+            options = null;
+            m_picture = null;
+            m_layer = null;
+        }
 
         protected Options options;
         protected Layer m_layer;
         protected Picture m_picture;
         protected int m_lastPressure;
         protected Point m_lastPosition;
-        protected Controller m_controller;      
+        protected ToolRunner m_controller;      
     }
 }

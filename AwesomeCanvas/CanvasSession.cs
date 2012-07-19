@@ -14,17 +14,17 @@ namespace AwesomeCanvas
     /// </summary>
     public class CanvasSession
     {
-        Controller m_localController;
+        ToolRunner m_toolRunner;
         CanvasWindow m_canvasWindow;
         MainForm m_mainForm;
         public CanvasWindow canvasWindow { get { return m_canvasWindow; } }
-        public Controller localController { get { return m_localController; } }
+        public ToolRunner localController { get { return m_toolRunner; } }
         //-------------------------------------------------------------------------
         // Constructor
         //-------------------------------------------------------------------------
         public CanvasSession(MainForm pMainForm, CanvasWindow pCanvasWindow)
         {
-            m_localController = new Controller("localUserInput", pCanvasWindow.GetPicture());
+            m_toolRunner = new ToolRunner("localUserInput", pCanvasWindow.GetPicture());
             m_mainForm = pMainForm;
             m_canvasWindow = pCanvasWindow;
             m_canvasWindow.canvasBox.MouseDown += new MouseEventHandler(GuiInput_MouseDown);
@@ -32,7 +32,7 @@ namespace AwesomeCanvas
             m_canvasWindow.canvasBox.MouseMove += new MouseEventHandler(GuiInput_MouseMove);
             m_canvasWindow.m_session = this;
             
-            m_localController.OnCanvasNeedsRedraw = m_canvasWindow.Redraw;
+            m_toolRunner.OnCanvasNeedsRedraw = m_canvasWindow.Redraw;
 
         }
 
@@ -43,7 +43,7 @@ namespace AwesomeCanvas
             j.AddData("x", e.X);
             j.AddData("y", e.Y);
             j.AddData("pressure", 0);
-            m_localController.ParseJSON(j.Finish());
+            m_toolRunner.ParseJSON(j.Finish());
         }
 
         public void GuiInput_MouseDown(object sender, MouseEventArgs e)
@@ -67,7 +67,7 @@ namespace AwesomeCanvas
                     j.AddData("options", null);
                 break;
             }
-            m_localController.ParseJSON(j.Finish());
+            m_toolRunner.ParseJSON(j.Finish());
         }
 
         public void GuiInput_MouseMove(object sender, MouseEventArgs e)
@@ -77,10 +77,7 @@ namespace AwesomeCanvas
             j.AddData("pressure", (128).ToString());
             j.AddData("x", e.X.ToString());
             j.AddData("y", e.Y.ToString());
-            m_localController.ParseJSON(j.Finish());
+            m_toolRunner.ParseJSON(j.Finish());
         }
-
-  
-
     }
 }

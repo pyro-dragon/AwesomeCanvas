@@ -12,7 +12,7 @@ namespace AwesomeCanvas
     public class FreehandTool : Tool 
     {
         // Constructor
-        public FreehandTool(Controller pController)
+        public FreehandTool(ToolRunner pController)
             : base(pController)
         { 
             

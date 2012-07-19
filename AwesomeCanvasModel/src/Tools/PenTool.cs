@@ -16,14 +16,14 @@ namespace AwesomeCanvas
             public Color color;
             public int size;
         }
-        public PenTool(Controller pController)
+        public PenTool(ToolRunner pController)
             : base(pController)
         {
         }
 
-        protected new Options options { get { return base.options as Options; } }
+        protected new PenTool.Options options { get { return base.options as Options; } }
         protected override void SetOptions(Newtonsoft.Json.Linq.JContainer o) {
-            base.options = o.ToObject<Options>();
+            base.options = o.ToObject<PenTool.Options>();
         }
         //---------------------------------------------------------------------
         // Render the alterations to the layer

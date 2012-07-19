@@ -126,17 +126,14 @@ namespace AwesomeCanvas
         private void toolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
 
         }
-
-        private int GetToolSize() {
-            return (int)this.toolStripNumericUpDownItem1.numericUpDown.Value;
-        }
-
         internal string GetToolName() {
             return m_activeToolButton.Text.ToLower();
         }
 
-
-        /// later we will collect information from diffrent option form here (color wheel, brush options etc)
+        private int GetToolSize() {
+            return (int)this.toolStripNumericUpDownItem1.numericUpDown.Value;
+        }
+        /// later we will collect information from diffrent option forms (color wheel, brush options etc)
         internal BrushTool.Options GetBrushOptions() {
             return new BrushTool.Options {
                 color = Color.Linen,
@@ -144,7 +141,7 @@ namespace AwesomeCanvas
                 pressureSensitive = false
             };
         }
-        /// later we will collect information from diffrent option form here (color wheel, pen options etc)
+        /// later we will collect information from diffrent option forms (color wheel, pen options etc)
         internal PenTool.Options GetPenOptions() {
             return new PenTool.Options {
                 color = Color.OrangeRed,

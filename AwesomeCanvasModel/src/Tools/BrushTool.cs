@@ -19,14 +19,14 @@ namespace AwesomeCanvas
             public int size;
         }
 
-        public BrushTool(Controller pController)
+        public BrushTool(ToolRunner pController)
             : base(pController)
         {
         }
         
         //cover up base.options with a casted version
-        protected new Options options {
-            get { return base.options as Options; }
+        protected new BrushTool.Options options {
+            get { return base.options as BrushTool.Options; }
         }
         
         //SetOptions is called on every Tool.Down
