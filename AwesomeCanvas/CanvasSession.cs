@@ -96,7 +96,9 @@ namespace AwesomeCanvas
             if (keyData == (Keys.Z | Keys.Control)) {
                     EzJson j = new EzJson();
                     j.BeginFunction("undo");
+                    j.AddData("layer", m_mainForm.GetCurrentLayer());
                     m_toolRunner.ParseJSON(j.Finish());
+                    
                     Console.WriteLine("undo!");
                     return true;
             }

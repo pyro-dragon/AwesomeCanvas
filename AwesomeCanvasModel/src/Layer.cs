@@ -12,6 +12,7 @@ namespace AwesomeCanvas
     public class Layer
     {
         // Member variables
+        public History History { get; private set; }
         public string Name { get; set; }
         public float Opacity { get; set; }
         public bool Visible { get; set; }
@@ -27,6 +28,7 @@ namespace AwesomeCanvas
             Name = name;
             Opacity = 1.0f;
             Visible = true;
+            History = new History();
             m_bitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             m_area = new Rectangle(0, 0, width, height);
         }

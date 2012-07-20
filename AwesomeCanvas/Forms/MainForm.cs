@@ -155,5 +155,9 @@ namespace AwesomeCanvas
                 size = GetToolSize()
             };
         }
+
+        internal int GetCurrentLayer() {
+            return 0;
+        }
     }
 }
