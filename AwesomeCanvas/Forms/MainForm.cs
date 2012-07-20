@@ -32,7 +32,6 @@ namespace AwesomeCanvas
 
             // Initialise the application core
             // TODO: Make this a Singlton
-   
             this.toolStripTrackBarItem1.trackBar.ValueChanged += OnGUISizeChanged;
             this.toolStripNumericUpDownItem1.numericUpDown.ValueChanged += OnGUISizeChanged;
             this.m_activeToolButton = this.pointerButton; 
@@ -40,6 +39,7 @@ namespace AwesomeCanvas
             number.Value = 17;
    
         }
+
         //---------------------------------------------------------------------
         // The function for when the New menu item is clicked
         //---------------------------------------------------------------------
@@ -79,6 +79,13 @@ namespace AwesomeCanvas
                 toolPanelTop.Visible = true;
             }
         }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+            if (m_currentCanvasSession != null) {
+                return m_currentCanvasSession.GuiInput_KeyDown(keyData);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         /// <summary>
         /// Swap Active Canvas Session
         /// </summary>

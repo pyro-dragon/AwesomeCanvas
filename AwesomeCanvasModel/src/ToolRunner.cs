@@ -61,6 +61,7 @@ namespace AwesomeCanvas
             {
                 m_currentTool.Up(x, y, pressure);
                 m_currentTool = null;
+                history.StoreUndoData(inputMessage);
             }
         }
         void ExecuteCommands(IEnumerable<Dictionary<string, object>> input) 
@@ -77,11 +78,9 @@ namespace AwesomeCanvas
                     break;
                     case "tool_move":
                     ToolMove(inputMessage);
-                    history.StoreUndoData(inputMessage);
                     break;
                     case "tool_up":
                     ToolUp(inputMessage);
-                    history.StoreUndoData(inputMessage);
                     break;
                     case "clear":
                     m_picture.Clear();

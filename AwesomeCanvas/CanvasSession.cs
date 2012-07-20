@@ -40,7 +40,7 @@ namespace AwesomeCanvas
 
         public void OnFocus()
         {
-            m_canvasWindow.KeyDown += new KeyEventHandler(GuiInput_KeyDown);
+
         }
 
         protected void GuiInput_MouseUp(object sender, MouseEventArgs e)
@@ -87,23 +87,27 @@ namespace AwesomeCanvas
             m_toolRunner.ParseJSON(j.Finish());
         }
 
-        protected void GuiInput_KeyDown(object sender, KeyEventArgs e) 
+        internal void GuiInput_KeyDown(object sender, KeyEventArgs e) 
         {
-            if (e.Control) 
-            {
-                if (e.KeyCode == Keys.Z) {
+  
+        }
+
+        internal bool GuiInput_KeyDown(Keys keyData) {
+            if (keyData == (Keys.Z | Keys.Control)) {
                     EzJson j = new EzJson();
                     j.BeginFunction("undo");
                     m_toolRunner.ParseJSON(j.Finish());
                     Console.WriteLine("undo!");
-                }
-                else if (e.KeyCode == Keys.X) {
+                    return true;
+            }
+            else if (keyData == (Keys.X | Keys.Control)) {
                     EzJson j = new EzJson();
                     j.BeginFunction("clear");
                     m_toolRunner.ParseJSON(j.Finish());
                     Console.WriteLine("clear!");
-                }
+                    return true;
             }
+            return false;
         }
     }
 }
