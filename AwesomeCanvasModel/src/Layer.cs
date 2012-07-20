@@ -36,13 +36,15 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         // Render the layers contents
         //---------------------------------------------------------------------
-        public void Draw(Graphics g)
+        public void Draw(Graphics g, Rectangle pOutputRect, Rectangle pSampleRect )
         {
+            pSampleRect.X = pSampleRect.X - Offset.X;
+            pSampleRect.Y = pSampleRect.Y - Offset.Y;
             g.DrawImage(m_bitmap,
-                        Offset.X,
-                        Offset.Y,
-                        m_bitmap.Size.Width,
-                        m_bitmap.Height);
+                        pOutputRect,
+                        pSampleRect,
+                        GraphicsUnit.Pixel
+                        );
         }
 
         public Bitmap GetBitmap() { return m_bitmap; }

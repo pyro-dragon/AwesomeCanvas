@@ -17,9 +17,11 @@ namespace AwesomeCanvas
     public partial class CanvasWindow : Form
     {
         // Member variables
+        private float m_magnification = 1.0f;
         private Picture m_picture;
-        internal CanvasSession m_session; 
+        internal CanvasSession m_session;
 
+        public float magnification { get { return m_magnification; } }
         //public event CanvasMouseEvent MouseButtonDown;
         //public event CanvasMouseEvent MouseButtonUp;
         //public event CanvasMouseEvent MouseButtonClick;
@@ -31,12 +33,16 @@ namespace AwesomeCanvas
         public CanvasWindow(int width = 200, int height = 200, string name = "New Picture")
         {
             InitializeComponent();
-            this.SetClientSizeCore(width, height);
             this.Text = name;
-            this.AutoScrollMinSize = new Size(width, height);   // Make the window add scroll bars if nesasery
             m_picture = new Picture(width, height, name);
+            this.SetClientSizeCore((int)(m_picture.Width), (int)(m_picture.Height));
+            SetZoom(1.5f);
         }
-
+        public void SetZoom(float pMaginfication) {
+            m_magnification = pMaginfication;
+            this.AutoScrollMinSize = new Size((int)(m_picture.Width * m_magnification), (int)(m_picture.Height * m_magnification));   // Make the window add scroll bars if nesasery
+            canvasBox.Size = new Size((int)(m_picture.Width * m_magnification), (int)(m_picture.Height * m_magnification));   // Make the window add scroll bars if nesasery
+        }
         //---------------------------------------------------------------------
         // Return the picture that is being used
         //---------------------------------------------------------------------
@@ -50,7 +56,13 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
-            m_picture.DrawPicture(e.Graphics);
+            Rectangle sampleRectagle = e.ClipRectangle;
+            sampleRectagle.X = (int)(sampleRectagle.X / magnification);
+            sampleRectagle.Y = (int)(sampleRectagle.Y / magnification);
+            sampleRectagle.Width = (int)(sampleRectagle.Width / m_magnification);
+            sampleRectagle.Height = (int)(sampleRectagle.Height / m_magnification);
+            Rectangle targetRectangle = e.ClipRectangle;
+            m_picture.DrawPicture(e.Graphics,targetRectangle, sampleRectagle);
         }
 
         public void Redraw( ToolRunner pController ) 
