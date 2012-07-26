@@ -131,8 +131,8 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
-                        | System.Windows.Forms.Keys.S)));
+            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.S)));
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             // 
@@ -382,10 +382,12 @@
             // 
             this.panel1.Controls.Add(this.layerControlForm1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel1.Enabled = false;
             this.panel1.Location = new System.Drawing.Point(644, 24);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(206, 516);
             this.panel1.TabIndex = 4;
+            this.panel1.Visible = false;
             // 
             // layerControlForm1
             // 
