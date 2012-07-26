@@ -9,16 +9,26 @@ using System.Windows.Forms;
 
 namespace AwesomeCanvas
 {
+    //-------------------------------------------------------------------------
+    // A for that is used to control the order of layers. It can create and 
+    // delete them too.
+    //-------------------------------------------------------------------------
     public partial class LayerControlForm : UserControl
     {
         //private event OnLayerNameChange(Layer layer, String name)
 
+        //-------------------------------------------------------------------------
+        // Contructor
+        //-------------------------------------------------------------------------
         public LayerControlForm()
         {
             InitializeComponent();
 
         }
 
+        //-------------------------------------------------------------------------
+        // New Layer Button click event
+        //-------------------------------------------------------------------------
         private void newLayerButton_Click(object sender, EventArgs e)
         {
             LayerControl lc = new LayerControl(new Layer(1,1,"a"));
@@ -32,6 +42,10 @@ namespace AwesomeCanvas
             
         }
 
+
+        //-------------------------------------------------------------------------
+        // Event handler for a layer selection event
+        //-------------------------------------------------------------------------
         private void OnLayerSelectionChange(LayerControl layerControl)
         {
             foreach (Control c in LayerDisplayPanel.Controls)

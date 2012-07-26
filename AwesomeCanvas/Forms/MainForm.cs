@@ -75,7 +75,11 @@ namespace AwesomeCanvas
                 SetCurrentCanvasSession(new CanvasSession(this, newMDIChild));
                 m_canvasSessions.Add(m_currentCanvasSession);
 
+                // Set up the workspace
+                // TODO: this stuff could probably be done in a seperate function that is called eveytime the canvas count changes. 
                 toolPanelTop.Visible = true;
+                panel1.Visible = true;
+                panel1.Enabled = true;
             }
         }
         /// <summary>
