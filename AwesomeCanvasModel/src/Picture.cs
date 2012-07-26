@@ -17,7 +17,8 @@ namespace AwesomeCanvas
         private int m_width;
         private int m_height;
         private string m_name;
-
+        public int Width { get { return m_width; } }
+        public int Height { get { return m_height; } }
         //---------------------------------------------------------------------
         // Contructor
         //---------------------------------------------------------------------
@@ -31,21 +32,28 @@ namespace AwesomeCanvas
 
             // Set layer1's colour to white
             // TODO: Let the user pick the starting colour
-            using (Graphics graphics = Graphics.FromImage(layers[0].GetBitmap()))
-            {
-                graphics.Clear(Color.White);
-            }
+            Clear();
         }
 
         //---------------------------------------------------------------------
         // A function to render the picture to the panel
         //---------------------------------------------------------------------
-        public void DrawPicture(Graphics graphics)
+        public void DrawPicture(Graphics graphics, Rectangle pOutputRect, Rectangle pSampleRect)
         {
             foreach (Layer layer in layers)
             {
                 if (layer.Visible) {
-                    layer.Draw(graphics);
+                    layer.Draw(graphics, pOutputRect, pSampleRect);
+                }
+            }
+        }
+
+        public void Clear() {
+            // Set layer1's colour to white
+            // TODO: Let the user pick the starting colour
+            for (int i = 0; i < layers.Count; i++ ){
+                using (Graphics graphics = Graphics.FromImage(layers[i].GetBitmap())) {
+                    graphics.Clear(Color.White);
                 }
             }
         }

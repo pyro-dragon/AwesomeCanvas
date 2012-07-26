@@ -17,7 +17,10 @@ namespace AwesomeCanvas
         { 
             
         }
-
+        public override void Down(int pX, int pY, int pPressure, Picture pPicture, Layer pLayer, object pOptions) {
+            base.Down(pX, pY, pPressure, pPicture, pLayer, pOptions);
+            DrawStep(pLayer, new Point(pX, pY), pPressure);
+        }
         public override void Move(int pX, int pY, int pPressure) {
             base.Move(pX, pY, pPressure);
             Point position = new Point(pX, pY);

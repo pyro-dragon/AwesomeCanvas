@@ -32,13 +32,14 @@ namespace AwesomeCanvas
 
             // Initialise the application core
             // TODO: Make this a Singlton
-   
             this.toolStripTrackBarItem1.trackBar.ValueChanged += OnGUISizeChanged;
             this.toolStripNumericUpDownItem1.numericUpDown.ValueChanged += OnGUISizeChanged;
             this.m_activeToolButton = this.pointerButton; 
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             number.Value = 17;
+   
         }
+
         //---------------------------------------------------------------------
         // The function for when the New menu item is clicked
         //---------------------------------------------------------------------
@@ -82,6 +83,13 @@ namespace AwesomeCanvas
                 panel1.Enabled = true;
             }
         }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+            if (m_currentCanvasSession != null) {
+                return m_currentCanvasSession.GuiInput_KeyDown(keyData);
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         /// <summary>
         /// Swap Active Canvas Session
         /// </summary>
@@ -93,8 +101,7 @@ namespace AwesomeCanvas
 
         private void SetCurrentCanvasSession(CanvasSession pCanvasSession) {
             m_currentCanvasSession = pCanvasSession;
-            //update the toolbar
-
+            m_currentCanvasSession.OnFocus();
         }
         //---------------------------------------------------------------------
         ///  Deactivate the current tool and activate the new tool
@@ -151,6 +158,10 @@ namespace AwesomeCanvas
                 color = Color.OrangeRed,
                 size = GetToolSize()
             };
+        }
+
+        internal int GetCurrentLayer() {
+            return 0;
         }
     }
 }

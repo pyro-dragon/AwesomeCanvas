@@ -12,6 +12,7 @@ namespace AwesomeCanvas
     public class Layer
     {
         // Member variables
+        public History History { get; private set; }
         public string Name { get; set; }
         public float Opacity { get; set; }
         public bool Visible { get; set; }
@@ -27,6 +28,7 @@ namespace AwesomeCanvas
             Name = name;
             Opacity = 1.0f;
             Visible = true;
+            History = new History();
             m_bitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             m_area = new Rectangle(0, 0, width, height);
         }
@@ -34,13 +36,15 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         // Render the layers contents
         //---------------------------------------------------------------------
-        public void Draw(Graphics g)
+        public void Draw(Graphics g, Rectangle pOutputRect, Rectangle pSampleRect )
         {
+            pSampleRect.X = pSampleRect.X - Offset.X;
+            pSampleRect.Y = pSampleRect.Y - Offset.Y;
             g.DrawImage(m_bitmap,
-                        Offset.X,
-                        Offset.Y,
-                        m_bitmap.Size.Width,
-                        m_bitmap.Height);
+                        pOutputRect,
+                        pSampleRect,
+                        GraphicsUnit.Pixel
+                        );
         }
 
         public Bitmap GetBitmap() { return m_bitmap; }
