@@ -19,6 +19,7 @@ namespace AwesomeCanvas
         // Member variables
         private float m_magnification = 1.0f;
         private Picture m_picture;
+        private string m_pictureName;
         internal CanvasSession m_session;
 
         public float magnification { get { return m_magnification; } }
@@ -32,14 +33,20 @@ namespace AwesomeCanvas
             this.Text = name;
             m_picture = new Picture(width, height, name);
             this.SetClientSizeCore((int)(m_picture.Width), (int)(m_picture.Height));
-            SetZoom(1.5f);
+            SetZoom(1.0f);
+
+
         }
 
-
+        //---------------------------------------------------------------------
+        // Set the zoom level of the image
+        //---------------------------------------------------------------------
         public void SetZoom(float pMaginfication) {
             m_magnification = pMaginfication;
             this.AutoScrollMinSize = new Size((int)(m_picture.Width * m_magnification), (int)(m_picture.Height * m_magnification));   // Make the window add scroll bars if nesasery
             canvasBox.Size = new Size((int)(m_picture.Width * m_magnification), (int)(m_picture.Height * m_magnification));   // Make the window add scroll bars if nesasery
+
+
         }
 
         //---------------------------------------------------------------------
@@ -67,6 +74,18 @@ namespace AwesomeCanvas
         public void Redraw( ToolRunner pController ) 
         {
             canvasBox.Invalidate();
+        }
+
+        private void CanvasWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Oemplus)
+            {
+                SetZoom(m_magnification + 1);
+            }
+            else if (e.KeyCode == Keys.OemMinus)
+            {
+                SetZoom(m_magnification -1 );
+            }
         }
     }
 }

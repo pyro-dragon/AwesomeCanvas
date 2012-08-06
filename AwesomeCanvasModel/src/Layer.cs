@@ -38,13 +38,20 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         public void Draw(Graphics g, Rectangle pOutputRect, Rectangle pSampleRect )
         {
+            // Set the draw rectagle to draw
             pSampleRect.X = pSampleRect.X - Offset.X;
             pSampleRect.Y = pSampleRect.Y - Offset.Y;
-            g.DrawImage(m_bitmap,
-                        pOutputRect,
-                        pSampleRect,
-                        GraphicsUnit.Pixel
-                        );
+
+            // Set the interpolation mode - this will ensure we have crisp lines when zooming in
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+
+            // Issue the draw command
+            g.DrawImage(
+                m_bitmap,
+                pOutputRect,
+                pSampleRect,
+                GraphicsUnit.Pixel
+            );
         }
 
         public Bitmap GetBitmap() { return m_bitmap; }
