@@ -16,6 +16,7 @@ namespace AwesomeCanvas
     public partial class LayerControlForm : UserControl
     {
         //private event OnLayerNameChange(Layer layer, String name)
+        private Picture currentPicture; // The currently selected working picture
 
         //-------------------------------------------------------------------------
         // Contructor
@@ -56,6 +57,42 @@ namespace AwesomeCanvas
                 else
                     lc.LayerActivated();
                     
+            }
+        }
+
+        //-------------------------------------------------------------------------
+        // Action to carry out when the picture focus has been changed
+        //-------------------------------------------------------------------------
+        public void ChangePictureFocus(Picture picture)
+        {
+            // Set the currently selected picture
+            currentPicture = picture;
+
+            // Rebuild the layer controls
+            RebuildLayerControls();
+        }
+
+        //-------------------------------------------------------------------------
+        // Rebuild the layers control. This is usually done after a picture change
+        //-------------------------------------------------------------------------
+        public void RebuildLayerControls()
+        {
+            // Delete current layer controls
+            foreach (Control control in LayerDisplayPanel.Controls)
+            {
+                if (control.GetType() == typeof(LayerControl))
+                {
+                    LayerDisplayPanel.Controls.Remove(control);
+                }
+            }
+            
+            // Cycle through each layer
+            foreach (Layer layer in currentPicture.layers)
+            {
+                LayerControl lc = new LayerControl(layer);
+                lc.layerNameChanged += new LayerNameChaged(OnLayerNameChange);
+                lc.layerControlSelected += new LayerControlSelected(OnLayerSelectionChange);
+                this.LayerDisplayPanel.Controls.Add(lc);
             }
         }
     }

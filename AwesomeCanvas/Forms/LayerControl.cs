@@ -12,7 +12,9 @@ namespace AwesomeCanvas
     public delegate void LayerNameChaged(Layer layer, String name);
     public delegate void LayerControlSelected(LayerControl layerControl);
 
+    //-------------------------------------------------------------------------
     // A UI component used to represent a layer in a drawing
+    //-------------------------------------------------------------------------
     public partial class LayerControl : UserControl
     {
         // Variables
@@ -22,36 +24,47 @@ namespace AwesomeCanvas
         public event LayerNameChaged layerNameChanged;
         public event LayerControlSelected layerControlSelected;
 
+        //-------------------------------------------------------------------------
         // Constructor
+        //-------------------------------------------------------------------------
         public LayerControl(Layer layer)
         {
             InitializeComponent();
 
-            //LayerNameChaged namechange = new LayerNameChaged(); 
-
             m_layer = layer;
+
+            layerNameBox.Text = m_layer.Name;
         }
 
+        //-------------------------------------------------------------------------
         // Event triggered when focus on the layer name box is lost
+        //-------------------------------------------------------------------------
         private void layerNameBox_Leave(object sender, EventArgs e)
         {
             DeactivateLayerNameBox();
         }
 
+        //-------------------------------------------------------------------------
         // Even triggered when the control's right pannel is double-clicked
+        //-------------------------------------------------------------------------
         private void layerControlSplitContainer_Panel2_DoubleClick(object sender, EventArgs e)
         {
             ActiveLayerNameBox();
         }
 
+        //-------------------------------------------------------------------------
         // Event triggered when an key-up event is detected in the layer name box
+        //-------------------------------------------------------------------------
         private void layerNameBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode.Equals(Keys.Enter))
                 DeactivateLayerNameBox();
         }
 
-        // Actions to carry out when the layer name text box is activated - we are renaming a layer
+        //-------------------------------------------------------------------------
+        // Actions to carry out when the layer name text box is activated - we are 
+        // renaming a layer
+        //-------------------------------------------------------------------------
         private void ActiveLayerNameBox()
         {
             // Enable the text input box
@@ -70,7 +83,10 @@ namespace AwesomeCanvas
             layerNameBox.SelectAll();
         }
 
-        // Actions to carry out when the layer name text box is deactivated - we are done renaming a layer
+        //-------------------------------------------------------------------------
+        // Actions to carry out when the layer name text box is deactivated - 
+        // we are done renaming a layer
+        //-------------------------------------------------------------------------
         private void DeactivateLayerNameBox()
         {
             // Disable the text input box
@@ -86,20 +102,26 @@ namespace AwesomeCanvas
             layerNameChanged(m_layer, layerNameBox.Text);
         }
 
+        //-------------------------------------------------------------------------
         // Event for when the layer control is clicked - selecting it
+        //-------------------------------------------------------------------------
         private void LayerControl_Click(object sender, EventArgs e)
         {
             // Triger event that tells the manager that another layer has been selected
             layerControlSelected(this);
         }
 
+        //-------------------------------------------------------------------------
         // Actions carried out when the layer is selected
+        //-------------------------------------------------------------------------
         public void LayerActivated()
         {
             this.BackColor = SystemColors.Highlight;
         }
 
+        //-------------------------------------------------------------------------
         // Actions carried out when the layer is deselected
+        //-------------------------------------------------------------------------
         public void LayerDeactivated()
         {
             this.BackColor = SystemColors.Control;

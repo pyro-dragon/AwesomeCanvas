@@ -22,10 +22,6 @@ namespace AwesomeCanvas
         internal CanvasSession m_session;
 
         public float magnification { get { return m_magnification; } }
-        //public event CanvasMouseEvent MouseButtonDown;
-        //public event CanvasMouseEvent MouseButtonUp;
-        //public event CanvasMouseEvent MouseButtonClick;
-        //public event CanvasMouseEvent MouseMoved;
 
         //---------------------------------------------------------------------
         // Constructor
@@ -38,11 +34,14 @@ namespace AwesomeCanvas
             this.SetClientSizeCore((int)(m_picture.Width), (int)(m_picture.Height));
             SetZoom(1.5f);
         }
+
+
         public void SetZoom(float pMaginfication) {
             m_magnification = pMaginfication;
             this.AutoScrollMinSize = new Size((int)(m_picture.Width * m_magnification), (int)(m_picture.Height * m_magnification));   // Make the window add scroll bars if nesasery
             canvasBox.Size = new Size((int)(m_picture.Width * m_magnification), (int)(m_picture.Height * m_magnification));   // Make the window add scroll bars if nesasery
         }
+
         //---------------------------------------------------------------------
         // Return the picture that is being used
         //---------------------------------------------------------------------

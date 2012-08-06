@@ -65,7 +65,7 @@
             this.toolPanelLeft = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelRight = new System.Windows.Forms.ToolStripPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.layerControlForm1 = new AwesomeCanvas.LayerControlForm();
+            this.layerControlForm = new AwesomeCanvas.LayerControlForm();
             this.menuStrip1.SuspendLayout();
             this.toolPanelTop.SuspendLayout();
             this.pointerTools.SuspendLayout();
@@ -380,7 +380,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.layerControlForm1);
+            this.panel1.Controls.Add(this.layerControlForm);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Enabled = false;
             this.panel1.Location = new System.Drawing.Point(644, 24);
@@ -389,13 +389,13 @@
             this.panel1.TabIndex = 4;
             this.panel1.Visible = false;
             // 
-            // layerControlForm1
+            // layerControlForm
             // 
-            this.layerControlForm1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layerControlForm1.Location = new System.Drawing.Point(0, 0);
-            this.layerControlForm1.Name = "layerControlForm1";
-            this.layerControlForm1.Size = new System.Drawing.Size(206, 516);
-            this.layerControlForm1.TabIndex = 0;
+            this.layerControlForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layerControlForm.Location = new System.Drawing.Point(0, 0);
+            this.layerControlForm.Name = "layerControlForm";
+            this.layerControlForm.Size = new System.Drawing.Size(206, 516);
+            this.layerControlForm.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -465,7 +465,7 @@
         private System.Windows.Forms.ToolStripPanel toolPanelLeft;
         private System.Windows.Forms.ToolStripPanel toolPanelRight;
         private System.Windows.Forms.Panel panel1;
-        private LayerControlForm layerControlForm1;
+        private LayerControlForm layerControlForm;
     }
 }
 

@@ -76,13 +76,18 @@ namespace AwesomeCanvas
                 SetCurrentCanvasSession(new CanvasSession(this, newMDIChild));
                 m_canvasSessions.Add(m_currentCanvasSession);
 
-                // Set up the workspace
+                // Set up the workspace - the side pannel mostly
                 // TODO: this stuff could probably be done in a seperate function that is called eveytime the canvas count changes. 
                 toolPanelTop.Visible = true;
                 panel1.Visible = true;
                 panel1.Enabled = true;
+
+                // Set the picture as the focus of the side bar
+                layerControlForm.ChangePictureFocus(newMDIChild.GetPicture());
             }
         }
+
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             if (m_currentCanvasSession != null) {
                 return m_currentCanvasSession.GuiInput_KeyDown(keyData);
