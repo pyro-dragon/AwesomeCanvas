@@ -7,6 +7,10 @@ namespace AwesomeCanvas
 {
     public static class PointFExt
     {
+        public static PointF Add(this PointF pSelf, PointF pAmmount) {
+            return new PointF(pSelf.X + pAmmount.X, pSelf.Y + pAmmount.Y);
+        }
+
         public static PointF Subtract(this PointF pSelf, PointF pAmmount) { 
             return new PointF(pSelf.X - pAmmount.X, pSelf.Y - pAmmount.Y); 
         }

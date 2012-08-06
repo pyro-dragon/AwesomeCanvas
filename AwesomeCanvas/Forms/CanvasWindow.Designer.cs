@@ -55,7 +55,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CanvasWindow";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.CanvasWindow_KeyUp);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.OnKeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.canvasBox)).EndInit();
             this.ResumeLayout(false);
 

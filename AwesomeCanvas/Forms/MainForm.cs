@@ -87,7 +87,6 @@ namespace AwesomeCanvas
             }
         }
 
-
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             if (m_currentCanvasSession != null) {
                 return m_currentCanvasSession.GuiInput_KeyDown(keyData);

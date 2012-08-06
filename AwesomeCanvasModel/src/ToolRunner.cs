@@ -61,9 +61,9 @@ namespace AwesomeCanvas
             m_currentTool = null;
             m_currentLayer = null;        
         }
-        void ExecuteCommands(IEnumerable<Dictionary<string, object>> input) 
+        void ExecuteCommands(IEnumerable<Dictionary<string, object>> pInput) 
         {
-            foreach (Dictionary<string, object>inputMessage in input) 
+            foreach (Dictionary<string, object>inputMessage in pInput) 
             {
 
                 switch (inputMessage["function"] as string) 

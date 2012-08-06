@@ -26,15 +26,10 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         public CanvasSession(MainForm pMainForm, CanvasWindow pCanvasWindow)
         {
-
             m_toolRunner = new ToolRunner("localUserInput", pCanvasWindow.GetPicture());
             m_mainForm = pMainForm;
             m_canvasWindow = pCanvasWindow;
-            m_canvasWindow.canvasBox.MouseDown += new MouseEventHandler(GuiInput_MouseDown);
-            m_canvasWindow.canvasBox.MouseUp += new MouseEventHandler(GuiInput_MouseUp);
-            m_canvasWindow.canvasBox.MouseMove += new MouseEventHandler(GuiInput_MouseMove);
             m_canvasWindow.m_session = this;
-            
             m_toolRunner.OnCanvasNeedsRedraw = m_canvasWindow.Redraw;
         }
 
@@ -43,7 +38,7 @@ namespace AwesomeCanvas
 
         }
 
-        protected void GuiInput_MouseUp(object sender, MouseEventArgs e)
+        internal void GuiInput_MouseUp(object sender, MouseEventArgs e)
         {
             EzJson j = new EzJson();
             j.BeginFunction("tool_up");
@@ -53,7 +48,7 @@ namespace AwesomeCanvas
             m_toolRunner.ParseJSON(j.Finish());
         }
 
-        protected void GuiInput_MouseDown(object sender, MouseEventArgs e)
+        internal void GuiInput_MouseDown(object sender, MouseEventArgs e)
         {
             string toolName = m_mainForm.GetToolName();
             EzJson j = new EzJson();
@@ -77,7 +72,7 @@ namespace AwesomeCanvas
             m_toolRunner.ParseJSON(j.Finish());
         }
 
-        protected void GuiInput_MouseMove(object sender, MouseEventArgs e)
+        internal void GuiInput_MouseMove(object sender, MouseEventArgs e)
         {
             EzJson j = new EzJson();
             j.BeginFunction("tool_move");
@@ -87,10 +82,6 @@ namespace AwesomeCanvas
             m_toolRunner.ParseJSON(j.Finish());
         }
 
-        internal void GuiInput_KeyDown(object sender, KeyEventArgs e) 
-        {
-  
-        }
 
         internal bool GuiInput_KeyDown(Keys keyData) {
             if (keyData == (Keys.Z | Keys.Control)) {
