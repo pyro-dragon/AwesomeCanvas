@@ -41,7 +41,7 @@ namespace AwesomeCanvas
             m_height = height;
             m_name = name;
             layers = new List<Layer>();
-            layers.Add(new Layer(width, height, "Layer 1"));
+            layers.Add(new Layer(width, height, "Layer 0"));
 
             // Set layer1's colour to white
             // TODO: Let the user pick the starting colour
@@ -68,6 +68,7 @@ namespace AwesomeCanvas
         public void AddLayer()
         { 
             // Add a new layer
+            layers.Add(new Layer(m_width, m_height, "Layer " + layers.Count.ToString()));
 
             // Inform everyone that there is a new layer
             //AddNewLayerEvent(new Layer);
