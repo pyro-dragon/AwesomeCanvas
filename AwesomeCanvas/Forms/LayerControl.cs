@@ -34,6 +34,7 @@ namespace AwesomeCanvas
             m_layer = layer;
 
             layerNameBox.Text = m_layer.Name;
+            previewImageBox.Image = layer.GetBitmap();
         }
 
         //-------------------------------------------------------------------------

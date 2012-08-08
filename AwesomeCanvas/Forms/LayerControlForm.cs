@@ -32,10 +32,9 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         private void newLayerButton_Click(object sender, EventArgs e)
         {
-            LayerControl lc = new LayerControl(new Layer(1,1,"a"));
-            lc.layerNameChanged += new LayerNameChaged(OnLayerNameChange);
-            lc.layerControlSelected += new LayerControlSelected(OnLayerSelectionChange);
-            this.LayerDisplayPanel.Controls.Add(lc);
+            currentPicture.AddLayer();
+
+            RebuildLayerControls();
         }
 
         private void OnLayerNameChange(Layer layer, String name)
@@ -78,13 +77,7 @@ namespace AwesomeCanvas
         public void RebuildLayerControls()
         {
             // Delete current layer controls
-            foreach (Control control in LayerDisplayPanel.Controls)
-            {
-                if (control.GetType() == typeof(LayerControl))
-                {
-                    LayerDisplayPanel.Controls.Remove(control);
-                }
-            }
+            LayerDisplayPanel.Controls.Clear();
             
             // Cycle through each layer
             foreach (Layer layer in currentPicture.layers)
