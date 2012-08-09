@@ -17,6 +17,7 @@ namespace AwesomeCanvas
     {
         //private event OnLayerNameChange(Layer layer, String name)
         private Picture currentPicture; // The currently selected working picture
+        private LayerControl selectedLayer;
 
         //-------------------------------------------------------------------------
         // Contructor
@@ -24,7 +25,7 @@ namespace AwesomeCanvas
         public LayerControlForm()
         {
             InitializeComponent();
-
+            selectedLayer = null;
         }
 
         //-------------------------------------------------------------------------
@@ -48,15 +49,18 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         private void OnLayerSelectionChange(LayerControl layerControl)
         {
-            foreach (Control c in LayerDisplayPanel.Controls)
-            {
-                LayerControl lc = (LayerControl)c;
-                if (lc != layerControl)
-                    lc.LayerDeactivated();
-                else
-                    lc.LayerActivated();
-                    
-            }
+            // Deactivate the currently selected layer
+            if (selectedLayer != null) 
+                selectedLayer.LayerDeactivated();
+
+            // Activate the newly selected layer
+            layerControl.LayerActivated();
+
+            // Set the corrasponding layer in the picture
+            currentPicture.SetActiveLayer(layerControl.GetLayerIndex());
+
+            // Set the currently selected layer to the new layer
+            selectedLayer = layerControl;
         }
 
         //-------------------------------------------------------------------------
@@ -80,9 +84,10 @@ namespace AwesomeCanvas
             LayerDisplayPanel.Controls.Clear();
             
             // Cycle through each layer
+            int layerIndex = 0;
             foreach (Layer layer in currentPicture.layers)
             {
-                LayerControl lc = new LayerControl(layer);
+                LayerControl lc = new LayerControl(layer, layerIndex++);
                 lc.layerNameChanged += new LayerNameChaged(OnLayerNameChange);
                 lc.layerControlSelected += new LayerControlSelected(OnLayerSelectionChange);
                 this.LayerDisplayPanel.Controls.Add(lc);

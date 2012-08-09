@@ -18,7 +18,8 @@ namespace AwesomeCanvas
     public partial class LayerControl : UserControl
     {
         // Variables
-        Layer m_layer;
+        Layer m_layer;  // Not used
+        int m_layerIndex;
 
         // Events
         public event LayerNameChaged layerNameChanged;
@@ -27,13 +28,13 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         // Constructor
         //-------------------------------------------------------------------------
-        public LayerControl(Layer layer)
+        public LayerControl(Layer layer, int layerIndex)
         {
             InitializeComponent();
 
-            m_layer = layer;
+            m_layerIndex = layerIndex;
 
-            layerNameBox.Text = m_layer.Name;
+            layerNameBox.Text = layer.Name;
             previewImageBox.Image = layer.GetBitmap();
         }
 
@@ -126,6 +127,14 @@ namespace AwesomeCanvas
         public void LayerDeactivated()
         {
             this.BackColor = SystemColors.Control;
+        }
+
+        //-------------------------------------------------------------------------
+        // Return the layer index
+        //-------------------------------------------------------------------------
+        public int GetLayerIndex()
+        {
+            return m_layerIndex;
         }
     }
 }

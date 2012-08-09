@@ -33,6 +33,7 @@ namespace AwesomeCanvas
             ExecuteCommands(input);
             OnCanvasNeedsRedraw(this);
         }
+
         void ToolDown(Dictionary<string, object> inputMessage) {
             int pressure = Convert.ToInt32(inputMessage["pressure"]);
             int x = Convert.ToInt32(inputMessage["x"]);
@@ -45,6 +46,7 @@ namespace AwesomeCanvas
             m_currentLayer.History.BeginNewUndoLevel();
             m_currentLayer.History.StoreUndoData(inputMessage);
         }
+
         void ToolMove(Dictionary<string, object> inputMessage) {
             int pressure = Convert.ToInt32(inputMessage["pressure"]);
             int x = Convert.ToInt32(inputMessage["x"]);
@@ -52,6 +54,7 @@ namespace AwesomeCanvas
             m_currentTool.Move(x, y, pressure);
             m_currentLayer.History.StoreUndoData(inputMessage);
         }
+
         void ToolUp(Dictionary<string, object> inputMessage) {
             int pressure = Convert.ToInt32(inputMessage["pressure"]);
             int x = Convert.ToInt32(inputMessage["x"]);
@@ -61,6 +64,7 @@ namespace AwesomeCanvas
             m_currentTool = null;
             m_currentLayer = null;        
         }
+
         void ExecuteCommands(IEnumerable<Dictionary<string, object>> input) 
         {
             foreach (Dictionary<string, object>inputMessage in input) 
