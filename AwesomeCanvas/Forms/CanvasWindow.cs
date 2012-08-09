@@ -159,7 +159,7 @@ namespace AwesomeCanvas
         internal void SetPanPosition(Point pPoint) {
             this.SetDisplayRectLocation(pPoint.X, pPoint.Y);
             Redraw(null);
-            this.Rect
+            //this.Rect
             //this.VerticalScroll.Value = Math.Max(0, pPoint.Y);
             //this.HorizontalScroll.Value =  Math.Max(0, pPoint.X);
         }

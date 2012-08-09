@@ -26,6 +26,7 @@ namespace AwesomeCanvas
 
         // Member variables
         public List<Layer> layers;
+        private int m_activeLayerIndex;
         private int m_width;
         private int m_height;
         private string m_name;
@@ -42,6 +43,7 @@ namespace AwesomeCanvas
             m_name = name;
             layers = new List<Layer>();
             layers.Add(new Layer(width, height, "Layer 0"));
+            m_activeLayerIndex = 0;
 
             // Set layer1's colour to white
             // TODO: Let the user pick the starting colour
@@ -63,7 +65,8 @@ namespace AwesomeCanvas
         }
 
         //-------------------------------------------------------------------------
-        // A function used to add a new layer to the picture TODO: Actully fill this thing in
+        // A function used to add a new layer to the picture TODO: Actully fill 
+        // this thing in
         //-------------------------------------------------------------------------
         public void AddLayer()
         { 
@@ -82,6 +85,19 @@ namespace AwesomeCanvas
                     graphics.Clear(Color.White);
                 }
             }
+        }
+
+        //---------------------------------------------------------------------
+        // Set the active layer 
+        //---------------------------------------------------------------------
+        public void SetActiveLayer(int layerIndex)
+        {
+            m_activeLayerIndex = layerIndex;
+        }
+
+        public int GetActiveLayerIndex()
+        {
+            return m_activeLayerIndex;
         }
     }
 }

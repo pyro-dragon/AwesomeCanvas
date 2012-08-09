@@ -56,7 +56,7 @@ namespace AwesomeCanvas
             j.AddData("pressure", (128).ToString());
             j.AddData("x", (int)(e.X / m_canvasWindow.magnification));
             j.AddData("y", (int)(e.Y / m_canvasWindow.magnification));
-            j.AddData("layer", 0);
+            j.AddData("layer", m_canvasWindow.GetPicture().GetActiveLayerIndex());
             j.AddData("tool", toolName);
             switch (toolName) {
                 case "brush":
