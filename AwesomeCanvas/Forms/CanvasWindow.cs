@@ -154,7 +154,7 @@ namespace AwesomeCanvas
 
         internal bool ProcessKeyDown(Keys pKeys)
         {
-            Console.WriteLine(pKeys);
+            //Console.WriteLine(pKeys);
             if ((pKeys & Keys.Shift) != Keys.None) {
                 m_zoomTool.Enabled = true;
             }

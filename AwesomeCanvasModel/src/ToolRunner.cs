@@ -8,7 +8,8 @@ namespace AwesomeCanvas
     public delegate void FunctionEventHandler(ToolRunner pTarget, string pFunctionName, Dictionary<string, object> inputMessage);
     public class ToolRunner
     {
-        public Dictionary<string, List<FunctionEventHandler>> _functionHandlers = new Dictionary<string,List<FunctionEventHandler>>();
+        public bool FunctionEventsEnabled {get;set;}
+        Dictionary<string, List<FunctionEventHandler>> _functionHandlers = new Dictionary<string,List<FunctionEventHandler>>();
         Picture m_picture;
         string m_username;
         Dictionary<string, Tool> m_tools = new Dictionary<string, Tool>();
@@ -22,6 +23,7 @@ namespace AwesomeCanvas
             m_tools.Add("pointer", new PointerTool(this));
             m_username = pUsername;
             m_picture = pPicture;
+            FunctionEventsEnabled = true;
         }
         
         // Decypher the JSON command and execute the corrasponding function
@@ -71,7 +73,9 @@ namespace AwesomeCanvas
             l.History.PopUndoLevel();
             Dictionary<string, object>[] h = l.History.ToArray();//important to copy to array since the history will be modified!
             l.History.Clear();
+            FunctionEventsEnabled = false; //we disable events so that the gui doesn't update while we re-paint the image
             ExecuteCommands(h);
+            FunctionEventsEnabled = true;
         }
         void RenameLayer(Dictionary<string, object> inputMessage) {
             string layerID = inputMessage["layer"] as string;
@@ -130,11 +134,13 @@ namespace AwesomeCanvas
                     default:
                     break;
                 }
-                //Fire off the events!
-                List<FunctionEventHandler> handlers;
-                if (_functionHandlers.TryGetValue(functionName, out handlers) && handlers != null) {
-                    foreach (FunctionEventHandler h in handlers)
-                        h(this, functionName, inputMessage);
+                if (FunctionEventsEnabled) {
+                    //Fire off the events!
+                    List<FunctionEventHandler> handlers;
+                    if (_functionHandlers.TryGetValue(functionName, out handlers) && handlers != null) {
+                        foreach (FunctionEventHandler h in handlers)
+                            h(this, functionName, inputMessage);
+                    }
                 }
                 
             }
