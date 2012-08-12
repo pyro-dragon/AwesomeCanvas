@@ -37,10 +37,10 @@ namespace AwesomeCanvas
             // TODO: Make this a Singlton
             this.toolStripTrackBarItem1.trackBar.ValueChanged += OnGUISizeChanged;
             this.toolStripNumericUpDownItem1.numericUpDown.ValueChanged += OnGUISizeChanged;
-            this.m_activeToolButton = this.pointerButton; 
+            this.m_activeToolButton = this.pointerButton;
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             number.Value = 17;
-            TrackBar bar = this.toolStripTrackBarItem1.trackBar;
+            //TrackBar bar = this.toolStripTrackBarItem1.trackBar;
             SetCurrentCanvasSession(null);
    
         }
@@ -147,6 +147,7 @@ namespace AwesomeCanvas
         // The function for when tool size changes in the GUI
         //---------------------------------------------------------------------
         private void OnGUISizeChanged(object sender, EventArgs e) {
+   
             TrackBar bar = this.toolStripTrackBarItem1.trackBar;
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             if (sender == bar && bar.Value != (int)number.Value) {
@@ -155,6 +156,7 @@ namespace AwesomeCanvas
             if (sender == number && bar.Value != number.Value) {
                 bar.Value = Math.Max(0, Math.Min((int)number.Value, bar.Maximum));
             }
+
         }
         
         //---------------------------------------------------------------------
@@ -191,33 +193,52 @@ namespace AwesomeCanvas
                 size = GetToolSize()
             };
         }
+
+        private void pointerTools_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+
+        }
+
         /*
-        Keys m_keyRepeating = Keys.None;
+        protected override bool IsInputKey(Keys keyData) {
+            return true;
+        }
+        protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e) {
+            if (m_currentCanvasSession != null) {
+                m_currentCanvasSession.canvasWindow.ProcessKeyDown(e.KeyData);
+
+            }
+        }
+
+        Keys m_keysDown = Keys.None;
         const int WM_KEYDOWN = 0x100;
         const int WM_KEYUP = 0x101;
         public bool PreFilterMessage(ref Message m) {
-            if (m_currentCanvasSession != null) {
-                Keys inputKeys = (Keys)m.WParam;
-                if (m.Msg == WM_KEYDOWN) {
-                    
-                    Keys newKeysDown = inputKeys & ~m_keyRepeating;
-                    m_keyRepeating |= inputKeys;
-                    if (newKeysDown != Keys.None) {
-                        //Console.WriteLine(" keys down " + newKeysDown);
-                        return m_currentCanvasSession.canvasWindow.ProcessKeyDown(inputKeys);
-                    }
+            Keys inputKeys = (Keys)m.WParam;
+            if (m.Msg == WM_KEYDOWN) {
+                //Keys newKeysDown = inputKeys & ~m_keysDown;
+                m_keysDown = inputKeys | m_keysDown;
+                Console.WriteLine(" keys down " + m_keysDown);
+                if (m_keysDown != Keys.None && m_currentCanvasSession != null) {
+                    return m_currentCanvasSession.canvasWindow.ProcessKeyDown(m_keysDown);
                 }
-                else if (m.Msg == WM_KEYUP) {
-                    //Console.WriteLine(" keys up " + inputKeys);
-                    m_keyRepeating = m_keyRepeating & ~inputKeys;
+            } else if (m.Msg == WM_KEYUP) {
+                Console.WriteLine(" keys up " + inputKeys);
+                m_keysDown = m_keysDown & ~inputKeys;
+                if (inputKeys != Keys.None && m_currentCanvasSession != null) {
                     return m_currentCanvasSession.canvasWindow.ProcessKeyUp(inputKeys);
                 }
             }
             return false;
-
+        }
+        */
+  
+        protected override bool ProcessCmdKey(ref Message message, Keys keys) {
+            if (m_currentCanvasSession != null) {
+                return m_currentCanvasSession.canvasWindow.ProcessKeyDown(keys);
+            }
+            return base.ProcessCmdKey(ref message, keys);
         }
 
-        */
 
     }
 }

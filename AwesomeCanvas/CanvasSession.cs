@@ -38,10 +38,10 @@ namespace AwesomeCanvas
             Gui_ClearSelectedLayer();
             
             //add listeners for all functions that should redraw the main canvas
-            m_toolRunner.AddFunctionListener( (pA, pB, pC) => { m_canvasWindow.Redraw(pA); }, "tool_down", "tool_up", "tool_move", "undo", "clear", "swap_layers", "remove_layer");
+            m_toolRunner.AddFunctionListener( (pA, pB, pC) => { m_canvasWindow.Redraw(pA); }, "tool_down", "tool_up", "tool_move", "undo", "clear", "reorder_layers", "remove_layer");
 
             //add listeners for all functions that should rebuild the layer list
-            m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.RebuildLayerControls(); }, "swap_layers", "rename_layer", "remove_layer", "create_layer");
+            m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.RebuildLayerControls(); }, "reorder_layers", "rename_layer", "remove_layer", "create_layer");
             
             //add listeners for all functions that should update a layer thumbnail
             m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.UpdateThumbnail(pC["layer"] as string); }, "tool_up", "undo", "clear");
@@ -92,22 +92,14 @@ namespace AwesomeCanvas
             m_toolRunner.ParseJSON(j.Finish());
         }
 
-
-        internal bool GuiInput_KeyDown(Keys keyData) {
-            if (keyData == (Keys.Z | Keys.Control)) {
-                    EzJson j = new EzJson();
-                    j.BeginFunction("undo");
-                    j.AddData("layer", selectedLayerID);
-                    m_toolRunner.ParseJSON(j.Finish());
-                    Console.WriteLine("undo!");
-                    return true;
-            }
-            else if (keyData == (Keys.X | Keys.Control)) {
-                    Gui_ClearSelectedLayer();
-                    return true;
-            }
-            return false;
+        internal void Gui_Undo() {
+            EzJson j = new EzJson();
+            j.BeginFunction("undo");
+            j.AddData("layer", selectedLayerID);
+            m_toolRunner.ParseJSON(j.Finish());
+            Console.WriteLine("undo!");
         }
+
         internal void Gui_ClearSelectedLayer() {
             EzJson j = new EzJson();
             j.BeginFunction("clear");
