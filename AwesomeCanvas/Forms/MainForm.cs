@@ -15,7 +15,7 @@ namespace AwesomeCanvas
     //-------------------------------------------------------------------------
     // The main application form. 
     //-------------------------------------------------------------------------
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IMessageFilter
     {
         // Member variables
         private List<CanvasSession> m_canvasSessions = new List<CanvasSession>();
@@ -25,6 +25,9 @@ namespace AwesomeCanvas
         // Constructor
         public MainForm()
         {
+            Application.AddMessageFilter(this);
+            this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
+
             InitializeComponent();
 
             // Allow this form to hold sub-windows
@@ -37,6 +40,8 @@ namespace AwesomeCanvas
             this.m_activeToolButton = this.pointerButton; 
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             number.Value = 17;
+            TrackBar bar = this.toolStripTrackBarItem1.trackBar;
+            SetCurrentCanvasSession(null);
    
         }
 
@@ -70,42 +75,65 @@ namespace AwesomeCanvas
                 // Put the form on top of the others
                 newMDIChild.BringToFront();
 
-                newMDIChild.GotFocus += OnCanvasWindowGotFocus;
+                //when a canvas is selected we want to update the toolbars and such!
+                newMDIChild.GotFocus += (object sender, EventArgs e) =>{
+                    CanvasWindow cw = sender as CanvasWindow;
+                    SetCurrentCanvasSession(cw.m_session);
+                };
 
-                // Add new picture to the base application
-                SetCurrentCanvasSession(new CanvasSession(this, newMDIChild));
-                m_canvasSessions.Add(m_currentCanvasSession);
+                //when a canvas is shut down we need to disable the toolbar if there are no other canvases left
+                newMDIChild.HandleDestroyed += (object sender, EventArgs args) => {
+                    if (m_currentCanvasSession != null && sender == m_currentCanvasSession.canvasWindow) {
+                        SetCurrentCanvasSession(null);
+                    }
+                };
 
+                //create a new canvas session to go with the canvasWindow
+                CanvasSession newSession = new CanvasSession(this, newMDIChild, layerControlForm);
+                m_canvasSessions.Add(newSession);
+                SetCurrentCanvasSession(newSession);
+            }
+        }
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
+            SaveFileDialog saveAsDialogue = new SaveFileDialog();
+            saveAsDialogue.Filter = "Awsome Canvas Save|.awsomeSave";
+            saveAsDialogue.FileOk += (object dialogue, CancelEventArgs arguments) => { 
+                if (arguments.Cancel) { 
+                    return; 
+                } else {
+                    m_currentCanvasSession.SaveCanvasToFile(((SaveFileDialog)dialogue).FileName);
+                } 
+            };
+            saveAsDialogue.ShowDialog();
+        }
+
+
+        private void SetCurrentCanvasSession(CanvasSession pCanvasSession) {
+            m_currentCanvasSession = pCanvasSession;
+            if (m_currentCanvasSession == null) {
+                toolPanelTop.Visible = false;
+                panel1.Visible = false;
+                panel1.Enabled = false;
+                saveAsToolStripMenuItem.Enabled = false;
+                saveToolStripMenuItem.Enabled = false;
+                editToolStripMenuItem.Enabled = false;
+                viewToolStripMenuItem.Enabled = false;
+                windowToolStripMenuItem.Enabled = false;
+            }
+            else {
                 // Set up the workspace - the side pannel mostly
                 // TODO: this stuff could probably be done in a seperate function that is called eveytime the canvas count changes. 
                 toolPanelTop.Visible = true;
                 panel1.Visible = true;
                 panel1.Enabled = true;
-
+                saveAsToolStripMenuItem.Enabled = true;
+                saveToolStripMenuItem.Enabled = true;
+                editToolStripMenuItem.Enabled = true;
+                viewToolStripMenuItem.Enabled = true;
+                windowToolStripMenuItem.Enabled = true;
                 // Set the picture as the focus of the side bar
-                layerControlForm.ChangePictureFocus(newMDIChild.GetPicture());
+                layerControlForm.SetCanvasSession(m_currentCanvasSession);
             }
-        }
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            if (m_currentCanvasSession != null) {
-                return m_currentCanvasSession.GuiInput_KeyDown(keyData);
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        /// <summary>
-        /// Swap Active Canvas Session
-        /// </summary>
-        private void OnCanvasWindowGotFocus(object sender, EventArgs e) {
-  //          Console.WriteLine("Canvas Got Focus!");
-            CanvasWindow cw = sender as CanvasWindow;
-            SetCurrentCanvasSession(cw.m_session);
-        }
-
-        private void SetCurrentCanvasSession(CanvasSession pCanvasSession) {
-            m_currentCanvasSession = pCanvasSession;
-            m_currentCanvasSession.OnFocus();
         }
         //---------------------------------------------------------------------
         ///  Deactivate the current tool and activate the new tool
@@ -164,8 +192,32 @@ namespace AwesomeCanvas
             };
         }
 
-        internal int GetCurrentLayer() {
-            return 0;
+        Keys m_keyRepeating = Keys.None;
+        const int WM_KEYDOWN = 0x100;
+        const int WM_KEYUP = 0x101;
+        public bool PreFilterMessage(ref Message m) {
+            if (m_currentCanvasSession != null) {
+                Keys inputKeys = (Keys)m.WParam;
+                if (m.Msg == WM_KEYDOWN) {
+                    
+                    Keys newKeysDown = inputKeys & ~m_keyRepeating;
+                    m_keyRepeating |= inputKeys;
+                    if (newKeysDown != Keys.None) {
+                        //Console.WriteLine(" keys down " + newKeysDown);
+                        return m_currentCanvasSession.canvasWindow.ProcessKeyDown(inputKeys);
+                    }
+                }
+                else if (m.Msg == WM_KEYUP) {
+                    //Console.WriteLine(" keys up " + inputKeys);
+                    m_keyRepeating = m_keyRepeating & ~inputKeys;
+                    return m_currentCanvasSession.canvasWindow.ProcessKeyUp(inputKeys);
+                }
+            }
+            return false;
+
         }
+
+
+
     }
 }

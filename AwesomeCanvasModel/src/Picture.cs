@@ -7,11 +7,7 @@ using System.Drawing;
 
 namespace AwesomeCanvas
 {
-    // Event handler delegate
-    //public delegate void NewPictureCreatedHandler(Picture picture);
-    public delegate void AddNewLayerHandler(Layer layer);
-    public delegate void DeleteLayerHandler(Layer layer);
-    public delegate void MoveLayerHandler(Layer layer, short position);
+
 
     //---------------------------------------------------------------------
     // The class that holds the structure of an image
@@ -20,13 +16,9 @@ namespace AwesomeCanvas
     {
         // An event for when the picture is created
         //public event NewPictureCreatedHandler NewPictureEvent;
-        public event AddNewLayerHandler AddNewLayerEvent;
-        public event DeleteLayerHandler DeleteLayerEvent;
-        public event MoveLayerHandler MoveLayerEvent;
 
         // Member variables
         public List<Layer> layers;
-        private int m_activeLayerIndex;
         private int m_width;
         private int m_height;
         private string m_name;
@@ -43,7 +35,6 @@ namespace AwesomeCanvas
             m_name = name;
             layers = new List<Layer>();
             layers.Add(new Layer(width, height, "Layer 0"));
-            m_activeLayerIndex = 0;
 
             // Set layer1's colour to white
             // TODO: Let the user pick the starting colour
@@ -87,17 +78,15 @@ namespace AwesomeCanvas
             }
         }
 
-        //---------------------------------------------------------------------
-        // Set the active layer 
-        //---------------------------------------------------------------------
-        public void SetActiveLayer(int layerIndex)
-        {
-            m_activeLayerIndex = layerIndex;
+        internal void RemoveLayer(int pLayerIndex) {
+            layers.RemoveAt(pLayerIndex);
         }
 
-        public int GetActiveLayerIndex()
-        {
-            return m_activeLayerIndex;
+        internal void SwapLayerPositions(int layerIndex, int layerIndex2) {
+            Layer a = layers[layerIndex];
+            Layer b = layers[layerIndex2];
+            layers[layerIndex2] = a;
+            layers[layerIndex] = b;
         }
     }
 }

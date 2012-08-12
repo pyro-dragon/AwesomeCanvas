@@ -42,10 +42,9 @@ namespace AwesomeCanvas
             m_zoomTool = new ZoomTool(this);
 
             SetZoom(1.0f, false);
-            this.canvasBox.MouseDown += new MouseEventHandler(OnMouseDown);
-            this.canvasBox.MouseUp += new MouseEventHandler(OnMouseUp);
+            this.canvasBox.MouseDown += new MouseEventHandler(OnMouseDown);  
+            this.canvasBox.MouseUp += new MouseEventHandler(OnMouseUp); 
             this.canvasBox.MouseMove += new MouseEventHandler(OnMouseMove);
-            this.KeyDown += new KeyEventHandler(OnKeyDown);
 
         }
 
@@ -131,29 +130,38 @@ namespace AwesomeCanvas
             
         }
 
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        internal bool ProcessKeyUp(Keys pKeys)
         {
-            if ((e.Modifiers & Keys.Shift) != Keys.None || m_zoomTool.Enabled) {
+            if ((pKeys & Keys.Shift) != Keys.None || m_zoomTool.Enabled) {
                 m_zoomTool.Enabled = false;
             }
-            else if ((e.KeyCode & Keys.Space) != Keys.None || m_panTool.Enabled) {
+            else if ((pKeys & Keys.Space) != Keys.None || m_panTool.Enabled) {
                 m_panTool.Enabled = false;
             }
-            else if (e.KeyCode == Keys.Oemplus){
+            else if (pKeys == Keys.Oemplus){
                 SetZoom(m_magnification * 1.5f, true);
             }
-            else if (e.KeyCode == Keys.OemMinus) {
+            else if (pKeys == Keys.OemMinus) {
                 SetZoom(m_magnification / 1.5f, true);
             }
+            else {
+                return false;
+            }
+            return true;
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e) 
+        internal bool ProcessKeyDown(Keys pKeys)
         {
-            if ((e.Modifiers & Keys.Shift) != Keys.None) {
+            if ((pKeys & Keys.Shift) != Keys.None) {
                 m_zoomTool.Enabled = true;
-            }else if ((e.KeyCode & Keys.Space) != Keys.None) {
+            }
+            else if ((pKeys & Keys.Space) != Keys.None) {
                 m_panTool.Enabled = true;
             }
+            else {
+                return false;
+            }
+            return true;
            
         }
         internal void SetPanPosition(Point pPoint) {

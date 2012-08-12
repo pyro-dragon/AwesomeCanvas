@@ -38,12 +38,21 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         public void Draw(Graphics g, Rectangle pOutputRect, Rectangle pSampleRect )
         {
+            Draw(g, pOutputRect, pSampleRect, false);
+        }
+        //---------------------------------------------------------------------
+        // Render the layers contents
+        //---------------------------------------------------------------------
+        public void Draw(Graphics g, Rectangle pOutputRect, Rectangle pSampleRect, bool smooth) {
             // Set the draw rectagle to draw
             pSampleRect.X = pSampleRect.X - Offset.X;
             pSampleRect.Y = pSampleRect.Y - Offset.Y;
 
             // Set the interpolation mode - this will ensure we have crisp lines when zooming in
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            if(smooth)
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
+            else
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
             // Issue the draw command
             g.DrawImage(

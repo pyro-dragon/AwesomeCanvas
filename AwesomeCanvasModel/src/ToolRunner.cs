@@ -5,10 +5,10 @@ using System.Text;
 
 namespace AwesomeCanvas
 {
-    public delegate void ToolRunnerEventHandler( ToolRunner pTarget );
+    public delegate void FunctionEventHandler(ToolRunner pTarget, string pFunctionName, Dictionary<string, object> inputMessage);
     public class ToolRunner
     {
-        public ToolRunnerEventHandler OnCanvasNeedsRedraw;
+        public Dictionary<string, List<FunctionEventHandler>> _functionHandlers = new Dictionary<string,List<FunctionEventHandler>>();
         Picture m_picture;
         string m_username;
         Dictionary<string, Tool> m_tools = new Dictionary<string, Tool>();
@@ -31,7 +31,7 @@ namespace AwesomeCanvas
             //Console.WriteLine(pJson);
             Dictionary<string, object>[] input = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>[]>(pJson);
             ExecuteCommands(input);
-            OnCanvasNeedsRedraw(this);
+
         }
 
         void ToolDown(Dictionary<string, object> inputMessage) {
@@ -64,12 +64,35 @@ namespace AwesomeCanvas
             m_currentTool = null;
             m_currentLayer = null;        
         }
+        void Undo(Dictionary<string, object> inputMessage) {
+            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
+            Layer l = layers[layerIndex];
+            m_picture.Clear();
+            l.History.PopUndoLevel();
+            Dictionary<string, object>[] h = l.History.ToArray();//important to copy to array since the history will be modified!
+            l.History.Clear();
+            ExecuteCommands(h);
+        }
+        void RenameLayer(Dictionary<string, object> inputMessage) {
+            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
+            m_picture.layers[layerIndex].Name = inputMessage["name"] as string;
+        }
+        void RemoveLayer(Dictionary<string, object> inputMessage) {
+            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
+            m_picture.RemoveLayer(layerIndex);
+        }
+        void SwapLayers(Dictionary<string, object> inputMessage) {
+            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
+            int layerIndex2 = Convert.ToInt32(inputMessage["layer2"]);
+            m_picture.SwapLayerPositions(layerIndex, layerIndex2);
+        
+        }
         void ExecuteCommands(IEnumerable<Dictionary<string, object>> pInput) 
         {
             foreach (Dictionary<string, object>inputMessage in pInput) 
             {
-
-                switch (inputMessage["function"] as string) 
+                string functionName = inputMessage["function"] as string;
+                switch (functionName) 
                 {
                     case "tool_down": //tool_down comes with all the tool options
                     ToolDown(inputMessage);
@@ -84,34 +107,33 @@ namespace AwesomeCanvas
                     break;
                     case "clear":
                     m_picture.Clear();
+                    m_currentLayer.History.StoreUndoData(inputMessage);
                     break;
                     case "undo":
-                    int layerIndex = Convert.ToInt32(inputMessage["layer"]);
-                    Layer l = layers[layerIndex];
-                    m_picture.Clear();
-                    l.History.PopUndoLevel();
-                    Dictionary<string,object>[] h = l.History.ToArray();//important to copy to array since the history will be modified!
-                    l.History.Clear();
-                    ExecuteCommands(h);
+                    Undo(inputMessage);
                     break;
-                    
-
-                    //case "change_layer": 
-
-                    //    break;
-
-                    //case "new_layer": 
-
-                    //    break;
-
-                    //case "delete_layer": 
-
-                    //    break;
-
+                    case "create_layer":
+                    m_picture.AddLayer();
+                    break;
+                    case "remove_layer":
+                    RemoveLayer(inputMessage);
+                    break;
+                    case "swap_layers":
+                    SwapLayers(inputMessage);
+                    break;
+                    case "rename_layer":
+                    RenameLayer(inputMessage);
+                    break;
                     default:
                     break;
                 }
-
+                //Fire off the events!
+                List<FunctionEventHandler> handlers;
+                if (_functionHandlers.TryGetValue(functionName, out handlers) && handlers != null) {
+                    foreach (FunctionEventHandler h in handlers)
+                        h(this, functionName, inputMessage);
+                }
+                
             }
         }
         public List<Layer> layers { 
@@ -119,6 +141,25 @@ namespace AwesomeCanvas
             {
                 return m_picture.layers; 
             } 
-        }        
+        }
+        public void AddFunctionListener(FunctionEventHandler pHandler, params string[] pFunctionNames) {
+            foreach (string s in pFunctionNames) {
+                AddFunctionListener(pHandler, s);
+            }
+        }
+        public void AddFunctionListener(FunctionEventHandler pHandler, string pFunctionName) {
+            if (!_functionHandlers.ContainsKey(pFunctionName))
+                _functionHandlers.Add(pFunctionName, new List<FunctionEventHandler>());
+            _functionHandlers[pFunctionName].Add(pHandler);
+        }
+        public void RemoveFunctionListener(FunctionEventHandler pHandler, params string[] pFunctionNames) {
+            foreach (string s in pFunctionNames) {
+                RemoveFunctionListener(pHandler, s);
+            }
+        }
+        public void RemoveFunctionListener(FunctionEventHandler pHandler, string pFunctionName) {
+            
+            _functionHandlers[pFunctionName].Remove(pHandler);
+        }
     }
 }
