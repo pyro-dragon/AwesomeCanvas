@@ -39,8 +39,8 @@ namespace AwesomeCanvas
             int x = Convert.ToInt32(inputMessage["x"]);
             int y = Convert.ToInt32(inputMessage["y"]);
             Tool tool = m_tools[inputMessage["tool"] as string]; //swap tool on tool down
-            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
-            m_currentLayer = layers[layerIndex];
+            string layerID = inputMessage["layer"] as string;
+            m_currentLayer = m_picture.GetLayer(layerID);
             m_currentTool = tool;
             m_currentTool.Down(x, y, pressure, m_picture, m_currentLayer, inputMessage["options"]);
             m_currentLayer.History.BeginNewUndoLevel();
@@ -65,27 +65,31 @@ namespace AwesomeCanvas
             m_currentLayer = null;        
         }
         void Undo(Dictionary<string, object> inputMessage) {
-            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
-            Layer l = layers[layerIndex];
-            m_picture.Clear();
+            string layerID = inputMessage["layer"] as string;
+            Layer l = m_picture.GetLayer(layerID);
+            m_picture.ClearAll();
             l.History.PopUndoLevel();
             Dictionary<string, object>[] h = l.History.ToArray();//important to copy to array since the history will be modified!
             l.History.Clear();
             ExecuteCommands(h);
         }
         void RenameLayer(Dictionary<string, object> inputMessage) {
-            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
-            m_picture.layers[layerIndex].Name = inputMessage["name"] as string;
+            string layerID = inputMessage["layer"] as string;
+            m_picture.GetLayer(layerID).Name = inputMessage["name"] as string;
         }
         void RemoveLayer(Dictionary<string, object> inputMessage) {
-            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
-            m_picture.RemoveLayer(layerIndex);
+            string layerID = inputMessage["layer"] as string;
+            m_picture.RemoveLayer(layerID);
         }
-        void SwapLayers(Dictionary<string, object> inputMessage) {
-            int layerIndex = Convert.ToInt32(inputMessage["layer"]);
-            int layerIndex2 = Convert.ToInt32(inputMessage["layer2"]);
-            m_picture.SwapLayerPositions(layerIndex, layerIndex2);
+        void ReorderLayers(Dictionary<string, object> inputMessage) {
+            var t = inputMessage["order"] as Newtonsoft.Json.Linq.JToken;
+            m_picture.Reorder_layers( t.ToObject<string[]>());
         
+        }
+        void ClearLayer(Dictionary<string, object> inputMessage) {
+            string layerID = inputMessage["layer"] as string;
+            m_picture.Clear(layerID);
+            m_picture.GetLayer(layerID).History.StoreUndoData(inputMessage);
         }
         void ExecuteCommands(IEnumerable<Dictionary<string, object>> pInput) 
         {
@@ -106,20 +110,19 @@ namespace AwesomeCanvas
                         ToolUp(inputMessage);
                     break;
                     case "clear":
-                    m_picture.Clear();
-                    m_currentLayer.History.StoreUndoData(inputMessage);
+                        ClearLayer(inputMessage);
                     break;
                     case "undo":
                     Undo(inputMessage);
                     break;
                     case "create_layer":
-                    m_picture.AddLayer();
+                    m_picture.AddLayer(inputMessage["layer"] as string);
                     break;
                     case "remove_layer":
                     RemoveLayer(inputMessage);
                     break;
-                    case "swap_layers":
-                    SwapLayers(inputMessage);
+                    case "reorder_layers":
+                    ReorderLayers(inputMessage);
                     break;
                     case "rename_layer":
                     RenameLayer(inputMessage);
@@ -135,12 +138,6 @@ namespace AwesomeCanvas
                 }
                 
             }
-        }
-        public List<Layer> layers { 
-            get 
-            {
-                return m_picture.layers; 
-            } 
         }
         public void AddFunctionListener(FunctionEventHandler pHandler, params string[] pFunctionNames) {
             foreach (string s in pFunctionNames) {

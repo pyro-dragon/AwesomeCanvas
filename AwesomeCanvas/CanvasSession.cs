@@ -33,6 +33,10 @@ namespace AwesomeCanvas
             m_canvasWindow.m_session = this;
             m_layerControl = pLayerControlForm;
             
+            //setup first layer
+            selectedLayerID = Gui_CreateLayer();
+            Gui_ClearSelectedLayer();
+            
             //add listeners for all functions that should redraw the main canvas
             m_toolRunner.AddFunctionListener( (pA, pB, pC) => { m_canvasWindow.Redraw(pA); }, "tool_down", "tool_up", "tool_move", "undo", "clear", "swap_layers", "remove_layer");
 
@@ -40,7 +44,7 @@ namespace AwesomeCanvas
             m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.RebuildLayerControls(); }, "swap_layers", "rename_layer", "remove_layer", "create_layer");
             
             //add listeners for all functions that should update a layer thumbnail
-            m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.UpdateThumbnail(Convert.ToInt32(pC["layer"])); }, "tool_up", "undo");
+            m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.UpdateThumbnail(pC["layer"] as string); }, "tool_up", "undo", "clear");
         }
 
         internal void GuiInput_MouseUp(object sender, MouseEventArgs e)
@@ -50,7 +54,7 @@ namespace AwesomeCanvas
             j.AddData("x", (int)(e.X / m_canvasWindow.magnification));
             j.AddData("y", (int)(e.Y / m_canvasWindow.magnification));
             j.AddData("pressure", 0);
-            j.AddData("layer", m_layerControl.GetSelectedLayerIndex());
+            j.AddData("layer", selectedLayerID);
             m_toolRunner.ParseJSON(j.Finish());
         }
 
@@ -62,7 +66,7 @@ namespace AwesomeCanvas
             j.AddData("pressure", (128).ToString());
             j.AddData("x", (int)(e.X / m_canvasWindow.magnification));
             j.AddData("y", (int)(e.Y / m_canvasWindow.magnification));
-            j.AddData("layer", m_layerControl.GetSelectedLayerIndex());
+            j.AddData("layer", selectedLayerID);
             j.AddData("tool", toolName);
             switch (toolName) {
                 case "brush":
@@ -93,45 +97,51 @@ namespace AwesomeCanvas
             if (keyData == (Keys.Z | Keys.Control)) {
                     EzJson j = new EzJson();
                     j.BeginFunction("undo");
-                    j.AddData("layer", m_layerControl.GetSelectedLayerIndex());
+                    j.AddData("layer", selectedLayerID);
                     m_toolRunner.ParseJSON(j.Finish());
                     Console.WriteLine("undo!");
                     return true;
             }
             else if (keyData == (Keys.X | Keys.Control)) {
-                    EzJson j = new EzJson();
-                    j.BeginFunction("clear");
-                    m_toolRunner.ParseJSON(j.Finish());
-                    Console.WriteLine("clear!");
+                    Gui_ClearSelectedLayer();
                     return true;
             }
             return false;
         }
-        internal void Gui_RenameLayer(int pLayerIndex, string pNewName) {
+        internal void Gui_ClearSelectedLayer() {
+            EzJson j = new EzJson();
+            j.BeginFunction("clear");
+            j.AddData("layer", selectedLayerID);
+            m_toolRunner.ParseJSON(j.Finish());
+
+            Console.WriteLine("clear!");
+        }
+        internal void Gui_RenameLayer(string pLayerID, string pNewName) {
             EzJson j = new EzJson();
             j.BeginFunction("rename_layer");
-            j.AddData("layer", pLayerIndex);
+            j.AddData("layer", pLayerID);
             j.AddData("name", pNewName);
             m_toolRunner.ParseJSON(j.Finish());
         }
 
-        internal void Gui_CreateLayer() {
+        internal string Gui_CreateLayer() {
+            string id = Guid.NewGuid().ToString(); //create a globally unique id
             EzJson j = new EzJson();
             j.BeginFunction("create_layer");
+            j.AddData("layer", id);
             m_toolRunner.ParseJSON(j.Finish());
+            return id;
         }
-        internal void Gui_RemoveLayer( int pLayer) {
+        internal void Gui_RemoveLayer( string pLayerID) {
             EzJson j = new EzJson();
             j.BeginFunction("remove_layer");
-            j.AddData("layer", pLayer);
+            j.AddData("layer", pLayerID);
             m_toolRunner.ParseJSON(j.Finish());
         }
-        internal void Gui_SwapLayers(int pIndexA, int pIndexB) {
-            Console.WriteLine("swap indices " + pIndexA + ", " + pIndexB);
+        internal void Gui_SetLayerOrder(string[] pOrderedIDs) {
             EzJson j = new EzJson();
-            j.BeginFunction("swap_layers");
-            j.AddData("layer", pIndexA);
-            j.AddData("layer2", pIndexB);
+            j.BeginFunction("reorder_layers");
+            j.AddData("order", pOrderedIDs);
             m_toolRunner.ParseJSON(j.Finish());
         }
 
@@ -149,5 +159,7 @@ namespace AwesomeCanvas
         }
 
 
+
+        public string selectedLayerID { get; set; }
     }
 }

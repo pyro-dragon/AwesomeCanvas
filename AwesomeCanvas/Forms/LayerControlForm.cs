@@ -23,11 +23,8 @@ namespace AwesomeCanvas
     public partial class LayerControlForm : UserControl
     {
         //private event OnLayerNameChange(Layer layer, String name)
-        Picture m_currentPicture; // The currently selected working picture
-        LayerControl[] m_layerControls = null;
+        Dictionary<string, LayerControl> m_layerControls = new Dictionary<string,LayerControl>();
         CanvasSession m_canvasSession = null;
-
-        Dictionary<int, int> m_selectedLayerIndexPerCanvasHashcode = new Dictionary<int, int>();
         //-------------------------------------------------------------------------
         // Contructor
         //-------------------------------------------------------------------------
@@ -36,19 +33,12 @@ namespace AwesomeCanvas
             InitializeComponent();
             this.LayerDisplayPanel.AllowDrop = true;
         }
-        
-        /// <returns>the currently selected layer index, if none zero is always returned</returns>
-        public int GetSelectedLayerIndex() {
-            if (m_canvasSession != null && m_selectedLayerIndexPerCanvasHashcode.ContainsKey(m_canvasSession.GetHashCode())) {
-                int index = m_selectedLayerIndexPerCanvasHashcode[m_canvasSession.GetHashCode()];
-                if (m_canvasSession.GetPicture().layers.Count <= index)
-                    index = m_canvasSession.GetPicture().layers.Count - 1;
-                return index;
-            }
-            else {
-                return 0;
-            }
+
+        string selectedIndex { 
+            get { return m_canvasSession.selectedLayerID; }
+            set { m_canvasSession.selectedLayerID = value; }
         }
+        
 
         //-------------------------------------------------------------------------
         // New Layer Button click event
@@ -62,12 +52,12 @@ namespace AwesomeCanvas
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void deleteLayerButton_Click(object sender, EventArgs e) {
-            m_canvasSession.Gui_RemoveLayer(GetSelectedLayerIndex());
+            m_canvasSession.Gui_RemoveLayer(selectedIndex);
         }
 
-        private void OnLayerNameChange(int pLayerIndex, string pPreviousName, string pNewName)
+        private void OnLayerNameChange(string pLayerID, string pPreviousName, string pNewName)
         {
-            m_canvasSession.Gui_RenameLayer(pLayerIndex, pNewName);
+            m_canvasSession.Gui_RenameLayer(pLayerID, pNewName);
         }
 
         public void SetCanvasSession(CanvasSession pSession) {
@@ -80,13 +70,13 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         private void OnLayerSelectionChange(LayerControl layerControl)
         {
-            int selectedIndex = layerControl.GetLayerIndex();
-            m_selectedLayerIndexPerCanvasHashcode[m_canvasSession.GetHashCode()] = selectedIndex;
-            for (int i = 0; i < m_layerControls.Length; i++) {
-                if (i == selectedIndex)
-                    m_layerControls[i].LayerActivated();
+            selectedIndex = layerControl.GetLayerID();
+            foreach(LayerControl lc in m_layerControls.Values)
+            {
+                if (lc == layerControl)
+                    lc.LayerActivated();
                 else
-                    m_layerControls[i].LayerDeactivated();
+                    lc.LayerDeactivated();
             }
         }
 
@@ -95,36 +85,51 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         public void RebuildLayerControls()
         {
-            Console.WriteLine("rebuild");
             // Delete current layer controls
-            LayerDisplayPanel.Controls.Clear();
             
+            SuspendDraw.Suspend(LayerDisplayPanel); //suspend redraw to reduce lag
+            //LayerDisplayPanel.SuspendLayout();
+            LayerDisplayPanel.Controls.Clear();
+            m_layerControls.Clear();
             // Cycle through each layer
-            int layerIndex = 0;
             List<LayerControl> controls = new List<LayerControl>();
             foreach (Layer layer in m_canvasSession.GetPicture().layers)
             {
-                LayerControl lc = new LayerControl(layer.Name, layerIndex++);
+                LayerControl lc = new LayerControl(layer.Name, layer.ID);
                 lc.layerNameChanged += new LayerNameChaged(OnLayerNameChange);
                 lc.layerControlSelected += new LayerControlSelected(OnLayerSelectionChange);
                 lc.layerDragStart += LayerControl_StartDrag;
+                m_layerControls.Add(lc.GetLayerID(), lc);
                 this.LayerDisplayPanel.Controls.Add(lc);
                 controls.Add(lc);
-                
             }
-            m_layerControls = controls.ToArray();
-            for (int i = 0; i < m_layerControls.Length; i++) {
-                UpdateThumbnail(i);
+            foreach (Layer layer in m_canvasSession.GetPicture().layers) {
+                UpdateThumbnail(layer.ID);
             }
-            OnLayerSelectionChange(m_layerControls[GetSelectedLayerIndex()]);
+            if (m_layerControls.ContainsKey(selectedIndex)) {
+                OnLayerSelectionChange(m_layerControls[selectedIndex]);
+            }
+            //LayerDisplayPanel.ResumeLayout();
+            SuspendDraw.Resume(LayerDisplayPanel);
+            
         }
 
+        internal void UpdateThumbnail(string pLayerID) {
+            if(m_layerControls != null)
+            {
+                Layer l = m_canvasSession.GetPicture().GetLayer(pLayerID);
+                m_layerControls[pLayerID].Redraw(l);
+            }
+            
+        }
+
+        #region dragDrop
         LayerControl _draggedLayer = null;
         int _draggedLayerStartIndex = 0;
         private void LayerControl_StartDrag(object sender, MouseEventArgs e) {
             _draggedLayer = sender as LayerControl;
             if (_draggedLayer != null) {
-                _draggedLayerStartIndex = _draggedLayer.GetLayerIndex();
+                _draggedLayerStartIndex = LayerDisplayPanel.Controls.IndexOf(_draggedLayer);
                 this.LayerDisplayPanel.DoDragDrop(_draggedLayer, DragDropEffects.Move);
             }
         }
@@ -145,21 +150,14 @@ namespace AwesomeCanvas
         private void LayerDisplayPanel_DragDrop(object sender, DragEventArgs e) {
             int resultingIndex = LayerDisplayPanel.Controls.IndexOf(_draggedLayer);
             if (_draggedLayerStartIndex != resultingIndex) {
-                m_canvasSession.Gui_SwapLayers(_draggedLayerStartIndex, resultingIndex);
-                
+                var order = new List<string>();
+                foreach (LayerControl lc in LayerDisplayPanel.Controls)
+                    order.Add(lc.GetLayerID());
+                m_canvasSession.Gui_SetLayerOrder(order.ToArray());
             }
             _draggedLayer = null;
         }
- 
-
-        internal void UpdateThumbnail(int p) {
-            if(m_layerControls != null && p < m_layerControls.Length)
-            {
-                Layer l = m_canvasSession.GetPicture().layers[p];
-                m_layerControls[p].Redraw(l);
-            }
-            
-        }
+        #endregion
 
 
     }

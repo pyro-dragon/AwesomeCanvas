@@ -15,7 +15,7 @@ namespace AwesomeCanvas
     //-------------------------------------------------------------------------
     // The main application form. 
     //-------------------------------------------------------------------------
-    public partial class MainForm : Form, IMessageFilter
+    public partial class MainForm : Form
     {
         // Member variables
         private List<CanvasSession> m_canvasSessions = new List<CanvasSession>();
@@ -25,8 +25,8 @@ namespace AwesomeCanvas
         // Constructor
         public MainForm()
         {
-            Application.AddMessageFilter(this);
-            this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
+            //Application.AddMessageFilter(this);
+            //this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 
             InitializeComponent();
 
@@ -191,7 +191,7 @@ namespace AwesomeCanvas
                 size = GetToolSize()
             };
         }
-
+        /*
         Keys m_keyRepeating = Keys.None;
         const int WM_KEYDOWN = 0x100;
         const int WM_KEYUP = 0x101;
@@ -217,7 +217,7 @@ namespace AwesomeCanvas
 
         }
 
-
+        */
 
     }
 }

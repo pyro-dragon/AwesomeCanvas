@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-
+using System.Diagnostics;
 namespace AwesomeCanvas
 {
 
@@ -18,7 +18,7 @@ namespace AwesomeCanvas
         //public event NewPictureCreatedHandler NewPictureEvent;
 
         // Member variables
-        public List<Layer> layers;
+        private List<Layer> m_layers;
         private int m_width;
         private int m_height;
         private string m_name;
@@ -33,12 +33,9 @@ namespace AwesomeCanvas
             m_width = width;
             m_height = height;
             m_name = name;
-            layers = new List<Layer>();
-            layers.Add(new Layer(width, height, "Layer 0"));
-
+            m_layers = new List<Layer>();
             // Set layer1's colour to white
             // TODO: Let the user pick the starting colour
-            Clear();
         }
 
         //---------------------------------------------------------------------
@@ -46,8 +43,8 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         public void DrawPicture(Graphics graphics, Rectangle pOutputRect, Rectangle pSampleRect)
         {
-            // Initialise the layers
-            foreach (Layer layer in layers)
+            // Initialise the m_layers
+            foreach (Layer layer in m_layers)
             {
                 if (layer.Visible) {
                     layer.Draw(graphics, pOutputRect, pSampleRect);
@@ -59,34 +56,50 @@ namespace AwesomeCanvas
         // A function used to add a new layer to the picture TODO: Actully fill 
         // this thing in
         //-------------------------------------------------------------------------
-        public void AddLayer()
+        public void AddLayer( string pId )
         { 
             // Add a new layer
-            layers.Add(new Layer(m_width, m_height, "Layer " + layers.Count.ToString()));
+            m_layers.Add(new Layer(m_width, m_height, "Layer " + m_layers.Count.ToString(), pId));
 
             // Inform everyone that there is a new layer
             //AddNewLayerEvent(new Layer);
         }
 
-        public void Clear() {
-            // Set layer1's colour to white
+        public void Clear(string pLayerID) {
             // TODO: Let the user pick the starting colour
-            for (int i = 0; i < layers.Count; i++ ){
-                using (Graphics graphics = Graphics.FromImage(layers[i].GetBitmap())) {
-                    graphics.Clear(Color.White);
-                }
+            Layer l = GetLayer(pLayerID);
+            using (Graphics graphics = Graphics.FromImage(l.GetBitmap())) {
+                graphics.Clear(Color.White);
+            }
+        }
+        public void ClearAll() {
+            foreach (Layer l in m_layers) {
+                Clear(l.ID);
             }
         }
 
-        internal void RemoveLayer(int pLayerIndex) {
-            layers.RemoveAt(pLayerIndex);
+        internal void RemoveLayer(string pLayerID) {
+            m_layers.Remove(GetLayer(pLayerID));
         }
 
-        internal void SwapLayerPositions(int layerIndex, int layerIndex2) {
-            Layer a = layers[layerIndex];
-            Layer b = layers[layerIndex2];
-            layers[layerIndex2] = a;
-            layers[layerIndex] = b;
+        public IEnumerable<Layer> layers { get { return m_layers; } }
+        public Layer GetLayer(string pID) {
+            return m_layers.First((p) => p.ID == pID);
+        }
+
+        public int GetLayerCount() {
+            return m_layers.Count;
+        }
+
+        internal void Reorder_layers(string[] pNewLayerOrder) {
+            Debug.Assert(pNewLayerOrder.Length == m_layers.Count, "layer order does not match setup");
+            Layer[] oldOrder = m_layers.ToArray();
+            m_layers.Clear();
+            foreach (string s in pNewLayerOrder) {
+               Layer t = oldOrder.First((l) => { return l.ID == s; });
+               Debug.Assert(t != null, "layer order does not match setup");
+               m_layers.Add(t);
+            }
         }
     }
 }

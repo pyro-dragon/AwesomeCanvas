@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace AwesomeCanvas
 {
-    public delegate void LayerNameChaged(int pLayerIndex, string pPreviousName, string pNewName);
+    public delegate void LayerNameChaged(string pLayerID, string pPreviousName, string pNewName);
     public delegate void LayerControlSelected(LayerControl layerControl);
 
     //-------------------------------------------------------------------------
@@ -18,7 +18,7 @@ namespace AwesomeCanvas
     public partial class LayerControl : UserControl
     {
         // Variables
-        int m_layerIndex;
+        string m_layerID;
         Layer m_cachedLayer = null;
         // Events
         public event LayerNameChaged layerNameChanged;
@@ -27,10 +27,10 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         // Constructor
         //-------------------------------------------------------------------------
-        public LayerControl(string pLayerName, int layerIndex)
+        public LayerControl(string pLayerName, string pLayerID)
         {
             InitializeComponent();
-            m_layerIndex = layerIndex;
+            m_layerID = pLayerID;
             layerNameBox.Text = pLayerName;
         }
         public void Redraw(Layer pLayer) {
@@ -101,7 +101,7 @@ namespace AwesomeCanvas
             layerNameBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             // TODO: Trigger layer renameing event
-            layerNameChanged(m_layerIndex, layerNameBox.Text, layerNameBox.Text);
+            layerNameChanged(m_layerID, layerNameBox.Text, layerNameBox.Text);
         }
 
         //-------------------------------------------------------------------------
@@ -132,9 +132,9 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         // Return the layer index
         //-------------------------------------------------------------------------
-        public int GetLayerIndex()
+        public string GetLayerID()
         {
-            return m_layerIndex;
+            return m_layerID;
         }
 
         private void previewImageBox_MouseDown(object sender, MouseEventArgs e) {

@@ -19,43 +19,44 @@ namespace AwesomeCanvas
         public Point Offset { get; set; }
         Bitmap m_bitmap;
         Rectangle m_area;
-
+        public string ID { get; private set; }
         //---------------------------------------------------------------------
         // Constructor
         //---------------------------------------------------------------------
-        public Layer(int width, int height, string name)
+        public Layer(int pWidth, int pHeight, string pName, string pID)
         {
-            Name = name;
+            ID = pID;
+            Name = pName;
             Opacity = 1.0f;
             Visible = true;
             History = new History();
-            m_bitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            m_area = new Rectangle(0, 0, width, height);
+            m_bitmap = new Bitmap(pWidth, pHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            m_area = new Rectangle(0, 0, pWidth, pHeight);
         }
 
         //---------------------------------------------------------------------
         // Render the layers contents
         //---------------------------------------------------------------------
-        public void Draw(Graphics g, Rectangle pOutputRect, Rectangle pSampleRect )
+        public void Draw(Graphics pGraphics, Rectangle pOutputRect, Rectangle pSampleRect )
         {
-            Draw(g, pOutputRect, pSampleRect, false);
+            Draw(pGraphics, pOutputRect, pSampleRect, false);
         }
         //---------------------------------------------------------------------
         // Render the layers contents
         //---------------------------------------------------------------------
-        public void Draw(Graphics g, Rectangle pOutputRect, Rectangle pSampleRect, bool smooth) {
+        public void Draw(Graphics pGraphics, Rectangle pOutputRect, Rectangle pSampleRect, bool smooth) {
             // Set the draw rectagle to draw
             pSampleRect.X = pSampleRect.X - Offset.X;
             pSampleRect.Y = pSampleRect.Y - Offset.Y;
 
             // Set the interpolation mode - this will ensure we have crisp lines when zooming in
             if(smooth)
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
+                pGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
             else
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                pGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
             // Issue the draw command
-            g.DrawImage(
+            pGraphics.DrawImage(
                 m_bitmap,
                 pOutputRect,
                 pSampleRect,

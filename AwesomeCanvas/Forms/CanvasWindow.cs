@@ -42,9 +42,11 @@ namespace AwesomeCanvas
             m_zoomTool = new ZoomTool(this);
 
             SetZoom(1.0f, false);
-            this.canvasBox.MouseDown += new MouseEventHandler(OnMouseDown);  
-            this.canvasBox.MouseUp += new MouseEventHandler(OnMouseUp); 
-            this.canvasBox.MouseMove += new MouseEventHandler(OnMouseMove);
+            this.canvasBox.MouseDown += new MouseEventHandler(ProcessMouseDown);  
+            this.canvasBox.MouseUp += new MouseEventHandler(ProcessMouseUp); 
+            this.canvasBox.MouseMove += new MouseEventHandler(ProcessMouseMove);
+            this.KeyDown += (object a, KeyEventArgs b) => ProcessKeyDown(b.KeyData);
+            this.KeyUp += (object a, KeyEventArgs b) => ProcessKeyUp(b.KeyData);
 
         }
 
@@ -85,13 +87,13 @@ namespace AwesomeCanvas
             canvasBox.Invalidate(true);
             canvasBox.Update();
         }
-        internal void OnMouseUp(object sender, MouseEventArgs e) {
+        internal void ProcessMouseUp(object sender, MouseEventArgs e) {
             if (e.Button == System.Windows.Forms.MouseButtons.Left) {
                 m_session.GuiInput_MouseUp(sender, e);
             }
         }
 
-        internal void OnMouseDown(object sender, MouseEventArgs e) 
+        internal void ProcessMouseDown(object sender, MouseEventArgs e) 
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left) 
             {
@@ -113,7 +115,7 @@ namespace AwesomeCanvas
             }
         }
 
-        internal void OnMouseMove(object sender, MouseEventArgs e) {
+        internal void ProcessMouseMove(object sender, MouseEventArgs e) {
             //if left button is down
             if ((Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) != System.Windows.Forms.MouseButtons.None) 
             {
@@ -152,6 +154,7 @@ namespace AwesomeCanvas
 
         internal bool ProcessKeyDown(Keys pKeys)
         {
+            Console.WriteLine(pKeys);
             if ((pKeys & Keys.Shift) != Keys.None) {
                 m_zoomTool.Enabled = true;
             }
@@ -159,7 +162,7 @@ namespace AwesomeCanvas
                 m_panTool.Enabled = true;
             }
             else {
-                return false;
+                return m_session.GuiInput_KeyDown(pKeys);
             }
             return true;
            
