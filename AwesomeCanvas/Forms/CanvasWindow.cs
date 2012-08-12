@@ -45,6 +45,10 @@ namespace AwesomeCanvas
             this.canvasBox.MouseDown += new MouseEventHandler(ProcessMouseDown);  
             this.canvasBox.MouseUp += new MouseEventHandler(ProcessMouseUp); 
             this.canvasBox.MouseMove += new MouseEventHandler(ProcessMouseMove);
+            this.WindowState = FormWindowState.Maximized;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.ControlBox = false;
             //this.KeyDown += (object a, KeyEventArgs b) => ProcessKeyDown(b.KeyData);
             //this.KeyUp += (object a, KeyEventArgs b) => ProcessKeyUp(b.KeyData);
         }
