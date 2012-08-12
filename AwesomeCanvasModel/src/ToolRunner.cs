@@ -69,7 +69,7 @@ namespace AwesomeCanvas
         void Undo(Dictionary<string, object> inputMessage) {
             string layerID = inputMessage["layer"] as string;
             Layer l = m_picture.GetLayer(layerID);
-            m_picture.ClearAll();
+            m_picture.Clear(layerID);
             l.History.PopUndoLevel();
             Dictionary<string, object>[] h = l.History.ToArray();//important to copy to array since the history will be modified!
             l.History.Clear();
@@ -114,7 +114,7 @@ namespace AwesomeCanvas
                         ToolUp(inputMessage);
                     break;
                     case "clear":
-                        ClearLayer(inputMessage);
+                    ClearLayer(inputMessage);
                     break;
                     case "undo":
                     Undo(inputMessage);

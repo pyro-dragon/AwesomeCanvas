@@ -139,38 +139,20 @@ namespace AwesomeCanvas
             }
             
         }
-        /*
-        internal bool ProcessKeyUp(Keys pKeys) {
 
-            switch (pKeys) {
-                case Keys.Shift:
-                m_zoomTool.Enabled = false;
-                break;
-                case Keys.Space:
-                m_panTool.Enabled = false;
-                break;
-
-                     
-                default:
-                return false;
-            }
-            return true;
-        }
-        */
         internal bool ProcessKeyDown(Keys pKeys)
         {
-            //Console.WriteLine(pKeys);
-            if(pKeys.HasFlag(Keys.Control | Keys.X))
+            if(pKeys == (Keys.Control | Keys.X))
                 m_session.Gui_ClearSelectedLayer();
-            else if(pKeys.HasFlag(Keys.Control | Keys.Z))
+            else if(pKeys == (Keys.Control | Keys.Z))
                 m_session.Gui_Undo();
-            else if(pKeys.HasFlag(Keys.Shift))
+            else if (pKeys.HasFlag(Keys.Shift))
                 m_zoomTool.Enabled = true;
-            else if(pKeys.HasFlag(Keys.Alt))
+            else if (pKeys.HasFlag(Keys.Alt))
                 m_panTool.Enabled = true;
-            else if(pKeys.HasFlag(Keys.Oemplus))
+            else if (pKeys.HasFlag(Keys.Oemplus))
                 SetZoom(m_magnification * 1.5f, true);
-            else if(pKeys.HasFlag(Keys.OemMinus))
+            else if (pKeys.HasFlag(Keys.OemMinus))
                 SetZoom(m_magnification / 1.5f, true);
              else 
                 return false;
