@@ -15,16 +15,23 @@ using System.Windows.Forms.Design;
 
 public class ToolStripTrackBarItem : ToolStripControlHost
 {
-    public TrackBar trackBar;
+    public CustomTrackbar trackBar;
 
     public ToolStripTrackBarItem()
-        : base(new TrackBar())
+        : base(new CustomTrackbar())
     {
-        trackBar = (TrackBar)this.Control;
+        trackBar = (CustomTrackbar)this.Control;
         trackBar.AutoSize = false;
         trackBar.Maximum = 100;
         trackBar.Size = new Size(200, 20);
         trackBar.TickFrequency = 1;
         trackBar.TickStyle = TickStyle.None;
     }
+}
+public class CustomTrackbar : TrackBar
+{
+    protected override void OnGotFocus(EventArgs e) {
+        //base.OnGotFocus(e);
+    }
+
 }

@@ -4,14 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-
+using System.Diagnostics;
 namespace AwesomeCanvas
 {
-    // Event handler delegate
-    //public delegate void NewPictureCreatedHandler(Picture picture);
-    public delegate void AddNewLayerHandler(Layer layer);
-    public delegate void DeleteLayerHandler(Layer layer);
-    public delegate void MoveLayerHandler(Layer layer, short position);
+
 
     //---------------------------------------------------------------------
     // The class that holds the structure of an image
@@ -20,13 +16,9 @@ namespace AwesomeCanvas
     {
         // An event for when the picture is created
         //public event NewPictureCreatedHandler NewPictureEvent;
-        public event AddNewLayerHandler AddNewLayerEvent;
-        public event DeleteLayerHandler DeleteLayerEvent;
-        public event MoveLayerHandler MoveLayerEvent;
 
         // Member variables
-        public List<Layer> layers;
-        private int m_activeLayerIndex;
+        private List<Layer> m_layers;
         private int m_width;
         private int m_height;
         private string m_name;
@@ -41,13 +33,9 @@ namespace AwesomeCanvas
             m_width = width;
             m_height = height;
             m_name = name;
-            layers = new List<Layer>();
-            layers.Add(new Layer(width, height, "Layer 0"));
-            m_activeLayerIndex = 0;
-
+            m_layers = new List<Layer>();
             // Set layer1's colour to white
             // TODO: Let the user pick the starting colour
-            Clear();
         }
 
         //---------------------------------------------------------------------
@@ -55,8 +43,8 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         public void DrawPicture(Graphics graphics, Rectangle pOutputRect, Rectangle pSampleRect)
         {
-            // Initialise the layers
-            foreach (Layer layer in layers)
+            // Initialise the m_layers
+            foreach (Layer layer in m_layers)
             {
                 if (layer.Visible) {
                     layer.Draw(graphics, pOutputRect, pSampleRect);
@@ -68,36 +56,50 @@ namespace AwesomeCanvas
         // A function used to add a new layer to the picture TODO: Actully fill 
         // this thing in
         //-------------------------------------------------------------------------
-        public void AddLayer()
+        public void AddLayer( string pId )
         { 
             // Add a new layer
-            layers.Add(new Layer(m_width, m_height, "Layer " + layers.Count.ToString()));
+            m_layers.Add(new Layer(m_width, m_height, "Layer " + m_layers.Count.ToString(), pId));
 
             // Inform everyone that there is a new layer
             //AddNewLayerEvent(new Layer);
         }
 
-        public void Clear() {
-            // Set layer1's colour to white
+        public void Clear(string pLayerID) {
             // TODO: Let the user pick the starting colour
-            for (int i = 0; i < layers.Count; i++ ){
-                using (Graphics graphics = Graphics.FromImage(layers[i].GetBitmap())) {
-                    graphics.Clear(Color.White);
-                }
+            Layer l = GetLayer(pLayerID);
+            using (Graphics graphics = Graphics.FromImage(l.GetBitmap())) {
+                graphics.Clear(Color.White);
+            }
+        }
+        public void ClearAll() {
+            foreach (Layer l in m_layers) {
+                Clear(l.ID);
             }
         }
 
-        //---------------------------------------------------------------------
-        // Set the active layer 
-        //---------------------------------------------------------------------
-        public void SetActiveLayer(int layerIndex)
-        {
-            m_activeLayerIndex = layerIndex;
+        internal void RemoveLayer(string pLayerID) {
+            m_layers.Remove(GetLayer(pLayerID));
         }
 
-        public int GetActiveLayerIndex()
-        {
-            return m_activeLayerIndex;
+        public IEnumerable<Layer> layers { get { return m_layers; } }
+        public Layer GetLayer(string pID) {
+            return m_layers.First((p) => p.ID == pID);
+        }
+
+        public int GetLayerCount() {
+            return m_layers.Count;
+        }
+
+        internal void Reorder_layers(string[] pNewLayerOrder) {
+            Debug.Assert(pNewLayerOrder.Length == m_layers.Count, "layer order does not match setup");
+            Layer[] oldOrder = m_layers.ToArray();
+            m_layers.Clear();
+            foreach (string s in pNewLayerOrder) {
+               Layer t = oldOrder.First((l) => { return l.ID == s; });
+               Debug.Assert(t != null, "layer order does not match setup");
+               m_layers.Add(t);
+            }
         }
     }
 }
