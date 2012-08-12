@@ -45,6 +45,9 @@ namespace AwesomeCanvas
             
             //add listeners for all functions that should update a layer thumbnail
             m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.UpdateThumbnail(pC["layer"] as string); }, "tool_up", "undo", "clear");
+            
+            //add listeners for updating the status bar (:
+            m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_mainForm.SetStatus("last action: " + pB); }, "tool_down", "tool_up", "tool_move", "undo", "clear", "reorder_layers", "remove_layer", "create_layer");
         }
 
         internal void GuiInput_MouseUp(object sender, MouseEventArgs e)

@@ -25,11 +25,12 @@ namespace AwesomeCanvas
         // Constructor
         public MainForm()
         {
+            
             //Application.AddMessageFilter(this);
             //this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 
             InitializeComponent();
-
+     
             // Allow this form to hold sub-windows
             this.IsMdiContainer = true;
 
@@ -42,7 +43,8 @@ namespace AwesomeCanvas
             number.Value = 17;
             //TrackBar bar = this.toolStripTrackBarItem1.trackBar;
             SetCurrentCanvasSession(null);
-   
+            SetStatus("Welcome to " + Application.ProductName + " v" + Application.ProductVersion);
+            this.Text = Application.ProductName;
         }
 
         //---------------------------------------------------------------------
@@ -171,6 +173,7 @@ namespace AwesomeCanvas
         private void toolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
 
         }
+
         internal string GetToolName() {
             return m_activeToolButton.Text.ToLower();
         }
@@ -193,7 +196,14 @@ namespace AwesomeCanvas
                 size = GetToolSize()
             };
         }
-
+        internal void SetStatus(string pString, int pProgress = -1) {
+            if (pProgress == -1)
+                toolStripProgressBar1.Visible = false;
+            else
+                toolStripProgressBar1.Value = pProgress;
+            toolStripStatusLabel1.Text = pString;
+            
+        }
         private void pointerTools_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
 
         }
