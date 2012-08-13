@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace AwesomeCanvas
 {
-    public delegate void LayerNameChaged(Layer layer, String name);
+    public delegate void LayerNameChaged(string pLayerID, string pPreviousName, string pNewName);
     public delegate void LayerControlSelected(LayerControl layerControl);
 
     //-------------------------------------------------------------------------
@@ -18,26 +18,26 @@ namespace AwesomeCanvas
     public partial class LayerControl : UserControl
     {
         // Variables
-        Layer m_layer;  // Not used
-        int m_layerIndex;
-
+        string m_layerID;
+        Layer m_cachedLayer = null;
         // Events
         public event LayerNameChaged layerNameChanged;
         public event LayerControlSelected layerControlSelected;
-
+        public event MouseEventHandler layerDragStart;
         //-------------------------------------------------------------------------
         // Constructor
         //-------------------------------------------------------------------------
-        public LayerControl(Layer layer, int layerIndex)
+        public LayerControl(string pLayerName, string pLayerID)
         {
             InitializeComponent();
-
-            m_layerIndex = layerIndex;
-
-            layerNameBox.Text = layer.Name;
-            previewImageBox.Image = layer.GetBitmap();
+            m_layerID = pLayerID;
+            layerNameBox.Text = pLayerName;
         }
-
+        public void Redraw(Layer pLayer) {
+            m_cachedLayer = pLayer;
+            previewImageBox.Invalidate();
+            previewImageBox.Update();
+        }
         //-------------------------------------------------------------------------
         // Event triggered when focus on the layer name box is lost
         //-------------------------------------------------------------------------
@@ -101,7 +101,7 @@ namespace AwesomeCanvas
             layerNameBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             // TODO: Trigger layer renameing event
-            layerNameChanged(m_layer, layerNameBox.Text);
+            layerNameChanged(m_layerID, layerNameBox.Text, layerNameBox.Text);
         }
 
         //-------------------------------------------------------------------------
@@ -132,9 +132,24 @@ namespace AwesomeCanvas
         //-------------------------------------------------------------------------
         // Return the layer index
         //-------------------------------------------------------------------------
-        public int GetLayerIndex()
+        public string GetLayerID()
         {
-            return m_layerIndex;
+            return m_layerID;
+        }
+
+        private void previewImageBox_MouseDown(object sender, MouseEventArgs e) {
+            if (layerDragStart != null)
+                layerDragStart(this, e);
+        }
+        
+        private void previewImageBox_Paint(object sender, PaintEventArgs e) {
+            if (m_cachedLayer != null) {
+
+                Rectangle sampleRectagle = m_cachedLayer.GetArea();
+                Rectangle targetRectangle = e.ClipRectangle;
+                m_cachedLayer.Draw(e.Graphics, targetRectangle, sampleRectagle, true);
+             
+            }
         }
     }
 }

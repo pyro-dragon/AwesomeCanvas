@@ -25,8 +25,12 @@ namespace AwesomeCanvas
         // Constructor
         public MainForm()
         {
-            InitializeComponent();
+            
+            //Application.AddMessageFilter(this);
+            //this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 
+            InitializeComponent();
+     
             // Allow this form to hold sub-windows
             this.IsMdiContainer = true;
 
@@ -34,10 +38,13 @@ namespace AwesomeCanvas
             // TODO: Make this a Singlton
             this.toolStripTrackBarItem1.trackBar.ValueChanged += OnGUISizeChanged;
             this.toolStripNumericUpDownItem1.numericUpDown.ValueChanged += OnGUISizeChanged;
-            this.m_activeToolButton = this.pointerButton; 
+            this.m_activeToolButton = this.pointerButton;
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             number.Value = 17;
-   
+            //TrackBar bar = this.toolStripTrackBarItem1.trackBar;
+            SetCurrentCanvasSession(null);
+            SetStatus("Welcome to " + Application.ProductName + " v" + Application.ProductVersion);
+            this.Text = Application.ProductName;
         }
 
         //---------------------------------------------------------------------
@@ -70,42 +77,65 @@ namespace AwesomeCanvas
                 // Put the form on top of the others
                 newMDIChild.BringToFront();
 
-                newMDIChild.GotFocus += OnCanvasWindowGotFocus;
+                //when a canvas is selected we want to update the toolbars and such!
+                newMDIChild.GotFocus += (object sender, EventArgs e) =>{
+                    CanvasWindow cw = sender as CanvasWindow;
+                    SetCurrentCanvasSession(cw.m_session);
+                };
 
-                // Add new picture to the base application
-                SetCurrentCanvasSession(new CanvasSession(this, newMDIChild));
-                m_canvasSessions.Add(m_currentCanvasSession);
+                //when a canvas is shut down we need to disable the toolbar if there are no other canvases left
+                newMDIChild.HandleDestroyed += (object sender, EventArgs args) => {
+                    if (m_currentCanvasSession != null && sender == m_currentCanvasSession.canvasWindow) {
+                        SetCurrentCanvasSession(null);
+                    }
+                };
 
+                //create a new canvas session to go with the canvasWindow
+                CanvasSession newSession = new CanvasSession(this, newMDIChild, layerControlForm);
+                m_canvasSessions.Add(newSession);
+                SetCurrentCanvasSession(newSession);
+            }
+        }
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
+            SaveFileDialog saveAsDialogue = new SaveFileDialog();
+            saveAsDialogue.Filter = "Awsome Canvas Save|.awsomeSave";
+            saveAsDialogue.FileOk += (object dialogue, CancelEventArgs arguments) => { 
+                if (arguments.Cancel) { 
+                    return; 
+                } else {
+                    m_currentCanvasSession.SaveCanvasToFile(((SaveFileDialog)dialogue).FileName);
+                } 
+            };
+            saveAsDialogue.ShowDialog();
+        }
+
+
+        private void SetCurrentCanvasSession(CanvasSession pCanvasSession) {
+            m_currentCanvasSession = pCanvasSession;
+            if (m_currentCanvasSession == null) {
+                toolPanelTop.Visible = false;
+                panel1.Visible = false;
+                panel1.Enabled = false;
+                saveAsToolStripMenuItem.Enabled = false;
+                saveToolStripMenuItem.Enabled = false;
+                editToolStripMenuItem.Enabled = false;
+                viewToolStripMenuItem.Enabled = false;
+                windowToolStripMenuItem.Enabled = false;
+            }
+            else {
                 // Set up the workspace - the side pannel mostly
                 // TODO: this stuff could probably be done in a seperate function that is called eveytime the canvas count changes. 
                 toolPanelTop.Visible = true;
                 panel1.Visible = true;
                 panel1.Enabled = true;
-
+                saveAsToolStripMenuItem.Enabled = true;
+                saveToolStripMenuItem.Enabled = true;
+                editToolStripMenuItem.Enabled = true;
+                viewToolStripMenuItem.Enabled = true;
+                windowToolStripMenuItem.Enabled = true;
                 // Set the picture as the focus of the side bar
-                layerControlForm.ChangePictureFocus(newMDIChild.GetPicture());
+                layerControlForm.SetCanvasSession(m_currentCanvasSession);
             }
-        }
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            if (m_currentCanvasSession != null) {
-                return m_currentCanvasSession.GuiInput_KeyDown(keyData);
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        /// <summary>
-        /// Swap Active Canvas Session
-        /// </summary>
-        private void OnCanvasWindowGotFocus(object sender, EventArgs e) {
-  //          Console.WriteLine("Canvas Got Focus!");
-            CanvasWindow cw = sender as CanvasWindow;
-            SetCurrentCanvasSession(cw.m_session);
-        }
-
-        private void SetCurrentCanvasSession(CanvasSession pCanvasSession) {
-            m_currentCanvasSession = pCanvasSession;
-            m_currentCanvasSession.OnFocus();
         }
         //---------------------------------------------------------------------
         ///  Deactivate the current tool and activate the new tool
@@ -119,6 +149,7 @@ namespace AwesomeCanvas
         // The function for when tool size changes in the GUI
         //---------------------------------------------------------------------
         private void OnGUISizeChanged(object sender, EventArgs e) {
+   
             TrackBar bar = this.toolStripTrackBarItem1.trackBar;
             NumericUpDown number = this.toolStripNumericUpDownItem1.numericUpDown;
             if (sender == bar && bar.Value != (int)number.Value) {
@@ -127,6 +158,7 @@ namespace AwesomeCanvas
             if (sender == number && bar.Value != number.Value) {
                 bar.Value = Math.Max(0, Math.Min((int)number.Value, bar.Maximum));
             }
+
         }
         
         //---------------------------------------------------------------------
@@ -141,6 +173,7 @@ namespace AwesomeCanvas
         private void toolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
 
         }
+
         internal string GetToolName() {
             return m_activeToolButton.Text.ToLower();
         }
@@ -163,9 +196,59 @@ namespace AwesomeCanvas
                 size = GetToolSize()
             };
         }
-
-        internal int GetCurrentLayer() {
-            return 0;
+        internal void SetStatus(string pString, int pProgress = -1) {
+            if (pProgress == -1)
+                toolStripProgressBar1.Visible = false;
+            else
+                toolStripProgressBar1.Value = pProgress;
+            toolStripStatusLabel1.Text = pString;
+            
         }
+        private void pointerTools_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+
+        }
+
+        /*
+        protected override bool IsInputKey(Keys keyData) {
+            return true;
+        }
+        protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e) {
+            if (m_currentCanvasSession != null) {
+                m_currentCanvasSession.canvasWindow.ProcessKeyDown(e.KeyData);
+
+            }
+        }
+
+        Keys m_keysDown = Keys.None;
+        const int WM_KEYDOWN = 0x100;
+        const int WM_KEYUP = 0x101;
+        public bool PreFilterMessage(ref Message m) {
+            Keys inputKeys = (Keys)m.WParam;
+            if (m.Msg == WM_KEYDOWN) {
+                //Keys newKeysDown = inputKeys & ~m_keysDown;
+                m_keysDown = inputKeys | m_keysDown;
+                Console.WriteLine(" keys down " + m_keysDown);
+                if (m_keysDown != Keys.None && m_currentCanvasSession != null) {
+                    return m_currentCanvasSession.canvasWindow.ProcessKeyDown(m_keysDown);
+                }
+            } else if (m.Msg == WM_KEYUP) {
+                Console.WriteLine(" keys up " + inputKeys);
+                m_keysDown = m_keysDown & ~inputKeys;
+                if (inputKeys != Keys.None && m_currentCanvasSession != null) {
+                    return m_currentCanvasSession.canvasWindow.ProcessKeyUp(inputKeys);
+                }
+            }
+            return false;
+        }
+        */
+  
+        protected override bool ProcessCmdKey(ref Message message, Keys keys) {
+            if (m_currentCanvasSession != null) {
+                return m_currentCanvasSession.canvasWindow.ProcessKeyDown(keys);
+            }
+            return base.ProcessCmdKey(ref message, keys);
+        }
+
+
     }
 }

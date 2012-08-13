@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using AwesomeCanvas;
-
+using System.IO;
 namespace AwesomeCanvas
 {
     /// <summary>
@@ -18,24 +18,36 @@ namespace AwesomeCanvas
         ToolRunner m_toolRunner;
         CanvasWindow m_canvasWindow;
         MainForm m_mainForm;
+        LayerControlForm m_layerControl;
         
         public CanvasWindow canvasWindow { get { return m_canvasWindow; } }
         public ToolRunner localController { get { return m_toolRunner; } }
         //-------------------------------------------------------------------------
         // Constructor
         //-------------------------------------------------------------------------
-        public CanvasSession(MainForm pMainForm, CanvasWindow pCanvasWindow)
+        public CanvasSession(MainForm pMainForm, CanvasWindow pCanvasWindow, LayerControlForm pLayerControlForm)
         {
             m_toolRunner = new ToolRunner("localUserInput", pCanvasWindow.GetPicture());
             m_mainForm = pMainForm;
             m_canvasWindow = pCanvasWindow;
             m_canvasWindow.m_session = this;
-            m_toolRunner.OnCanvasNeedsRedraw = m_canvasWindow.Redraw;
-        }
+            m_layerControl = pLayerControlForm;
+            
+            //setup first layer
+            selectedLayerID = Gui_CreateLayer();
+            Gui_ClearSelectedLayer();
+            
+            //add listeners for all functions that should redraw the main canvas
+            m_toolRunner.AddFunctionListener( (pA, pB, pC) => { m_canvasWindow.Redraw(pA); }, "tool_down", "tool_up", "tool_move", "undo", "clear", "reorder_layers", "remove_layer");
 
-        public void OnFocus()
-        {
-
+            //add listeners for all functions that should rebuild the layer list
+            m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.RebuildLayerControls(); }, "reorder_layers", "rename_layer", "remove_layer", "create_layer");
+            
+            //add listeners for all functions that should update a layer thumbnail
+            m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_layerControl.UpdateThumbnail(pC["layer"] as string); }, "tool_up", "undo", "clear");
+            
+            //add listeners for updating the status bar (:
+            m_toolRunner.AddFunctionListener((pA, pB, pC) => { m_mainForm.SetStatus("last action: " + pB); }, "tool_down", "tool_up", "tool_move", "undo", "clear", "reorder_layers", "remove_layer", "create_layer");
         }
 
         internal void GuiInput_MouseUp(object sender, MouseEventArgs e)
@@ -45,6 +57,7 @@ namespace AwesomeCanvas
             j.AddData("x", (int)(e.X / m_canvasWindow.magnification));
             j.AddData("y", (int)(e.Y / m_canvasWindow.magnification));
             j.AddData("pressure", 0);
+            j.AddData("layer", selectedLayerID);
             m_toolRunner.ParseJSON(j.Finish());
         }
 
@@ -56,7 +69,7 @@ namespace AwesomeCanvas
             j.AddData("pressure", (128).ToString());
             j.AddData("x", (int)(e.X / m_canvasWindow.magnification));
             j.AddData("y", (int)(e.Y / m_canvasWindow.magnification));
-            j.AddData("layer", m_canvasWindow.GetPicture().GetActiveLayerIndex());
+            j.AddData("layer", selectedLayerID);
             j.AddData("tool", toolName);
             switch (toolName) {
                 case "brush":
@@ -82,25 +95,66 @@ namespace AwesomeCanvas
             m_toolRunner.ParseJSON(j.Finish());
         }
 
-
-        internal bool GuiInput_KeyDown(Keys keyData) {
-            if (keyData == (Keys.Z | Keys.Control)) {
-                    EzJson j = new EzJson();
-                    j.BeginFunction("undo");
-                    j.AddData("layer", m_mainForm.GetCurrentLayer());
-                    m_toolRunner.ParseJSON(j.Finish());
-                    
-                    Console.WriteLine("undo!");
-                    return true;
-            }
-            else if (keyData == (Keys.X | Keys.Control)) {
-                    EzJson j = new EzJson();
-                    j.BeginFunction("clear");
-                    m_toolRunner.ParseJSON(j.Finish());
-                    Console.WriteLine("clear!");
-                    return true;
-            }
-            return false;
+        internal void Gui_Undo() {
+            EzJson j = new EzJson();
+            j.BeginFunction("undo");
+            j.AddData("layer", selectedLayerID);
+            m_toolRunner.ParseJSON(j.Finish());
+            Console.WriteLine("undo!");
         }
+
+        internal void Gui_ClearSelectedLayer() {
+            EzJson j = new EzJson();
+            j.BeginFunction("clear");
+            j.AddData("layer", selectedLayerID);
+            m_toolRunner.ParseJSON(j.Finish());
+
+            Console.WriteLine("clear!");
+        }
+        internal void Gui_RenameLayer(string pLayerID, string pNewName) {
+            EzJson j = new EzJson();
+            j.BeginFunction("rename_layer");
+            j.AddData("layer", pLayerID);
+            j.AddData("name", pNewName);
+            m_toolRunner.ParseJSON(j.Finish());
+        }
+
+        internal string Gui_CreateLayer() {
+            string id = Guid.NewGuid().ToString(); //create a globally unique id
+            EzJson j = new EzJson();
+            j.BeginFunction("create_layer");
+            j.AddData("layer", id);
+            m_toolRunner.ParseJSON(j.Finish());
+            return id;
+        }
+        internal void Gui_RemoveLayer( string pLayerID) {
+            EzJson j = new EzJson();
+            j.BeginFunction("remove_layer");
+            j.AddData("layer", pLayerID);
+            m_toolRunner.ParseJSON(j.Finish());
+        }
+        internal void Gui_SetLayerOrder(string[] pOrderedIDs) {
+            EzJson j = new EzJson();
+            j.BeginFunction("reorder_layers");
+            j.AddData("order", pOrderedIDs);
+            m_toolRunner.ParseJSON(j.Finish());
+        }
+
+        internal void SaveCanvasToFile(string pFileName) 
+        {
+            using (StreamWriter newTask = new StreamWriter(pFileName, false)) {
+                
+            }
+            Console.WriteLine("trying to save file: " + pFileName);
+        
+        }
+
+        internal Picture GetPicture() {
+            return m_canvasWindow.GetPicture();
+        }
+
+
+
+        public string selectedLayerID { get; set; }
     }
 }

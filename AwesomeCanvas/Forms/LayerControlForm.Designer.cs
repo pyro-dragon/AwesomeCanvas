@@ -102,6 +102,8 @@
             this.LayerDisplayPanel.Name = "LayerDisplayPanel";
             this.LayerDisplayPanel.Size = new System.Drawing.Size(215, 215);
             this.LayerDisplayPanel.TabIndex = 0;
+            this.LayerDisplayPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.LayerDisplayPanel_DragDrop);
+            this.LayerDisplayPanel.DragOver += new System.Windows.Forms.DragEventHandler(this.LayerDisplayPanel_DragOver);
             // 
             // deleteLayerButton
             // 
@@ -112,6 +114,7 @@
             this.deleteLayerButton.TabIndex = 1;
             this.deleteLayerButton.Text = "Delete Layer";
             this.deleteLayerButton.UseVisualStyleBackColor = true;
+            this.deleteLayerButton.Click += new System.EventHandler(this.deleteLayerButton_Click);
             // 
             // newLayerButton
             // 

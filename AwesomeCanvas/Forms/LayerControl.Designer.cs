@@ -68,6 +68,8 @@
             this.previewImageBox.TabIndex = 0;
             this.previewImageBox.TabStop = false;
             this.previewImageBox.Click += new System.EventHandler(this.LayerControl_Click);
+            this.previewImageBox.Paint += new System.Windows.Forms.PaintEventHandler(this.previewImageBox_Paint);
+            this.previewImageBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.previewImageBox_MouseDown);
             // 
             // layerNameBox
             // 

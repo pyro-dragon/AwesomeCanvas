@@ -42,13 +42,16 @@ namespace AwesomeCanvas
             m_zoomTool = new ZoomTool(this);
 
             SetZoom(1.0f, false);
-            this.canvasBox.MouseDown += new MouseEventHandler(OnMouseDown);
-            this.canvasBox.MouseUp += new MouseEventHandler(OnMouseUp);
-            this.canvasBox.MouseMove += new MouseEventHandler(OnMouseMove);
-            this.KeyDown += new KeyEventHandler(OnKeyDown);
-
+            this.canvasBox.MouseDown += new MouseEventHandler(ProcessMouseDown);  
+            this.canvasBox.MouseUp += new MouseEventHandler(ProcessMouseUp); 
+            this.canvasBox.MouseMove += new MouseEventHandler(ProcessMouseMove);
+            this.WindowState = FormWindowState.Maximized;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.ControlBox = false;
+            //this.KeyDown += (object a, KeyEventArgs b) => ProcessKeyDown(b.KeyData);
+            //this.KeyUp += (object a, KeyEventArgs b) => ProcessKeyUp(b.KeyData);
         }
-
         //---------------------------------------------------------------------
         // Set the zoom level of the image
         //---------------------------------------------------------------------
@@ -85,15 +88,17 @@ namespace AwesomeCanvas
         {
             canvasBox.Invalidate(true);
             canvasBox.Update();
+         
         }
-        internal void OnMouseUp(object sender, MouseEventArgs e) {
+        internal void ProcessMouseUp(object sender, MouseEventArgs e) {
             if (e.Button == System.Windows.Forms.MouseButtons.Left) {
                 m_session.GuiInput_MouseUp(sender, e);
             }
         }
 
-        internal void OnMouseDown(object sender, MouseEventArgs e) 
+        internal void ProcessMouseDown(object sender, MouseEventArgs e) 
         {
+            
             if (e.Button == System.Windows.Forms.MouseButtons.Left) 
             {
                 if (m_zoomTool.Enabled) {
@@ -114,12 +119,20 @@ namespace AwesomeCanvas
             }
         }
 
-        internal void OnMouseMove(object sender, MouseEventArgs e) {
+        internal void ProcessMouseMove(object sender, MouseEventArgs e) {
             //if left button is down
+
+            if (m_zoomTool.Enabled && !Control.ModifierKeys.HasFlag(Keys.Shift))
+                m_zoomTool.Enabled = false;
+
+            if (m_panTool.Enabled && !Control.ModifierKeys.HasFlag(Keys.Alt))
+                m_panTool.Enabled = false;
+       
             if ((Control.MouseButtons & System.Windows.Forms.MouseButtons.Left) != System.Windows.Forms.MouseButtons.None) 
             {
                 if (m_zoomTool.Enabled) {
                     m_zoomTool.Move(new Point(e.X, e.Y));
+                    
                 }
                 else if (m_panTool.Enabled) {
                     m_panTool.Move(new Point(e.X, e.Y));
@@ -131,29 +144,23 @@ namespace AwesomeCanvas
             
         }
 
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        internal bool ProcessKeyDown(Keys pKeys)
         {
-            if ((e.Modifiers & Keys.Shift) != Keys.None || m_zoomTool.Enabled) {
-                m_zoomTool.Enabled = false;
-            }
-            else if ((e.KeyCode & Keys.Space) != Keys.None || m_panTool.Enabled) {
-                m_panTool.Enabled = false;
-            }
-            else if (e.KeyCode == Keys.Oemplus){
-                SetZoom(m_magnification * 1.5f, true);
-            }
-            else if (e.KeyCode == Keys.OemMinus) {
-                SetZoom(m_magnification / 1.5f, true);
-            }
-        }
-
-        private void OnKeyDown(object sender, KeyEventArgs e) 
-        {
-            if ((e.Modifiers & Keys.Shift) != Keys.None) {
+            if(pKeys == (Keys.Control | Keys.X))
+                m_session.Gui_ClearSelectedLayer();
+            else if(pKeys == (Keys.Control | Keys.Z))
+                m_session.Gui_Undo();
+            else if (pKeys.HasFlag(Keys.Shift))
                 m_zoomTool.Enabled = true;
-            }else if ((e.KeyCode & Keys.Space) != Keys.None) {
+            else if (pKeys.HasFlag(Keys.Alt))
                 m_panTool.Enabled = true;
-            }
+            else if (pKeys.HasFlag(Keys.Oemplus))
+                SetZoom(m_magnification * 1.5f, true);
+            else if (pKeys.HasFlag(Keys.OemMinus))
+                SetZoom(m_magnification / 1.5f, true);
+             else 
+                return false;
+            return true;
            
         }
         internal void SetPanPosition(Point pPoint) {

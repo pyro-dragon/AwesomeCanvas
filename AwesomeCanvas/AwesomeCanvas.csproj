@@ -103,6 +103,7 @@
     <Compile Include="Forms\ToolStripTrackBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SuspendDraw.cs" />
     <Compile Include="ViewTools\PanTool.cs" />
     <Compile Include="ViewTools\ZoomTool.cs" />
     <EmbeddedResource Include="Forms\CanvasWindow.resx">
