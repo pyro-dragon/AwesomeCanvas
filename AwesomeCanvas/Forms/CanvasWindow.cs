@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using WintabDN;
 
 namespace AwesomeCanvas
 {
@@ -174,5 +175,17 @@ namespace AwesomeCanvas
             return new Point(this.DisplayRectangle.X, this.DisplayRectangle.Y);
         }
 
+        //---------------------------------------------------------------------
+        // Prepare to take tablet input
+        //---------------------------------------------------------------------
+        private void PrepareForTabletInput(object sender, EventArgs e)
+        {
+            // Set up the tablet context
+            CWintabContext context = new CWintabContext();
+            context = CWintabInfo.GetDefaultDigitizingContext(ECTXOptionValues.CXO_MESSAGES);
+
+            // Prepare to take data
+            CWintabData data = new CWintabData(context);
+        }
     }
 }

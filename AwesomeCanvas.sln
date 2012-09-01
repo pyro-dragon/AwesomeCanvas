@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeCanvas", "AwesomeCanvas\AwesomeCanvas.csproj", "{E8E07FA4-C45B-461F-BBE0-E32F1FB62D2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeCanvasModel", "AwesomeCanvasModel\AwesomeCanvasModel.csproj", "{24C0D25B-0A5F-40EF-9256-C17ABC33DA21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WintabDN", "..\WintabDN\WintabDN\WintabDN.csproj", "{73EAE30A-60B9-43A5-AD81-9B05873E405C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,16 @@ Global
 		{24C0D25B-0A5F-40EF-9256-C17ABC33DA21}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{24C0D25B-0A5F-40EF-9256-C17ABC33DA21}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{24C0D25B-0A5F-40EF-9256-C17ABC33DA21}.Release|x86.ActiveCfg = Release|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{73EAE30A-60B9-43A5-AD81-9B05873E405C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

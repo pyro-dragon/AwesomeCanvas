@@ -42,6 +42,7 @@
             this.canvasBox.TabIndex = 0;
             this.canvasBox.TabStop = false;
             this.canvasBox.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
+            this.canvasBox.MouseEnter += new System.EventHandler(this.PrepareForTabletInput);
             // 
             // CanvasWindow
             // 
