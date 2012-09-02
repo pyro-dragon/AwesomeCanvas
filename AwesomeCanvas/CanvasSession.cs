@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using AwesomeCanvas;
 using System.IO;
+using WintabDN;
 namespace AwesomeCanvas
 {
     /// <summary>
@@ -92,6 +93,16 @@ namespace AwesomeCanvas
             j.AddData("pressure", (128).ToString());
             j.AddData("x", (int)(e.X / m_canvasWindow.magnification));
             j.AddData("y", (int)(e.Y / m_canvasWindow.magnification));
+            m_toolRunner.ParseJSON(j.Finish());
+        }
+
+        internal void GuiInput_TabletMove(object sender, WintabPacket pkt)
+        {
+            EzJson j = new EzJson();
+            j.BeginFunction("tool_move");
+            j.AddData("pressure", pkt.pkNormalPressure.pkAbsoluteNormalPressure.ToString());
+            j.AddData("x", (int)(pkt.pkX / m_canvasWindow.magnification));
+            j.AddData("y", (int)(pkt.pkY / m_canvasWindow.magnification));
             m_toolRunner.ParseJSON(j.Finish());
         }
 

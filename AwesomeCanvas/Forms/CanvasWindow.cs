@@ -25,6 +25,9 @@ namespace AwesomeCanvas
         ZoomTool m_zoomTool;
         
         internal CanvasSession m_session;
+
+         // Experimental tablet shit
+        CWintabData data;
         
 
         public float magnification { get { return m_magnification; } }
@@ -184,8 +187,32 @@ namespace AwesomeCanvas
             CWintabContext context = new CWintabContext();
             context = CWintabInfo.GetDefaultDigitizingContext(ECTXOptionValues.CXO_MESSAGES);
 
+            // Allow the mouse to move
+            context.Options |= (uint)ECTXOptionValues.CXO_SYSTEM;
+
+            context.Name = "Tablet event data context";
+            context.OutOrgX = 0;
+            context.OutOrgY = 0;
+            context.OutExtX = 1000;
+            context.OutExtY = 1000;
+
+            bool status = context.Open();
+
             // Prepare to take data
-            CWintabData data = new CWintabData(context);
+            data = new CWintabData(context);
+            data.SetWTPacketEventHandler(TabletEventHandler);
+        }
+
+        //---------------------------------------------------------------------
+        // Tablet event handler
+        //---------------------------------------------------------------------
+        private void TabletEventHandler(object sender, MessageReceivedEventArgs args)
+        {
+            uint pktID = (uint)args.Message.WParam;
+            WintabPacket pkt = data.GetDataPacket(pktID);
+
+            if(pkt.pkNormalPressure.pkAbsoluteNormalPressure > 0)
+                m_session.GuiInput_TabletMove(sender, pkt);
         }
     }
 }
