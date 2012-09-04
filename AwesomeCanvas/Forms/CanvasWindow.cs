@@ -10,8 +10,6 @@ using WintabDN;
 
 namespace AwesomeCanvas
 {
-    //public delegate void CanvasMouseEvent(CanvasWindow window, MouseEventArgs args);
-
     //-------------------------------------------------------------------------
     // The form that contains a picture and displays it
     //-------------------------------------------------------------------------
@@ -28,6 +26,7 @@ namespace AwesomeCanvas
 
          // Experimental tablet shit
         CWintabData data;
+        uint tabletPressure;
         
 
         public float magnification { get { return m_magnification; } }
@@ -53,8 +52,8 @@ namespace AwesomeCanvas
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.ControlBox = false;
-            //this.KeyDown += (object a, KeyEventArgs b) => ProcessKeyDown(b.KeyData);
-            //this.KeyUp += (object a, KeyEventArgs b) => ProcessKeyUp(b.KeyData);
+
+            tabletPressure = 0;
         }
         //---------------------------------------------------------------------
         // Set the zoom level of the image
@@ -96,7 +95,7 @@ namespace AwesomeCanvas
         }
         internal void ProcessMouseUp(object sender, MouseEventArgs e) {
             if (e.Button == System.Windows.Forms.MouseButtons.Left) {
-                m_session.GuiInput_MouseUp(sender, e);
+                m_session.GuiInput_PointerUp(sender, e.X, e.Y);
             }
         }
 
@@ -111,14 +110,8 @@ namespace AwesomeCanvas
                 else if (m_panTool.Enabled) {
                     m_panTool.Begin(new Point(e.X, e.Y));
                 }
-          /*      else if ((Control.ModifierKeys & Keys.Control) != Keys.None) {
-                    SetZoom(m_magnification / 1.5f, true);
-                }
-                else if ((Control.ModifierKeys & Keys.Shift) != Keys.None) {
-                    SetZoom(m_magnification * 1.5f, true);
-                }*/
                 else {
-                    m_session.GuiInput_MouseDown(sender, e);
+                    m_session.GuiInput_PointerDown(sender, e.X, e.Y, tabletPressure);
                 }
             }
         }
@@ -142,7 +135,7 @@ namespace AwesomeCanvas
                     m_panTool.Move(new Point(e.X, e.Y));
                 }
                 else {
-                    m_session.GuiInput_MouseMove(sender, e);
+                    m_session.GuiInput_PointerMove(sender, e.X, e.Y, tabletPressure);
                 }
             }
             
@@ -170,9 +163,6 @@ namespace AwesomeCanvas
         internal void SetPanPosition(Point pPoint) {
             this.SetDisplayRectLocation(pPoint.X, pPoint.Y);
             Redraw(null);
-            //this.Rect
-            //this.VerticalScroll.Value = Math.Max(0, pPoint.Y);
-            //this.HorizontalScroll.Value =  Math.Max(0, pPoint.X);
         }
         internal Point GetPanPosition() {
             return new Point(this.DisplayRectangle.X, this.DisplayRectangle.Y);
@@ -193,8 +183,8 @@ namespace AwesomeCanvas
             context.Name = "Tablet event data context";
             context.OutOrgX = 0;
             context.OutOrgY = 0;
-            context.OutExtX = 1000;
-            context.OutExtY = 1000;
+            context.OutExtX = 800;
+            context.OutExtY = 600;
 
             bool status = context.Open();
 
@@ -211,8 +201,11 @@ namespace AwesomeCanvas
             uint pktID = (uint)args.Message.WParam;
             WintabPacket pkt = data.GetDataPacket(pktID);
 
-            if(pkt.pkNormalPressure.pkAbsoluteNormalPressure > 0)
-                m_session.GuiInput_TabletMove(sender, pkt);
+            // Update the pressure
+            tabletPressure = pkt.pkNormalPressure.pkAbsoluteNormalPressure;
+
+            //if(pkt.pkNormalPressure.pkAbsoluteNormalPressure > 0)
+            //    m_session.GuiInput_PointerMove(sender, pkt.pkX, pkt.pkY, pkt.pkNormalPressure.pkAbsoluteNormalPressure);
         }
     }
 }
