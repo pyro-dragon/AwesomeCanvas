@@ -62,6 +62,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WintabDN, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\WintabDN.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanvasSession.cs" />
@@ -164,10 +168,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WintabDN\WintabDN\WintabDN.csproj">
-      <Project>{73EAE30A-60B9-43A5-AD81-9B05873E405C}</Project>
-      <Name>WintabDN</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AwesomeCanvasModel\AwesomeCanvasModel.csproj">
       <Project>{24C0D25B-0A5F-40EF-9256-C17ABC33DA21}</Project>
       <Name>AwesomeCanvasModel</Name>
