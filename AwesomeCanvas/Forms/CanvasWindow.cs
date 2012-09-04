@@ -26,7 +26,7 @@ namespace AwesomeCanvas
 
          // Experimental tablet shit
         CWintabData data;
-        uint tabletPressure;
+        float tabletPressure;
         
 
         public float magnification { get { return m_magnification; } }
@@ -53,7 +53,7 @@ namespace AwesomeCanvas
             this.MinimizeBox = false;
             this.ControlBox = false;
 
-            tabletPressure = 0;
+            tabletPressure = 1.0f;
         }
         //---------------------------------------------------------------------
         // Set the zoom level of the image
@@ -201,11 +201,13 @@ namespace AwesomeCanvas
             uint pktID = (uint)args.Message.WParam;
             WintabPacket pkt = data.GetDataPacket(pktID);
 
-            // Update the pressure
-            tabletPressure = pkt.pkNormalPressure.pkAbsoluteNormalPressure;
+            if (pkt.pkNormalPressure.pkAbsoluteNormalPressure > 0)
+                tabletPressure = (float)pkt.pkNormalPressure.pkAbsoluteNormalPressure / 1024.0f;
 
-            //if(pkt.pkNormalPressure.pkAbsoluteNormalPressure > 0)
-            //    m_session.GuiInput_PointerMove(sender, pkt.pkX, pkt.pkY, pkt.pkNormalPressure.pkAbsoluteNormalPressure);
+            // Update the pressure
+            //tabletPressure = (float)pkt.pkNormalPressure.pkAbsoluteNormalPressure / 1024.0f;
+
+
         }
     }
 }
