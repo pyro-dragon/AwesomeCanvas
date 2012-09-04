@@ -37,7 +37,7 @@ namespace AwesomeCanvas
         }
 
         void ToolDown(Dictionary<string, object> inputMessage) {
-            int pressure = Convert.ToInt32(inputMessage["pressure"]);
+            float pressure = Convert.ToSingle(inputMessage["pressure"]);
             int x = Convert.ToInt32(inputMessage["x"]);
             int y = Convert.ToInt32(inputMessage["y"]);
             Tool tool = m_tools[inputMessage["tool"] as string]; //swap tool on tool down
@@ -50,7 +50,7 @@ namespace AwesomeCanvas
         }
 
         void ToolMove(Dictionary<string, object> inputMessage) {
-            int pressure = Convert.ToInt32(inputMessage["pressure"]);
+            float pressure = Convert.ToSingle(inputMessage["pressure"]);
             int x = Convert.ToInt32(inputMessage["x"]);
             int y = Convert.ToInt32(inputMessage["y"]);
             m_currentTool.Move(x, y, pressure);
@@ -58,7 +58,7 @@ namespace AwesomeCanvas
         }
 
         void ToolUp(Dictionary<string, object> inputMessage) {
-            int pressure = Convert.ToInt32(inputMessage["pressure"]);
+            float pressure = Convert.ToSingle(inputMessage["pressure"]);
             int x = Convert.ToInt32(inputMessage["x"]);
             int y = Convert.ToInt32(inputMessage["y"]);
             m_currentTool.Up(x, y, pressure);

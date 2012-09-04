@@ -38,9 +38,9 @@ namespace AwesomeCanvas
         //---------------------------------------------------------------------
         // Render the alterations to the layer
         //---------------------------------------------------------------------
-        protected override void DrawStep(Layer layer, Point position, int pPressure)
+        protected override void DrawStep(Layer layer, Point position, float pPressure)
         {
-            int size = options.size;
+            int size = MathExt.RoundToInt(options.size * pPressure);
             int halfSize = size / 2;
             Rectangle toolArea = new Rectangle(0, 0, size, size);
             int halfSizeSquared = halfSize * halfSize;

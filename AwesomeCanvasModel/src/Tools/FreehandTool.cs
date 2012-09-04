@@ -18,13 +18,13 @@ namespace AwesomeCanvas
             
         }
 
-        public override void Down(int pX, int pY, int pPressure, Picture pPicture, Layer pLayer, object pOptions) 
+        public override void Down(int pX, int pY, float pPressure, Picture pPicture, Layer pLayer, object pOptions) 
         {
             base.Down(pX, pY, pPressure, pPicture, pLayer, pOptions);
             DrawStep(pLayer, new Point(pX, pY), pPressure);
         }
 
-        public override void Move(int pX, int pY, int pPressure) 
+        public override void Move(int pX, int pY, float pPressure) 
         {
             base.Move(pX, pY, pPressure);
             Point position = new Point(pX, pY);
@@ -35,7 +35,7 @@ namespace AwesomeCanvas
         }
 
         // Calculate the line and step through
-        public void DrawLine(Layer layer, Point start, Point end, int pStartPressure, int pEndPressure)
+        public void DrawLine(Layer layer, Point start, Point end, float pStartPressure, float pEndPressure)
         {
             // Create a line vector
             PointF fStart = PointFExt.FromPoint(start);
@@ -54,14 +54,14 @@ namespace AwesomeCanvas
                 // Draw a pixel
                 float quota =  (float)i / length;
                 PointF position = PointFExt.Lerp(fStart, fEnd,quota);
-                int pressure = MathExt.RoundToInt(MathExt.Lerp(pStartPressure, pEndPressure, quota));
+                float pressure = MathExt.Lerp(pStartPressure, pEndPressure, quota);
                 DrawStep(layer, position.ToPointRounded(), pressure);
 
             }
         }
 
         // Draw on the actual canvas
-        protected virtual void DrawStep(Layer layer, System.Drawing.Point point, int pPressure)
+        protected virtual void DrawStep(Layer layer, System.Drawing.Point point, float pPressure)
         { 
             
         }

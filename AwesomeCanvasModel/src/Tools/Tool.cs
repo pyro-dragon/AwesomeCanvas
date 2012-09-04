@@ -19,7 +19,7 @@ namespace AwesomeCanvas
 
         protected virtual void SetOptions(Newtonsoft.Json.Linq.JContainer o) { options = o.ToObject<Options>(); } //!! virtual
 
-        public virtual void Down(int pX, int pY, int pPressure, Picture pPicture, Layer pLayer, object pOptions) {
+        public virtual void Down(int pX, int pY, float pPressure, Picture pPicture, Layer pLayer, object pOptions) {
             isDown = true;
             m_lastPosition = new Point(pX, pY);
             m_lastPressure = pPressure;
@@ -27,8 +27,8 @@ namespace AwesomeCanvas
             m_layer = pLayer;
             m_picture = pPicture;
         }
-        public virtual void Move(int pX, int pY, int pPressure) {}
-        public virtual void Up(int pX, int pY, int pPressure) { 
+        public virtual void Move(int pX, int pY, float pPressure) {}
+        public virtual void Up(int pX, int pY, float pPressure) { 
             isDown = false;
             options = null;
             m_picture = null;
@@ -38,7 +38,7 @@ namespace AwesomeCanvas
         protected Options options;
         protected Layer m_layer;
         protected Picture m_picture;
-        protected int m_lastPressure;
+        protected float m_lastPressure;
         protected Point m_lastPosition;
         protected ToolRunner m_controller;      
     }

@@ -56,7 +56,7 @@ namespace AwesomeCanvas
             EzJson j = new EzJson();
             j.BeginFunction("tool_up");
             j.AddData("x", (int)(x / m_canvasWindow.magnification));
-            j.AddData("y", (int)(x / m_canvasWindow.magnification));
+            j.AddData("y", (int)(y / m_canvasWindow.magnification));
             j.AddData("pressure", pressure);
             j.AddData("layer", selectedLayerID);
             m_toolRunner.ParseJSON(j.Finish());
@@ -69,7 +69,7 @@ namespace AwesomeCanvas
             j.BeginFunction("tool_down");
             j.AddData("pressure", (pressure).ToString());
             j.AddData("x", (int)(x / m_canvasWindow.magnification));
-            j.AddData("y", (int)(x / m_canvasWindow.magnification));
+            j.AddData("y", (int)(y / m_canvasWindow.magnification));
             j.AddData("layer", selectedLayerID);
             j.AddData("tool", toolName);
             switch (toolName) {
