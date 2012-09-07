@@ -203,11 +203,6 @@ namespace AwesomeCanvas
 
             if (pkt.pkNormalPressure.pkAbsoluteNormalPressure > 0)
                 tabletPressure = (float)pkt.pkNormalPressure.pkAbsoluteNormalPressure / 1024.0f;
-
-            // Update the pressure
-            //tabletPressure = (float)pkt.pkNormalPressure.pkAbsoluteNormalPressure / 1024.0f;
-
-
         }
     }
 }

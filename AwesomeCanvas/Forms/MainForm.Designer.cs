@@ -63,6 +63,7 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
             this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
+            this.toolStripColourSwatch = new ToolStripColourSwatch();
             this.toolPanelBottom = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelLeft = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelRight = new System.Windows.Forms.ToolStripPanel();
@@ -319,7 +320,8 @@
             this.toolStripSeparator3,
             this.toolStripLabel1,
             this.toolStripNumericUpDownItem1,
-            this.toolStripTrackBarItem1});
+            this.toolStripTrackBarItem1, 
+            this.toolStripColourSwatch});
             this.brushTools.Location = new System.Drawing.Point(38, 0);
             this.brushTools.Name = "brushTools";
             this.brushTools.Size = new System.Drawing.Size(365, 26);
@@ -363,6 +365,12 @@
             this.toolStripNumericUpDownItem1.Name = "toolStripNumericUpDownItem1";
             this.toolStripNumericUpDownItem1.Size = new System.Drawing.Size(41, 23);
             this.toolStripNumericUpDownItem1.Text = "0";
+            //
+            // toolStripColourSwatch
+            //
+            this.toolStripColourSwatch.Name = "toolStripColourSwatch";
+            this.toolStripColourSwatch.Size = new System.Drawing.Size(50, 23);
+            this.toolStripColourSwatch.Text = "colour";
             // 
             // toolStripTrackBarItem1
             // 
@@ -482,6 +490,7 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private ToolStripNumericUpDownItem toolStripNumericUpDownItem1;
         private ToolStripTrackBarItem toolStripTrackBarItem1;
+        private ToolStripColourSwatch toolStripColourSwatch;
         private System.Windows.Forms.ToolStripPanel toolPanelBottom;
         private System.Windows.Forms.ToolStripPanel toolPanelLeft;
         private System.Windows.Forms.ToolStripPanel toolPanelRight;
