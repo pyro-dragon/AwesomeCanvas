@@ -249,6 +249,12 @@ namespace AwesomeCanvas
             return base.ProcessCmdKey(ref message, keys);
         }
 
+        private void toolStripColourSwatch_Click(object sender, EventArgs e)
+        {
+            this.toolStripColourSwatch.ForeColor = System.Drawing.Color.Green;
+            this.toolStripColourSwatch.BackColor = System.Drawing.Color.Green;
+        }
+
 
     }
 }

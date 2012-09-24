@@ -63,7 +63,7 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
             this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
-            this.toolStripColourSwatch = new ToolStripColourSwatch();
+            this.toolStripColourSwatch = new System.Windows.Forms.ToolStripLabel();
             this.toolPanelBottom = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelLeft = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelRight = new System.Windows.Forms.ToolStripPanel();
@@ -135,8 +135,8 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
-                        | System.Windows.Forms.Keys.S)));
+            this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.S)));
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
@@ -281,7 +281,7 @@
             this.toolPanelTop.Controls.Add(this.pointerTools);
             this.toolPanelTop.Controls.Add(this.brushTools);
             this.toolPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.toolPanelTop.Location = new System.Drawing.Point(0, 0);
+            this.toolPanelTop.Location = new System.Drawing.Point(0, 24);
             this.toolPanelTop.Name = "toolPanelTop";
             this.toolPanelTop.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.toolPanelTop.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
@@ -320,12 +320,14 @@
             this.toolStripSeparator3,
             this.toolStripLabel1,
             this.toolStripNumericUpDownItem1,
-            this.toolStripTrackBarItem1, 
+            this.toolStripTrackBarItem1,
             this.toolStripColourSwatch});
             this.brushTools.Location = new System.Drawing.Point(38, 0);
             this.brushTools.Name = "brushTools";
-            this.brushTools.Size = new System.Drawing.Size(365, 26);
+            this.brushTools.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.brushTools.Size = new System.Drawing.Size(439, 26);
             this.brushTools.TabIndex = 1;
+            //this.brushTools.Visible = false;
             // 
             // pencilButton
             // 
@@ -365,18 +367,22 @@
             this.toolStripNumericUpDownItem1.Name = "toolStripNumericUpDownItem1";
             this.toolStripNumericUpDownItem1.Size = new System.Drawing.Size(41, 23);
             this.toolStripNumericUpDownItem1.Text = "0";
-            //
-            // toolStripColourSwatch
-            //
-            this.toolStripColourSwatch.Name = "toolStripColourSwatch";
-            this.toolStripColourSwatch.Size = new System.Drawing.Size(50, 23);
-            this.toolStripColourSwatch.Text = "colour";
             // 
             // toolStripTrackBarItem1
             // 
             this.toolStripTrackBarItem1.Name = "toolStripTrackBarItem1";
             this.toolStripTrackBarItem1.Size = new System.Drawing.Size(200, 23);
             this.toolStripTrackBarItem1.Text = "toolStripTrackBarItem1";
+            // 
+            // toolStripColourSwatch
+            // 
+            this.toolStripColourSwatch.BackColor = System.Drawing.Color.DarkRed;
+            this.toolStripColourSwatch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripColourSwatch.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.toolStripColourSwatch.Name = "toolStripColourSwatch";
+            this.toolStripColourSwatch.Size = new System.Drawing.Size(43, 23);
+            this.toolStripColourSwatch.Text = "Colour";
+            this.toolStripColourSwatch.Click += new System.EventHandler(this.toolStripColourSwatch_Click);
             // 
             // toolPanelBottom
             // 
@@ -410,9 +416,9 @@
             this.panel1.Controls.Add(this.layerControlForm);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Enabled = false;
-            this.panel1.Location = new System.Drawing.Point(644, 24);
+            this.panel1.Location = new System.Drawing.Point(644, 50);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(206, 516);
+            this.panel1.Size = new System.Drawing.Size(206, 490);
             this.panel1.TabIndex = 4;
             this.panel1.Visible = false;
             // 
@@ -421,7 +427,7 @@
             this.layerControlForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layerControlForm.Location = new System.Drawing.Point(0, 0);
             this.layerControlForm.Name = "layerControlForm";
-            this.layerControlForm.Size = new System.Drawing.Size(206, 516);
+            this.layerControlForm.Size = new System.Drawing.Size(206, 490);
             this.layerControlForm.TabIndex = 0;
             // 
             // MainForm
@@ -490,7 +496,7 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private ToolStripNumericUpDownItem toolStripNumericUpDownItem1;
         private ToolStripTrackBarItem toolStripTrackBarItem1;
-        private ToolStripColourSwatch toolStripColourSwatch;
+        private System.Windows.Forms.ToolStripLabel toolStripColourSwatch;
         private System.Windows.Forms.ToolStripPanel toolPanelBottom;
         private System.Windows.Forms.ToolStripPanel toolPanelLeft;
         private System.Windows.Forms.ToolStripPanel toolPanelRight;
