@@ -63,7 +63,8 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripNumericUpDownItem1 = new ToolStripNumericUpDownItem();
             this.toolStripTrackBarItem1 = new ToolStripTrackBarItem();
-            this.toolStripColourSwatch = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripColourSwatch = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSecondaryColourSwatch = new System.Windows.Forms.ToolStripTextBox();
             this.toolPanelBottom = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelLeft = new System.Windows.Forms.ToolStripPanel();
             this.toolPanelRight = new System.Windows.Forms.ToolStripPanel();
@@ -321,13 +322,13 @@
             this.toolStripLabel1,
             this.toolStripNumericUpDownItem1,
             this.toolStripTrackBarItem1,
-            this.toolStripColourSwatch});
+            this.toolStripColourSwatch,
+            this.toolStripSecondaryColourSwatch});
             this.brushTools.Location = new System.Drawing.Point(38, 0);
             this.brushTools.Name = "brushTools";
             this.brushTools.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.brushTools.Size = new System.Drawing.Size(439, 26);
+            this.brushTools.Size = new System.Drawing.Size(469, 26);
             this.brushTools.TabIndex = 1;
-            //this.brushTools.Visible = false;
             // 
             // pencilButton
             // 
@@ -376,13 +377,19 @@
             // 
             // toolStripColourSwatch
             // 
+            this.toolStripColourSwatch.AutoSize = false;
             this.toolStripColourSwatch.BackColor = System.Drawing.Color.DarkRed;
-            this.toolStripColourSwatch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripColourSwatch.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripColourSwatch.Name = "toolStripColourSwatch";
-            this.toolStripColourSwatch.Size = new System.Drawing.Size(43, 23);
-            this.toolStripColourSwatch.Text = "Colour";
+            this.toolStripColourSwatch.Size = new System.Drawing.Size(50, 23);
             this.toolStripColourSwatch.Click += new System.EventHandler(this.toolStripColourSwatch_Click);
+            // 
+            // toolStripSecondaryColourSwatch
+            // 
+            this.toolStripSecondaryColourSwatch.AutoSize = false;
+            this.toolStripSecondaryColourSwatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.toolStripSecondaryColourSwatch.Name = "toolStripSecondaryColourSwatch";
+            this.toolStripSecondaryColourSwatch.Size = new System.Drawing.Size(50, 23);
             // 
             // toolPanelBottom
             // 
@@ -416,9 +423,9 @@
             this.panel1.Controls.Add(this.layerControlForm);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Enabled = false;
-            this.panel1.Location = new System.Drawing.Point(644, 50);
+            this.panel1.Location = new System.Drawing.Point(644, 24);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(206, 490);
+            this.panel1.Size = new System.Drawing.Size(206, 516);
             this.panel1.TabIndex = 4;
             this.panel1.Visible = false;
             // 
@@ -427,7 +434,7 @@
             this.layerControlForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layerControlForm.Location = new System.Drawing.Point(0, 0);
             this.layerControlForm.Name = "layerControlForm";
-            this.layerControlForm.Size = new System.Drawing.Size(206, 490);
+            this.layerControlForm.Size = new System.Drawing.Size(206, 516);
             this.layerControlForm.TabIndex = 0;
             // 
             // MainForm
@@ -496,7 +503,8 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private ToolStripNumericUpDownItem toolStripNumericUpDownItem1;
         private ToolStripTrackBarItem toolStripTrackBarItem1;
-        private System.Windows.Forms.ToolStripLabel toolStripColourSwatch;
+        private System.Windows.Forms.ToolStripTextBox toolStripColourSwatch;
+        private System.Windows.Forms.ToolStripTextBox toolStripSecondaryColourSwatch;
         private System.Windows.Forms.ToolStripPanel toolPanelBottom;
         private System.Windows.Forms.ToolStripPanel toolPanelLeft;
         private System.Windows.Forms.ToolStripPanel toolPanelRight;
